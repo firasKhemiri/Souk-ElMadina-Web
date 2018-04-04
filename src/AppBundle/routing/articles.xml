@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<routes xmlns="http://symfony.com/schema/routing" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+
+
+    <route id="getAllArts" path="/getallarts">
+        <default key="_controller">AppBundle:Article:getAllArts</default>
+    </route>
+
+    <route id="getFuturedArts" path="/getfuturedarts">
+        <default key="_controller">AppBundle:Article:getFuturedArts</default>
+    </route>
+
+    <route id="getCats" path="/getcats">
+        <default key="_controller">AppBundle:Article:getCats</default>
+    </route>
+
+    <route id="accueil" path="/accueil">
+        <default key="_controller">AppBundle:Article:accueil</default>
+    </route>
+
+
+    <route id="allarticles" path="/allarticles">
+        <default key="_controller">AppBundle:Article:AllArticles</default>
+    </route>
+
+
+    <route id="articlespager" path="/articlespager">
+        <default key="_controller">AppBundle:Article:articlesPager</default>
+    </route>
+
+    <route id="filterArts" path="/filterarts">
+        <default key="_controller">AppBundle:Article:filterArts</default>
+    </route>
+
+
+    <route id="test" path="/test">
+        <default key="_controller">AppBundle:Article:test</default>
+    </route>
+
+    <route id="singleArticle" path="/article/{id}" methods="GET">
+        <default key="_controller">AppBundle:Article:singleArticle</default>
+    </route>
+
+    <route id="detailsArticle" path="/detailsarticle" methods="GET">
+        <default key="_controller">AppBundle:Article:articleDetails</default>
+    </route>
+
+
+    <route id="addComment" path="/addcomment" methods="POST">
+        <default key="_controller">AppBundle:Article:addComment</default>
+    </route>
+
+    <route id="getComments" path="/getcomments">
+        <default key="_controller">AppBundle:Article:getComments</default>
+    </route>
+
+    <route id="delComment" path="/delcomment">
+        <default key="_controller">AppBundle:Article:delComment</default>
+    </route>
+
+
+
+
+</routes>

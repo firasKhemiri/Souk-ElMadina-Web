@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+
+
+    {% block myjavascript %}
+
+
+        <script type="text/javascript" src="{{ asset('vendor/jquery/jquery-3.2.1.min.js') }}"></script>
+
+        <script type="text/javascript">
+
+
+            var first = true;
+
+            var nom_art;
+            var cats;
+            var nom_bout;
+            var pmin;
+            var pmax;
+            var gov;
+            var tri_type;
+
+            var sliderValue;
+
+            function getAllArticles(page) {
+
+                var jsonString = JSON.stringify(cats);
+
+                //  alert("jso"+jsonString);
+
+                $.ajax({
+                    url: "{{ path('filterArts') }}",
+                    type: "POST",
+                    data: {page:page,
+                        nom_art:nom_art,
+                        cats:jsonString,
+                        nom_bout:nom_bout,
+                        type_tri:tri_type,
+                        pmin:pmin,
+                        pmax:pmax,
+                        gov:gov},
+
+                    beforeSend: function () {
+                        //    alert(page);
+                        //  document.getElementById("pagination").innerHTML = "";
+                        i=0;
+
+                        $('#pagination').fadeOut();
+                        $('#prodsec').fadeOut();
+                    },
+                    complete: function () {
+
+                    },
+                    success: function (data) {
+                        var response = jQuery.parseJSON(data);
+                        console.log(response);
+
+                        if (response.nbrc===0)
+                        {
+                            document.getElementById("prodsec").innerHTML = "";
+
+                            $html="<h1> Aucun élément trouvé";
+                            document.getElementById("prodsec").innerHTML += $html;
+
+                            $('#prodsec').fadeIn();
+
+                        }
+
+                        else
+                        {
+
+                            document.getElementById("prodsec").innerHTML = "";
+
+
+                            if (first) {
+                                init(response.pages);
+                                first= false;
+                            }
+
+                            for (i=0;i<response.nbrc;i++) {
+
+                                if (response[i].oldprix === "" && !response[i].new) {
+                                    $html =
+                                        "<div class=\" col-sm-12 col-md-6 col-lg-4 p-b-50\">\n" +
+                                        "                        <!-- Block2 -->\n" +
+                                        "                        <div class=\"block2\">\n" +
+                                        "                            <div class=\"block2-img wrap-pic-w of-hidden pos-relative block2-labelnew\">";
+                                }
+
+                                else if (response[i].oldprix <= response[i].prix && !response[i].new) {
+                                    $html =
+                                        "<div class=\"col-sm-12 col-md-6 col-lg-4 p-b-50\">\n" +
+                                        "                        <!-- Block2 -->\n" +
+                                        "                        <div class=\"block2\">\n" +
+                                        "                            <div class=\"block2-img wrap-pic-w of-hidden pos-relative block2-labelnew\">";
+                                }
+
+
+                                else if (response[i].oldprix > response[i].prix) {
+                                    $html =
+                                        "<div class=\"col-sm-12 col-md-6 col-lg-4 p-b-50\">\n" +
+                                        "                        <!-- Block2 -->\n" +
+                                        "                        <div class=\"block2\">\n" +
+                                        "                            <div class=\"block2-img wrap-pic-w of-hidden pos-relative block2-labelsale\">";
+                                }
+
+
+                                $html += "                                " +
+                                    "<img id='pimg" + i + "' class =\"IMG-ART \" src=\"" + response[i].img + " \" alt=\"IMG-PRODUCT\">\n"  +
+
+
+                                    "                                <div class=\"block2-overlay trans-0-4\" >\n" +
+
+                                     "<a href=\"article/"+response[i].id+"\" >\n" +
+                                "                                        <i class=\"block2-overlay trans-1-0\"></i>\n" +
+                                "                                    </a>\n" +
+
+                                    "                                    <a href=\"#\" class=\"block2-btn-addwishlist hov-pointer trans-0-4\">\n" +
+                                    "                                        <i class=\"icon-wishlist icon_heart_alt\" aria-hidden=\"true\"></i>\n" +
+                                    "                                        <i class=\"icon-wishlist icon_heart dis-none\" aria-hidden=\"true\"></i>\n" +
+                                    "                                    </a>\n" +
+                                    "\n" +
+                     //               " <div class=\"block2-overlay\" onclick=\"location.href='article/"+response[i].id+"';\" > </div> "+
+
+                                    "                                    <div class=\"block2-btn-addcart w-size2 trans-0-4\">\n" +
+                                    "                                        <!-- Button -->\n" +
+                                    "                                        <button class=\"flex-c-m size2 bg4 bo-rad-23 hov1 s-text1 trans-0-4\">\n" +
+                                    "                                            Ajouter au panier\n" +
+                                    "                                        </button>\n" +
+                                    "                                    </div>\n" +
+
+
+                                    "                                </div>\n" +
+                                    "                            </div>";
+
+
+                                if (response[i].oldprix === "") {
+                                    $html +=
+                                        "         <div class=\"block2-txt p-t-20\">" +
+                                        "              <a href=\"product-detail.html\" class=\"block2-name dis-block s-text3 p-b-5\">" +
+                                        "                    " + response[i].name +
+                                        "              </a>" +
+
+                                        "              <span class=\"block2-price m-text6 p-r-5\">" +
+                                        "                    " + response[i].prix +
+                                        "              </span>" +
+                                        "         </div>" +
+                                        "    </div>" +
+                                        "</div>";
+                                }
+
+                                else {
+                                    $html +=
+                                        "         <div class=\"block2-txt p-t-20\">" +
+                                        "              <a href=\"product-detail.html\" class=\"block2-name dis-block s-text3 p-b-5\">" +
+                                        "                    " + response[i].name +
+                                        "              </a>" +
+
+                                        "              <span class=\"block2-oldprice m-text7 p-r-5\">" +
+                                        "                   " + response[i].oldprix +
+                                        "              </span>" +
+
+                                        "              <span class=\"block2-newprice m-text8 p-r-5\">" +
+                                        "                    " + response[i].prix +
+                                        "              </span>" +
+                                        "         </div>" +
+                                        "    </div>" +
+                                        "</div>";
+                                }
+
+
+                                document.getElementById("prodsec").innerHTML += $html;
+
+
+                                $('#prodsec').fadeIn();
+
+
+                                var im = $(".block2").hide();
+                            }
+
+                        }
+
+
+                        $(".IMG-ART").each(function(i) {
+                            $(this).on('load', function() {
+                                $(im).fadeIn(1000);
+
+                            });
+                        });
+
+
+                        $('#pagination').fadeIn();
+
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert(errorThrown)
+                    }
+                });
+
+            }
+
+
+
+
+            function getCat() {
+
+
+                $.ajax({
+                    url: "{{ path('getCats') }}",
+                    type: "GET",
+                    data: {},
+
+                    beforeSend: function () {
+                    },
+                    complete: function () {
+
+                    },
+                    success: function (data) {
+                        var response = jQuery.parseJSON(data);
+                        console.log(response);
+
+                        for (i=0;i<response.nbrc;i++) {
+
+                            document.getElementById("cats").innerHTML +=
+                                "<option value='"+response[i].name+"'>"+response[i].name+"</option>"
+                        }
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert(errorThrown)
+                    }
+                });
+
+            }
+
+
+
+            $(document).ready(function() {
+                first = true;
+
+                nom_art="";
+                nom_bout="";
+                cat="";
+                gov="";
+                pmin=0;
+                pmax=1500;
+                tri_type='';
+                getAllArticles(1);
+
+                getCat();
+
+                $("#rech").click(function () {
+
+                    //alert("hheyy");
+                    nom_art = $("#nom_art").val();
+                    nom_bout = $("#nom_bout").val();
+                    pmax = Math.round(sliderValue[1]);
+                    pmin = Math.round(sliderValue[0]);
+
+
+                    cats =  $('.ui.dropdown').dropdown('get value') ;
+
+                    first = true;
+
+
+                    if (cats == null)
+                        cats =undefined;
+
+
+                    //   alert("hheyy art"+nom_art+" b "+nom_bout+" pmin "+pmin+" pmax "+pmax+"cats "+cats);
+
+                    getAllArticles(1);
+
+                });
+
+                $("#tri_type").change(function () {
+                    tri_type = $("#tri_type").val();
+
+                 //   alert(tri_type);
+                    getAllArticles(1);
+
+                })
+
+
+            });
+
+
+
+
+
+
+
+        </script>
+
+
+    {% endblock %}
+
+
+
+
+    <title>Product</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--===============================================================================================-->
+    <link rel="icon" type="image/png" href="{{ asset('images/icons/favicon.png') }}"/>
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{{ asset('vendor/bootstrap/css/bootstrap.min.css') }}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{{ asset('fonts/font-awesome-4.7.0/css/font-awesome.min.css') }}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{{ asset('fonts/themify/themify-icons.css') }}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{{ asset('fonts/Linearicons-Free-v1.0.0/icon-font.min.css') }}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{{ asset('fonts/elegant-font/html-css/style.css') }}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{{ asset('vendor/animate/animate.css') }}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{{ asset('vendor/css-hamburgers/hamburgers.min.css') }}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{{ asset('vendor/animsition/css/animsition.min.css') }}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{{ asset('vendor/select2/select2.min.css') }}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{{ asset('vendor/slick/slick.css') }}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{{ asset('vendor/noui/nouislider.min.css') }}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/util.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/main.css') }}">
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2/semantic.min.css"/>
+    <!--link rel="stylesheet" href="{{ asset('css/semantic.css') }}"/>
+    <!--===============================================================================================-->
+</head>
+
+
+{% block body %}
+
+
+    <body class="animsition">
+
+
+    <!-- Header -->
+    <header class="header1">
+        <!-- Header desktop -->
+        <div class="container-menu-header">
+            <div class="topbar">
+                <div class="topbar-social">
+                    <a href="#" class="topbar-social-item fa fa-facebook"></a>
+                    <a href="#" class="topbar-social-item fa fa-instagram"></a>
+                    <a href="#" class="topbar-social-item fa fa-pinterest-p"></a>
+                    <a href="#" class="topbar-social-item fa fa-snapchat-ghost"></a>
+                    <a href="#" class="topbar-social-item fa fa-youtube-play"></a>
+                </div>
+
+                <span class="topbar-child1">
+					Livraison gratuite pour les produits qui coutent plus de 300DT
+				</span>
+
+                <div class="topbar-child2">
+					<span class="topbar-email">
+						soukmadina@gmail.com
+					</span>
+
+                    <div class="topbar-language rs1-select2">
+                        <select class="selection-1" name="time">
+                            <option>FR</option>
+                            <option>EN</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="wrap_header">
+                <!-- Logo -->
+                <a href="{{ path('accueil') }}" class="logo">
+                    <!--img src="{{ asset('images/icons/logo.png') }}" alt="IMG-LOGO"-->
+
+                    <div class="clip-text clip-text_twelve clip-text--cover" >Souk Elmdina</div>
+                </a>
+
+
+                <!-- Menu -->
+                <div class="wrap_menu">
+                    <nav class="menu">
+                        <ul class="main_menu">
+                            <li>
+                                <a href="{{ path('accueil') }}">Accueil</a>
+                                <ul class="sub_menu">
+                                    <li><a href="{{ path('accueil') }}">Homepage V1</a></li>
+                                </ul>
+                            </li>
+
+                            <li>
+                                <a href="{{ path('allarticles') }}">Shopping</a>
+                            </li>
+
+                            <li class="sale-noti">
+                                <a href="product.html">Bon Plans</a>
+                            </li>
+
+                            <li>
+                                <a href="cart.html">Nos Boutiques</a>
+                            </li>
+
+                            <li>
+                                <a href="blog.html">Blog</a>
+                            </li>
+
+                            <li>
+                                <a href="about.html">A Propos</a>
+                            </li>
+
+                            <li>
+                                <a href="contact.html">Contact</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+
+                <!-- Header Icon -->
+                <div class="header-icons">
+
+                    {% if user.photoProf == '' %}
+                        <a href="{{ path('fos_user_security_login') }}" class="header-wrapicon1 dis-block">
+                            <img src="{{ asset('images/icons/icon-header-01.png') }}" class="header-icon1" alt="ICON">
+                        </a>
+                    {% else %}
+                        <a href="{{ path('profile') }}" class="header-wrapicon1 dis-block">
+                            <div class="circle-header">
+                                <img src="{{ user.photoProf }}" class="header-icon1 circle-header " alt="ICON">
+                            </div>
+                        </a>
+                    {% endif %}
+
+                    <span class="linedivide1"></span>
+
+                    <div class="header-wrapicon2">
+                        <img src="/images/icons/icon-header-02.png" class="header-icon1 js-show-header-dropdown" alt="ICON">
+                        <span class="header-icons-noti">0</span>
+0
+                        <!-- Header cart noti -->
+                        <div class="header-cart header-dropdown">
+                            <ul class="header-cart-wrapitem">
+                                <li class="header-cart-item">
+                                    <div class="header-cart-item-img">
+                                        <img src="/images/item-cart-01.jpg" alt="IMG">
+                                    </div>
+
+                                    <div class="header-cart-item-txt">
+                                        <a href="#" class="header-cart-item-name">
+                                            Chacheyya
+                                        </a>
+
+                                        <span class="header-cart-item-info">
+											2 x 10DT
+										</span>
+                                    </div>
+                                </li>
+
+                                <li class="header-cart-item">
+                                    <div class="header-cart-item-img">
+                                        <img src="/images/item-cart-02.jpg" alt="IMG">
+                                    </div>
+
+                                    <div class="header-cart-item-txt">
+                                        <a href="#" class="header-cart-item-name">
+                                            Vase rouge
+                                        </a>
+
+                                        <span class="header-cart-item-info">
+											1 x 40DT
+										</span>
+                                    </div>
+                                </li>
+
+                                <li class="header-cart-item">
+                                    <div class="header-cart-item-img">
+                                        <img src="/images/item-cart-03.jpg" alt="IMG">
+                                    </div>
+
+                                    <div class="header-cart-item-txt">
+                                        <a href="#" class="header-cart-item-name">
+                                            Faza
+                                        </a>
+
+                                        <span class="header-cart-item-info">
+											1 x 15DT
+										</span>
+                                    </div>
+                                </li>
+                            </ul>
+
+                            <div class="header-cart-total">
+                                Total: 75.00DT
+                            </div>
+
+                            <div class="header-cart-buttons">
+                                <div class="header-cart-wrapbtn">
+                                    <!-- Button -->
+                                    <a href="cart.html" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
+                                        Voir panier
+                                    </a>
+                                </div>
+
+                                <div class="header-cart-wrapbtn">
+                                    <!-- Button -->
+                                    <a href="#" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
+                                        Commander
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Header Mobile -->
+        <div class="wrap_header_mobile">
+            <!-- Logo moblie -->
+            <a href="{{ path('accueil') }}" class="logo">
+                <!--img src="{{ asset('images/icons/logo.png') }}" alt="IMG-LOGO"-->
+                <i>Souk Elmdina</i>
+            </a>
+
+            <!-- Button show menu -->
+            <div class="btn-show-menu">
+                <!-- Header Icon mobile -->
+                <div class="header-icons-mobile">
+
+                    {% if user.photoProf == '' %}
+                        <a href="{{ path('fos_user_security_login') }}" class="header-wrapicon1 dis-block">
+                            <img src="{{ asset('images/icons/icon-header-01.png') }}" class="header-icon1" alt="ICON">
+                        </a>
+                    {% else %}
+                        <a href="#" class="header-wrapicon1 dis-block">
+                            <div class="circle-header">
+                                <img src="{{ user.photoProf }}" class="header-icon1 circle-header " alt="ICON">
+                            </div>
+                        </a>
+                    {% endif %}
+
+                    <span class="linedivide2"></span>
+
+                    <div class="header-wrapicon2">
+                        <img src="/images/icons/icon-header-02.png" class="header-icon1 js-show-header-dropdown" alt="ICON">
+                        <span class="header-icons-noti">0</span>
+
+                        <!-- Header cart noti -->
+                        <div class="header-cart header-dropdown">
+                            <ul class="header-cart-wrapitem">
+                                <li class="header-cart-item">
+                                    <div class="header-cart-item-img">
+                                        <img src="/images/item-cart-01.jpg" alt="IMG">
+                                    </div>
+
+                                    <div class="header-cart-item-txt">
+                                        <a href="#" class="header-cart-item-name">
+                                            White Shirt With Pleat Detail Back
+                                        </a>
+
+                                        <span class="header-cart-item-info">
+											1 x $19.00
+										</span>
+                                    </div>
+                                </li>
+
+                                <li class="header-cart-item">
+                                    <div class="header-cart-item-img">
+                                        <img src="/images/item-cart-02.jpg" alt="IMG">
+                                    </div>
+
+                                    <div class="header-cart-item-txt">
+                                        <a href="#" class="header-cart-item-name">
+                                            Converse All Star Hi Black Canvas
+                                        </a>
+
+                                        <span class="header-cart-item-info">
+											1 x $39.00
+										</span>
+                                    </div>
+                                </li>
+
+                                <li class="header-cart-item">
+                                    <div class="header-cart-item-img">
+                                        <img src="/images/item-cart-03.jpg" alt="IMG">
+                                    </div>
+
+                                    <div class="header-cart-item-txt">
+                                        <a href="#" class="header-cart-item-name">
+                                            Nixon Porter Leather Watch In Tan
+                                        </a>
+
+                                        <span class="header-cart-item-info">
+											1 x $17.00
+										</span>
+                                    </div>
+                                </li>
+                            </ul>
+
+                            <div class="header-cart-total">
+                                Total: $75.00
+                            </div>
+
+                            <div class="header-cart-buttons">
+                                <div class="header-cart-wrapbtn">
+                                    <!-- Button -->
+                                    <a href="cart.html" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
+                                        View Cart
+                                    </a>
+                                </div>
+
+                                <div class="header-cart-wrapbtn">
+                                    <!-- Button -->
+                                    <a href="#" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
+                                        Check Out
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="btn-show-menu-mobile hamburger hamburger--squeeze">
+					<span class="hamburger-box">
+						<span class="hamburger-inner"></span>
+					</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Menu Mobile -->
+        <div class="wrap-side-menu" >
+            <nav class="side-menu">
+                <ul class="main-menu">
+                    <li class="item-topbar-mobile p-l-20 p-t-8 p-b-8">
+						<span class="topbar-child1">
+							Livraison gratuite pour les produits qui coutent plus de 300DT
+						</span>
+                    </li>
+
+                    <li class="item-topbar-mobile p-l-20 p-t-8 p-b-8">
+                        <div class="topbar-child2-mobile">
+							<span class="topbar-email">
+								soukmadina@gmail.com
+							</span>
+
+                            <div class="topbar-language rs1-select2">
+                                <select class="selection-1" name="time">
+                                    <option>FR</option>
+                                    <option>EN</option>
+                                </select>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="item-topbar-mobile p-l-10">
+                        <div class="topbar-social-mobile">
+                            <a href="#" class="topbar-social-item fa fa-facebook"></a>
+                            <a href="#" class="topbar-social-item fa fa-instagram"></a>
+                            <a href="#" class="topbar-social-item fa fa-pinterest-p"></a>
+                            <a href="#" class="topbar-social-item fa fa-snapchat-ghost"></a>
+                            <a href="#" class="topbar-social-item fa fa-youtube-play"></a>
+                        </div>
+                    </li>
+
+                    <li class="item-menu-mobile">
+                        <a href="{{ path('accueil') }}">Accueil</a>
+                        <ul class="sub-menu">
+                            <li><a href="{{ path('accueil') }}">Homepage V1</a></li>
+                        </ul>
+                        <i class="arrow-main-menu fa fa-angle-right" aria-hidden="true"></i>
+                    </li>
+
+                    <li class="item-menu-mobile">
+                        <a href="{{ path('allarticles') }}">Shopping</a>
+                    </li>
+
+                    <li class="item-menu-mobile">
+                        <a href="product.html">Bon plans</a>
+                    </li>
+
+                    <li class="item-menu-mobile">
+                        <a href="cart.html">Features</a>
+                    </li>
+
+                    <li class="item-menu-mobile">
+                        <a href="blog.html">Blog</a>
+                    </li>
+
+                    <li class="item-menu-mobile">
+                        <a href="about.html">A propos</a>
+                    </li>
+
+                    <li class="item-menu-mobile">
+                        <a href="contact.html">Contact</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Title Page -->
+
+    <!-- Content page -->
+    <section class="bgwhite p-t-55 p-b-65">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-md-4 col-lg-3 p-b-50">
+                    <div class="leftbar p-r-20 p-r-0-sm">
+                        <!--  -->
+                        <h4 class="m-text14 p-b-7">
+                            Categories
+                        </h4>
+
+
+
+                        <select id="cats" class="ui fluid search dropdown" multiple="">
+                            <option value="">Categories</option>
+                        </select>
+
+                        <!--  -->
+                        <h4 class="m-text14 p-b-12">
+                            Filtres
+                        </h4>
+
+
+                        <div class="search-product pos-relative bo4 of-hidden ">
+                            <input id="nom_art" class="s-text7 size1 p-l-23 p-r-50 " type="text" name="search-product" placeholder="Chercher articles par nom">
+
+                            <!--      <button class="flex-c-m size5 ab-r-m color2 color0-hov trans-0-4">
+                                      <i class="fs-12 fa fa-search" aria-hidden="true"></i>
+                                  </button> -->
+                        </div>
+
+                        <br>
+
+                        <div  class="search-product pos-relative bo4 of-hidden">
+                            <input id="nom_bout" class="s-text7 size1 p-l-23 p-r-50" type="text" name="search-product" placeholder="Chercher par vendeur">
+
+                            <!--      <button class="flex-c-m size5 ab-r-m color2 color0-hov trans-0-4">
+                                      <i class="fs-12 fa fa-search" aria-hidden="true"></i>
+                                  </button> -->
+                        </div>
+
+                        <div class="filter-price p-t-22 p-b-50 bo3">
+                            <div class="m-text15 p-b-17">
+                                Prix
+                            </div>
+
+                            <div class="wra-filter-bar">
+                                <div id="filter-bar"></div>
+                            </div>
+
+                            <div class="flex-sb-m flex-w p-t-16">
+                                <div class="w-size11">
+                                    <!-- Button -->
+                                    <button id="rech" class="flex-c-m size4 bg7 bo-rad-15 hov1 s-text14 trans-0-4">
+                                        Filter
+                                    </button>
+                                </div>
+
+                                <div class="s-text3 p-t-10 p-b-10">
+                                    Range: <span id="value-lower">610</span>DT - <span id="value-upper">980</span>DT
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="filter-color p-t-22 p-b-50 bo3">
+                            <div class="m-text15 p-b-12">
+                                Couleur
+                            </div>
+
+                            <ul class="flex-w">
+                                <li class="m-r-10">
+                                    <input class="checkbox-color-filter" id="color-filter1" type="checkbox" name="color-filter1">
+                                    <label class="color-filter color-filter1" for="color-filter1"></label>
+                                </li>
+
+                                <li class="m-r-10">
+                                    <input class="checkbox-color-filter" id="color-filter2" type="checkbox" name="color-filter2">
+                                    <label class="color-filter color-filter2" for="color-filter2"></label>
+                                </li>
+
+                                <li class="m-r-10">
+                                    <input class="checkbox-color-filter" id="color-filter3" type="checkbox" name="color-filter3">
+                                    <label class="color-filter color-filter3" for="color-filter3"></label>
+                                </li>
+
+                                <li class="m-r-10">
+                                    <input class="checkbox-color-filter" id="color-filter4" type="checkbox" name="color-filter4">
+                                    <label class="color-filter color-filter4" for="color-filter4"></label>
+                                </li>
+
+                                <li class="m-r-10">
+                                    <input class="checkbox-color-filter" id="color-filter5" type="checkbox" name="color-filter5">
+                                    <label class="color-filter color-filter5" for="color-filter5"></label>
+                                </li>
+
+                                <li class="m-r-10">
+                                    <input class="checkbox-color-filter" id="color-filter6" type="checkbox" name="color-filter6">
+                                    <label class="color-filter color-filter6" for="color-filter6"></label>
+                                </li>
+
+                                <li class="m-r-10">
+                                    <input class="checkbox-color-filter" id="color-filter7" type="checkbox" name="color-filter7">
+                                    <label class="color-filter color-filter7" for="color-filter7"></label>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-8 col-lg-9 p-b-50">
+                    <!--  -->
+                    <div class="flex-sb-m flex-w p-b-35">
+                        <div class="flex-w">
+                            <div class="rs2-select2 bo4 of-hidden w-size12 m-t-5 m-b-5 m-r-10">
+                                <select id="tri_type" class="selection-2" name="Trier par:">
+                                    <option>date pub decroissant</option>
+                                    <option>Prix decroissant</option>
+                                    <option>Date pub croissant</option>
+                                    <option>Prix croissant</option>
+                                    <option>Alphabetique</option>
+                                </select>
+                            </div>
+
+                       <!--     <div class="rs2-select2 bo4 of-hidden w-size12 m-t-5 m-b-5 m-r-10">
+                                <select class="selection-2" name="sorting">
+                                    <option>prix</option>
+                                    <option>$0.00 - $50.00</option>
+                                    <option>$50.00 - $100.00</option>
+                                    <option>$100.00 - $150.00</option>
+                                    <option>$150.00 - $200.00</option>
+                                    <option>$200.00+</option>
+
+                                </select>
+                            </div> -->
+                        </div>
+
+                        <span id="art_num" class="s-text8 p-t-5 p-b-5">
+					<!--todo		Showing 1–12 of 16 results -->
+						</span>
+                    </div>
+
+                    <!-- Product -->
+                    <div id="prodsec" class="row">
+
+                    </div>
+
+                    <!-- Pagination -->
+                    <div id="pagination" class="pagination flex-m flex-w p-t-26">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Footer -->
+
+    <!-- Footer -->
+    <footer class="bg6 p-t-45 p-b-43 p-l-45 p-r-45">
+        <div class="flex-w p-b-90">
+            <div class="w-size6 p-t-30 p-l-15 p-r-15 respon3">
+                <h4 class="s-text12 p-b-30">
+                    Prenez contact avec nous
+                </h4>
+
+                <div>
+                    <p class="s-text7 w-size27">
+                        y a t'il des questions ? Contactez nous sur notre adresse mail souk.madina@gmail.com
+                    </p>
+
+                    <div class="flex-m p-t-30">
+                        <a href="#" class="fs-18 color1 p-r-20 fa fa-facebook"></a>
+                        <a href="#" class="fs-18 color1 p-r-20 fa fa-instagram"></a>
+                        <a href="#" class="fs-18 color1 p-r-20 fa fa-pinterest-p"></a>
+                        <a href="#" class="fs-18 color1 p-r-20 fa fa-snapchat-ghost"></a>
+                        <a href="#" class="fs-18 color1 p-r-20 fa fa-youtube-play"></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-size7 p-t-30 p-l-15 p-r-15 respon4">
+                <h4 class="s-text12 p-b-30">
+                    Categories
+                </h4>
+
+                <ul>
+                    <li class="p-b-9">
+                        <a href="#" class="s-text7">
+                            Cat1
+                        </a>
+                    </li>
+
+                    <li class="p-b-9">
+                        <a href="#" class="s-text7">
+                            Cat2
+                        </a>
+                    </li>
+
+                    <li class="p-b-9">
+                        <a href="#" class="s-text7">
+                            Cat3
+                        </a>
+                    </li>
+
+                    <li class="p-b-9">
+                        <a href="#" class="s-text7">
+                            Cat4
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="w-size7 p-t-30 p-l-15 p-r-15 respon4">
+                <h4 class="s-text12 p-b-30">
+                    Liens Utiles
+                </h4>
+
+                <ul>
+                    <li class="p-b-9">
+                        <a href="#" class="s-text7">
+                            Chercher
+                        </a>
+                    </li>
+
+                    <li class="p-b-9">
+                        <a href="#" class="s-text7">
+                            A Propos
+                        </a>
+                    </li>
+
+                    <li class="p-b-9">
+                        <a href="#" class="s-text7">
+                            Contacter Nous
+                        </a>
+                    </li>
+
+                    <li class="p-b-9">
+                        <a href="#" class="s-text7">
+                            Retours
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="w-size7 p-t-30 p-l-15 p-r-15 respon4">
+                <h4 class="s-text12 p-b-30">
+                    Aide
+                </h4>
+
+                <ul>
+                    <li class="p-b-9">
+                        <a href="#" class="s-text7">
+                            Suivre la Livraison
+                        </a>
+                    </li>
+
+                    <li class="p-b-9">
+                        <a href="#" class="s-text7">
+                            Retours
+                        </a>
+                    </li>
+
+                    <li class="p-b-9">
+                        <a href="#" class="s-text7">
+                            Livraison
+                        </a>
+                    </li>
+
+                    <li class="p-b-9">
+                        <a href="#" class="s-text7">
+                            FAQs
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="w-size8 p-t-30 p-l-15 p-r-15 respon3">
+                <h4 class="s-text12 p-b-30">
+                    Bulletin
+                </h4>
+
+                <form>
+                    <div class="effect1 w-size9">
+                        <input class="s-text7 bg6 w-full p-b-5" type="text" name="email" placeholder="email@example.com">
+                        <span class="effect1-line"></span>
+                    </div>
+
+                    <div class="w-size2 p-t-20">
+                        <!-- Button -->
+                        <button class="flex-c-m size2 bg4 bo-rad-23 hov1 m-text3 trans-0-4">
+                            Abonnez-vous
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+        <div class="t-center p-l-15 p-r-15">
+            <a href="#">
+                <img class="h-size2" src="{{ asset('images/icons/paypal.png') }}" alt="IMG-PAYPAL">
+            </a>
+
+            <a href="#">
+                <img class="h-size2" src="{{ asset('images/icons/visa.png') }}" alt="IMG-VISA">
+            </a>
+
+            <a href="#">
+                <img class="h-size2" src="{{ asset('images/icons/mastercard.png') }}" alt="IMG-MASTERCARD">
+            </a>
+
+            <a href="#">
+                <img class="h-size2" src="{{ asset('images/icons/express.png') }}" alt="IMG-EXPRESS">
+            </a>
+
+            <a href="#">
+                <img class="h-size2" src="{{ asset('images/icons/discover.png') }}" alt="IMG-DISCOVER">
+            </a>
+
+            <div class="t-center s-text8 p-t-20">
+                Copyright © 2018 All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- Back to top -->
+    <div class="btn-back-to-top bg0-hov" id="myBtn">
+		<span class="symbol-btn-back-to-top">
+			<i class="fa fa-angle-double-up" aria-hidden="true"></i>
+		</span>
+    </div>
+
+    <!-- Container Selection -->
+    <div id="dropDownSelect1"></div>
+    <div id="dropDownSelect2"></div>
+
+
+
+    <!--===============================================================================================-->
+    <script type="text/javascript" src="{{ asset('vendor/jquery/jquery-3.2.1.min.js') }}"></script>
+
+<!--===============================================================================================-->-->
+
+    <!--script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script-->
+    <script src="{{ asset('js/semantic.js') }}"></script>
+
+
+    <script type="text/javascript" src="{{ asset('vendor/animsition/js/animsition.min.js') }}"></script>
+    <!--===============================================================================================-->
+    <script type="text/javascript" src="{{ asset('vendor/bootstrap/js/popper.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('vendor/bootstrap/js/bootstrap.min.js') }}"></script>
+    <!--===============================================================================================-->
+    <script type="text/javascript" src="{{ asset('vendor/select2/select2.min.js') }}"></script>
+
+    <script type="text/javascript" src="{{ asset('vendor/bootstrap/js/bootstrap.min.js') }}"></script>
+
+    <script type="text/javascript">
+        $(".selection-1").select2({
+            minimumResultsForSearch: 20,
+            dropdownParent: $('#dropDownSelect1')
+        });
+
+        $(".selection-2").select2({
+            minimumResultsForSearch: 20,
+            dropdownParent: $('#dropDownSelect2')
+        });
+    </script>
+    <!--===============================================================================================-->
+    <script type="text/javascript" src="{{ asset('vendor/daterangepicker/moment.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('vendor/daterangepicker/daterangepicker.js') }}"></script>
+    <!--===============================================================================================-->
+    <script type="text/javascript" src="{{ asset('vendor/slick/slick.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/slick-custom.js') }}"></script>
+
+
+    <script src="{{ asset('js/semantic.js') }}"></script>
+    <script>
+        $('select.dropdown').dropdown('set selected', ['meteor', 'ember']);
+    </script>
+    <!--===============================================================================================-->
+    <script type="text/javascript" src="{{ asset('vendor/sweetalert/sweetalert.min.js') }}"></script>
+    <script type="text/javascript">
+        $('.block2-btn-addcart').each(function(){
+            var nameProduct = $(this).parent().parent().parent().find('.block2-name').html();
+            $(this).on('click', function(){
+                swal(nameProduct, "is added to cart !", "success");
+            });
+        });
+
+        $('.block2-btn-addwishlist').each(function(){
+            var nameProduct = $(this).parent().parent().parent().find('.block2-name').html();
+            $(this).on('click', function(){
+                swal(nameProduct, "is added to wishlist !", "success");
+            });
+        });
+    </script>
+
+    <!--===============================================================================================-->
+    <script type="text/javascript" src="{{ asset('vendor/noui/nouislider.min.js') }}"></script>
+    <script type="text/javascript">
+        /*[ No ui ]
+        ===========================================================*/
+        var filterBar = document.getElementById('filter-bar');
+
+        noUiSlider.create(filterBar, {
+            start: [ 0, 1000 ],
+            connect: true,
+            range: {
+                'min': 0,
+                'max': 1000
+            }
+        });
+
+        var skipValues = [
+            document.getElementById('value-lower'),
+            document.getElementById('value-upper')
+        ];
+
+        filterBar.noUiSlider.on('update', function( values, handle ) {
+            skipValues[handle].innerHTML = Math.round(values[handle]) ;
+
+            sliderValue = filterBar.noUiSlider.get();
+            //   console.log("sliderValue: ", sliderValue);
+        });
+    </script>
+    <!--===============================================================================================-->
+    <script src="{{ asset('js/main.js') }}"></script>
+
+    </body>
+
+{% endblock %}
+
+
+
+{% block script %}
+
+
+    <script>
+        var Pagination = {
+
+            code: '',
+
+            // --------------------
+            // Utility
+            // --------------------
+
+            // converting initialize data
+            Extend: function(data) {
+                data = data || {};
+                Pagination.size = data.size || 300;
+                Pagination.page = data.page || 1;
+                Pagination.step = data.step || 3;
+            },
+
+            // add pages by number (from [s] to [f])
+            Add: function(s, f) {
+                for (var i = s; i < f; i++) {
+                    Pagination.code += '<a  class="item-pagination flex-c-m trans-0-4 ">' + i + '</a>';
+                }
+            },
+
+            // add last page with separator
+            Last: function() {
+                Pagination.code += '<i >...</i>  <a  class="item-pagination flex-c-m trans-0-4 ">' + Pagination.size + '</a>';
+            },
+
+            // add first page with separator
+            First: function() {
+                Pagination.code += '<a  class="item-pagination flex-c-m trans-0-4 " >1</a>    <i >...</i>';
+            },
+
+
+
+            // --------------------
+            // Handlers
+            // --------------------
+
+            // change page
+            Click: function() {
+                Pagination.page = +this.innerHTML;
+
+                //    alert(Pagination.page);
+                getAllArticles(Pagination.page);
+                $('html, body').animate({scrollTop: 0}, 300);
+                Pagination.Start();
+            },
+
+            // previous page
+            Prev: function() {
+                Pagination.page--;
+                if (Pagination.page < 1) {
+                    Pagination.page = 1;
+                }
+                else {
+                    $('html, body').animate({scrollTop: 0}, 300);
+                    getAllArticles(Pagination.page);
+                }
+
+                //    alert(Pagination.page);
+                Pagination.Start();
+            },
+
+            // next page
+            Next: function() {
+                Pagination.page++;
+                if (Pagination.page > Pagination.size) {
+                    Pagination.page = Pagination.size;
+                }
+                else {
+                    $('html, body').animate({scrollTop: 0}, 300);
+                    getAllArticles(Pagination.page);
+                }
+                //    alert(Pagination.page);
+                Pagination.Start();
+            },
+
+
+
+            // --------------------
+            // Script
+            // --------------------
+
+            // binding pages
+            Bind: function() {
+                var a = Pagination.e.getElementsByTagName('a');
+                for (var i = 0; i < a.length; i++) {
+                    if (+a[i].innerHTML === Pagination.page) a[i].className = 'current';
+                    a[i].addEventListener('click', Pagination.Click, false);
+                }
+            },
+
+            // write pagination
+            Finish: function() {
+                Pagination.e.innerHTML = Pagination.code;
+                Pagination.code = '';
+                Pagination.Bind();
+            },
+
+            // find pagination type
+            Start: function() {
+                if (Pagination.size < Pagination.step * 2 + 6) {
+                    Pagination.Add(1, Pagination.size + 1);
+                }
+                else if (Pagination.page < Pagination.step * 2 + 1) {
+                    Pagination.Add(1, Pagination.step * 2 + 4);
+                    Pagination.Last();
+                }
+                else if (Pagination.page > Pagination.size - Pagination.step * 2) {
+                    Pagination.First();
+                    Pagination.Add(Pagination.size - Pagination.step * 2 - 2, Pagination.size + 1);
+                }
+                else {
+                    Pagination.First();
+                    Pagination.Add(Pagination.page - Pagination.step, Pagination.page + Pagination.step + 1);
+                    Pagination.Last();
+                }
+                Pagination.Finish();
+            },
+
+
+
+            // --------------------
+            // Initialization
+            // --------------------
+
+            // binding buttons
+            Buttons: function(e) {
+                var nav = e.getElementsByTagName('a');
+                nav[0].addEventListener('click', Pagination.Prev, false);
+                nav[1].addEventListener('click', Pagination.Next, false);
+            },
+
+            // create skeleton
+            Create: function(e) {
+
+                var html = [
+                    '<a  class="item-pagination flex-c-m trans-0-4 ">&#9668;</a>', // previous button
+                    '<span></span>',  // pagination container
+                    '<a  class="item-pagination flex-c-m trans-0-4 ">&#9658;</a>'  // next button
+                ];
+
+                e.innerHTML = html.join('');
+                Pagination.e = e.getElementsByTagName('span')[0];
+                Pagination.Buttons(e);
+            },
+
+            // init
+            Init: function(e, data) {
+                Pagination.Extend(data);
+                Pagination.Create(e);
+                Pagination.Start();
+            }
+        };
+
+
+
+        /* * * * * * * * * * * * * * * * *
+        * Initialization
+        * * * * * * * * * * * * * * * * */
+
+        function init(size) {
+            Pagination.Init(document.getElementById('pagination'), {
+                size: size, // pages size
+                page: 1,  // selected page
+                step: 3   // pages before and after current
+            });
+        }
+
+        //  document.addEventListener('DOMContentLoaded', init(5), false);
+
+
+    </script>
+
+
+
+
+{% endblock %}
