@@ -9,11 +9,11 @@
 namespace AppBundle\Entity;
 
 
+use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToOne;
 use Symfony\Component\Validator\Constraints\Type;
-use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Message
@@ -86,6 +86,16 @@ class Message
     }
 
     /**
+     * Get message
+     *
+     * @return string
+     */
+    public function getMessage()
+    {
+        return $this->message;
+    }
+
+    /**
      * Set message
      *
      * @param string $message
@@ -100,13 +110,13 @@ class Message
     }
 
     /**
-     * Get message
+     * Get date
      *
-     * @return string
+     * @return \DateTime
      */
-    public function getMessage()
+    public function getDate()
     {
-        return $this->message;
+        return $this->date;
     }
 
     /**
@@ -124,13 +134,13 @@ class Message
     }
 
     /**
-     * Get date
+     * Get vu
      *
-     * @return \DateTime
+     * @return boolean
      */
-    public function getDate()
+    public function getVu()
     {
-        return $this->date;
+        return $this->vu;
     }
 
     /**
@@ -148,13 +158,13 @@ class Message
     }
 
     /**
-     * Get vu
+     * Get sender
      *
-     * @return boolean
+     * @return \AppBundle\Entity\User
      */
-    public function getVu()
+    public function getSender()
     {
-        return $this->vu;
+        return $this->sender;
     }
 
     /**
@@ -172,13 +182,13 @@ class Message
     }
 
     /**
-     * Get sender
+     * Get reciever
      *
      * @return \AppBundle\Entity\User
      */
-    public function getSender()
+    public function getReceiver()
     {
-        return $this->sender;
+        return $this->receiver;
     }
 
     /**
@@ -196,13 +206,13 @@ class Message
     }
 
     /**
-     * Get reciever
+     * Get conversation
      *
-     * @return \AppBundle\Entity\User
+     * @return \AppBundle\Entity\Conversation
      */
-    public function getReceiver()
+    public function getConversation()
     {
-        return $this->receiver;
+        return $this->conversation;
     }
 
     /**
@@ -217,15 +227,5 @@ class Message
         $this->conversation = $conversation;
 
         return $this;
-    }
-
-    /**
-     * Get conversation
-     *
-     * @return \AppBundle\Entity\Conversation
-     */
-    public function getConversation()
-    {
-        return $this->conversation;
     }
 }

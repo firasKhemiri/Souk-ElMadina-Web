@@ -13,7 +13,7 @@ class AvisRepository extends \Doctrine\ORM\EntityRepository
 
     public function getAllComments($id)
     {
-        $query=$this->createQueryBuilder('c')->select('c')
+        $query = $this->createQueryBuilder('c')->select('c')
             ->join('c.article', 'a')
             ->where('a .id = :id')
             ->orderBy('c.id', 'DESC')
@@ -25,12 +25,11 @@ class AvisRepository extends \Doctrine\ORM\EntityRepository
     }
 
 
-
     public function deleteComment($id)
     {
         $qb = $this->createQueryBuilder('c');
         $q = $qb->delete('AppBundle:Avis', 'c')
-            ->where('c.id ='.$id)
+            ->where('c.id =' . $id)
             ->getQuery();
         $q->execute();
     }

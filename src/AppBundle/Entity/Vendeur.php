@@ -9,14 +9,11 @@
 namespace AppBundle\Entity;
 
 
-use Doctrine\ORM\Mapping\JoinTable;
-use Doctrine\ORM\Mapping\ManyToMany;
-use Doctrine\ORM\Mapping\OneToMany;
-
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\ManyToMany;
+use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\OneToOne;
-
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Constraints\Type;
 
@@ -28,23 +25,6 @@ use Symfony\Component\Validator\Constraints\Type;
  */
 class Vendeur
 {
-
-    /**
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
-
-    /**
-     * One Product has One Shipment.
-     * @OneToOne(targetEntity="AppBundle\Entity\User")
-     * @JoinColumn(name="user_id", referencedColumnName="id",onDelete="CASCADE")
-     *
-     */
-    private $user;
-
 
     /**
      * @ORM\Column(type="string", length=255,nullable=true)
@@ -59,13 +39,24 @@ class Vendeur
      * )
      */
     protected $nom_boutique;
-
-
     /**
      * @ORM\Column(type="string", length=255,nullable=true)
      */
     protected $description;
-
+    /**
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+    /**
+     * One Product has One Shipment.
+     * @OneToOne(targetEntity="AppBundle\Entity\User")
+     * @JoinColumn(name="user_id", referencedColumnName="id",onDelete="CASCADE")
+     *
+     */
+    private $user;
     /**
      * Many Groups have Many Users.
      * @ManyToMany(targetEntity="AppBundle\Entity\Acheteur", mappedBy="vendeur")
@@ -79,13 +70,20 @@ class Vendeur
     private $articles;
 
 
-
-
     /**
      * @ORM\Column(type="string", nullable=true)
      * @Type("int")
      */
     private $note;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->abonnes = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->articles = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Add article
@@ -154,14 +152,6 @@ class Vendeur
     {
         return $this->abonnes;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->abonnes = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->articles = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
      * Set nom
@@ -188,6 +178,16 @@ class Vendeur
     }
 
     /**
+     * Get note
+     *
+     * @return string
+     */
+    public function getNote()
+    {
+        return $this->note;
+    }
+
+    /**
      * Set note
      *
      * @param string $note
@@ -202,13 +202,13 @@ class Vendeur
     }
 
     /**
-     * Get note
+     * Get description
      *
      * @return string
      */
-    public function getNote()
+    public function getDescription()
     {
-        return $this->note;
+        return $this->description;
     }
 
     /**
@@ -223,16 +223,6 @@ class Vendeur
         $this->description = $description;
 
         return $this;
-    }
-
-    /**
-     * Get description
-     *
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
     }
 
     /**
@@ -308,6 +298,16 @@ class Vendeur
     }
 
     /**
+     * Get nomBoutique
+     *
+     * @return string
+     */
+    public function getNomBoutique()
+    {
+        return $this->nom_boutique;
+    }
+
+    /**
      * Set nomBoutique
      *
      * @param string $nomBoutique
@@ -319,16 +319,6 @@ class Vendeur
         $this->nom_boutique = $nomBoutique;
 
         return $this;
-    }
-
-    /**
-     * Get nomBoutique
-     *
-     * @return string
-     */
-    public function getNomBoutique()
-    {
-        return $this->nom_boutique;
     }
 
     /**
@@ -500,6 +490,16 @@ class Vendeur
     }
 
     /**
+     * Get user
+     *
+     * @return \AppBundle\Entity\User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
      * Set user
      *
      * @param \AppBundle\Entity\User $user
@@ -511,15 +511,5 @@ class Vendeur
         $this->user = $user;
 
         return $this;
-    }
-
-    /**
-     * Get user
-     *
-     * @return \AppBundle\Entity\User
-     */
-    public function getUser()
-    {
-        return $this->user;
     }
 }

@@ -9,7 +9,6 @@
 namespace AppBundle\Entity;
 
 
-
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\OneToOne;
@@ -31,7 +30,6 @@ class Publicity
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
 
 
     /**
@@ -64,7 +62,6 @@ class Publicity
     private $image_url;
 
 
-
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Type("datetime")
@@ -78,11 +75,6 @@ class Publicity
     private $date_fin;
 
 
-
-
-
-
-
     /**
      * Get id
      *
@@ -91,6 +83,16 @@ class Publicity
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Get article
+     *
+     * @return \AppBundle\Entity\Article
+     */
+    public function getArticle()
+    {
+        return $this->article;
     }
 
     /**
@@ -108,13 +110,13 @@ class Publicity
     }
 
     /**
-     * Get article
+     * Get pubType
      *
-     * @return \AppBundle\Entity\Article
+     * @return string
      */
-    public function getArticle()
+    public function getPubType()
     {
-        return $this->article;
+        return $this->pub_type;
     }
 
     /**
@@ -132,13 +134,13 @@ class Publicity
     }
 
     /**
-     * Get pubType
+     * Get imageUrl
      *
      * @return string
      */
-    public function getPubType()
+    public function getImageUrl()
     {
-        return $this->pub_type;
+        return $this->image_url;
     }
 
     /**
@@ -156,13 +158,13 @@ class Publicity
     }
 
     /**
-     * Get imageUrl
+     * Get vendeur
      *
-     * @return string
+     * @return \AppBundle\Entity\Vendeur
      */
-    public function getImageUrl()
+    public function getVendeur()
     {
-        return $this->image_url;
+        return $this->vendeur;
     }
 
     /**
@@ -180,13 +182,13 @@ class Publicity
     }
 
     /**
-     * Get vendeur
+     * Get dateDeb
      *
-     * @return \AppBundle\Entity\Vendeur
+     * @return \DateTime
      */
-    public function getVendeur()
+    public function getDateDeb()
     {
-        return $this->vendeur;
+        return $this->date_deb;
     }
 
     /**
@@ -204,13 +206,13 @@ class Publicity
     }
 
     /**
-     * Get dateDeb
+     * Get dateFin
      *
      * @return \DateTime
      */
-    public function getDateDeb()
+    public function getDateFin()
     {
-        return $this->date_deb;
+        return $this->date_fin;
     }
 
     /**
@@ -225,15 +227,5 @@ class Publicity
         $this->date_fin = $dateFin;
 
         return $this;
-    }
-
-    /**
-     * Get dateFin
-     *
-     * @return \DateTime
-     */
-    public function getDateFin()
-    {
-        return $this->date_fin;
     }
 }

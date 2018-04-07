@@ -3,7 +3,6 @@
 <head>
 
 
-
     {% block myjavascript %}
 
 
@@ -37,161 +36,158 @@
                         $("#commentsul").fadeOut(500);
 
 
-                        setTimeout(function(){
+                        setTimeout(function () {
                             $("#commentsul").html('');
 
-                            for (i=0;i<response.nbrc;i++) {
+                            for (i = 0; i < response.nbrc; i++) {
 
 
-                         $html ="\n" +
-                             "                    <div class=\"comment-item bo3 \">\n" +
-                             "\n" +
-                             "                        <div class=\"box w-size29\" >\n" +
-                             "\n" +
-                             "                            <div class=\"circle\">\n" +
-                             "                                <img class=\"circular\" src=\""+response[i].img_user+"\" >\n" +
-                             "\n" +
-                             "                            </div>\n" +
-                             "\n" +
-                             "\n" +
-                             "                            <div class=\"box3\">\n" +
-                             "\n" +
-                             "\n" +
-                             "                                <div class=\"box2 \">\n" +
-                             "\n" +
-                             "\n" +
-                             "                                    <div class=\"nom\">\n" +
-                             "                                    <span class=\"s-text18\">\n" +
-                             "                                         "+response[i].user_name+
-                             "                                    </span>\n" +
-                             "                                    </div>\n" +
-                             "\n" +
-                             "                                    <div class=\"starr\">\n" ;
+                                $html = "\n" +
+                                    "                    <div class=\"comment-item bo3 \">\n" +
+                                    "\n" +
+                                    "                        <div class=\"box w-size29\" >\n" +
+                                    "\n" +
+                                    "                            <div class=\"circle\">\n" +
+                                    "                                <img class=\"circular\" src=\"" + response[i].img_user + "\" >\n" +
+                                    "\n" +
+                                    "                            </div>\n" +
+                                    "\n" +
+                                    "\n" +
+                                    "                            <div class=\"box3\">\n" +
+                                    "\n" +
+                                    "\n" +
+                                    "                                <div class=\"box2 \">\n" +
+                                    "\n" +
+                                    "\n" +
+                                    "                                    <div class=\"nom\">\n" +
+                                    "                                    <span class=\"s-text18\">\n" +
+                                    "                                         " + response[i].user_name +
+                                    "                                    </span>\n" +
+                                    "                                    </div>\n" +
+                                    "\n" +
+                                    "                                    <div class=\"starr\">\n";
 
 
-                             for (j=5;j>0;j--)
-                             {
-                                 if ((j) == response[i].rate)
-                                 {
-                                     $html +=
-                                         "<input type=\"checkbox\" id=\"st"+j+"\" value=\""+j+"\" disabled checked='checked' />\n " +
-                                         "<label for=\"st"+j+"\"></label>\n";
+                                for (j = 5; j > 0; j--) {
+                                    if ((j) == response[i].rate) {
+                                        $html +=
+                                            "<input type=\"checkbox\" id=\"st" + j + "\" value=\"" + j + "\" disabled checked='checked' />\n " +
+                                            "<label for=\"st" + j + "\"></label>\n";
 
-                                 }
-                                 else
-                                 {
-                                     $html +=
-                                         "<input type=\"checkbox\" id=\"st"+j+"\" value=\""+j+"\" disabled  />\n " +
-                                         "<label for=\"st"+j+"\"></label>\n";
-                                 }
-                             }
+                                    }
+                                    else {
+                                        $html +=
+                                            "<input type=\"checkbox\" id=\"st" + j + "\" value=\"" + j + "\" disabled  />\n " +
+                                            "<label for=\"st" + j + "\"></label>\n";
+                                    }
+                                }
 
-                           /*  "                                        <input type=\"checkbox\" id=\"st1\" value=\"1\" disabled/>\n" +
-                             "                                        <label for=\"st1\"></label>\n" +
-                             "                                        <input type=\"checkbox\" id=\"st2\" value=\"2\" disabled/>\n" +
-                             "                                        <label for=\"st2\"></label>\n" +
-                             "                                        <input type=\"checkbox\" id=\"st3\" value=\"3\" disabled checked='checked' />\n" +
-                             "                                        <label for=\"st3\"></label>\n" +
-                             "                                        <input type=\"checkbox\" id=\"st4\" value=\"4\" disabled/>\n" +
-                             "                                        <label for=\"st4\"></label>\n" +
-                             "                                        <input type=\"checkbox\" id=\"st5\" value=\"5\" disabled/>\n" +
-                             "                                        <label for=\"st5\"></label>\n" ;
-                              */
+                                /*  "                                        <input type=\"checkbox\" id=\"st1\" value=\"1\" disabled/>\n" +
+                                  "                                        <label for=\"st1\"></label>\n" +
+                                  "                                        <input type=\"checkbox\" id=\"st2\" value=\"2\" disabled/>\n" +
+                                  "                                        <label for=\"st2\"></label>\n" +
+                                  "                                        <input type=\"checkbox\" id=\"st3\" value=\"3\" disabled checked='checked' />\n" +
+                                  "                                        <label for=\"st3\"></label>\n" +
+                                  "                                        <input type=\"checkbox\" id=\"st4\" value=\"4\" disabled/>\n" +
+                                  "                                        <label for=\"st4\"></label>\n" +
+                                  "                                        <input type=\"checkbox\" id=\"st5\" value=\"5\" disabled/>\n" +
+                                  "                                        <label for=\"st5\"></label>\n" ;
+                                   */
 
 
-                             $html += "                                    </div>\n" +
-                             "\n" +
-                             "                                    <div class=\"end\" >\n" +
-                             "                                    <span >\n" +
-                             "                                     " + response[i].date +
-                             "                                    </span>\n" +
-                             "                                    </div>\n" +
-                             "\n" +
-                             "\n" +
-                             "\n" +
-                             "                                    <div class=\"size\">\n" +
-                             "                                        <input type=\"image\" src=\"{{ asset('images/icons/option_menu.png') }}\" name=\"test\" value=\":\" class=\"field\" readonly=\"readonly\" />\n" +
-                             "                                        <ul class=\"list\">\n" ;
-             //                "                                            <li>Signaler</li>" ;
+                                $html += "                                    </div>\n" +
+                                    "\n" +
+                                    "                                    <div class=\"end\" >\n" +
+                                    "                                    <span >\n" +
+                                    "                                     " + response[i].date +
+                                    "                                    </span>\n" +
+                                    "                                    </div>\n" +
+                                    "\n" +
+                                    "\n" +
+                                    "\n" +
+                                    "                                    <div class=\"size\">\n" +
+                                    "                                        <input type=\"image\" src=\"{{ asset('images/icons/option_menu.png') }}\" name=\"test\" value=\":\" class=\"field\" readonly=\"readonly\" />\n" +
+                                    "                                        <ul class=\"list\">\n";
+                                //                "                                            <li>Signaler</li>" ;
 
-                             if (response[i].mine) {
-                                 $html+=
-                                 "                                            <li onclick=delComments(\"?id="+response[i].id+"\")>Supprimer</li>\n" ;
-                             }
-                             else {
-                                 $html+=
-                                     "                                            <li>Signaler</li>\n" ;
-                             }
+                                if (response[i].mine) {
+                                    $html +=
+                                        "                                            <li onclick=delComments(\"?id=" + response[i].id + "\")>Supprimer</li>\n";
+                                }
+                                else {
+                                    $html +=
+                                        "                                            <li>Signaler</li>\n";
+                                }
 
-                             $html +=
-                             "                                        </ul>\n" +
-                             "                                    </div>\n" +
-                             "\n" +
-                             "\n" +
-                             "                                </div>\n" +
-                             "\n" +
-                             "                                <span class=\"commentt\">\n" +
-                             "                                " + response[i].comment +
-                             "                                </span>\n" +
-                             "\n" +
-                             "                            </div>\n" +
-                             "\n" +
-                             "                        </div>\n" +
-                             "\n" +
-                             "                    </div>";
-
-
-                            $("#commentsul").append($html);
-
-                        }
+                                $html +=
+                                    "                                        </ul>\n" +
+                                    "                                    </div>\n" +
+                                    "\n" +
+                                    "\n" +
+                                    "                                </div>\n" +
+                                    "\n" +
+                                    "                                <span class=\"commentt\">\n" +
+                                    "                                " + response[i].comment +
+                                    "                                </span>\n" +
+                                    "\n" +
+                                    "                            </div>\n" +
+                                    "\n" +
+                                    "                        </div>\n" +
+                                    "\n" +
+                                    "                    </div>";
 
 
-                        $("#numcmt").html("Avis ("+numcm+")");
+                                $("#commentsul").append($html);
 
-                  /*      $(".comment-item").each(function(i) {
-                            $(".comment-item").fadeIn(1000*i);
-                        });*/
-
-                        $('#commentsul').fadeIn(1000);
+                            }
 
 
+                            $("#numcmt").html("Avis (" + numcm + ")");
 
-                        $(function(){
-                            $('.size').styleddropdown();
-                        });
+                            /*      $(".comment-item").each(function(i) {
+                                      $(".comment-item").fadeIn(1000*i);
+                                  });*/
 
-                        (function($){
-                            $.fn.styleddropdown = function(){
-                                return this.each(function(){
-                                    var obj = $(this);
-                                    obj.find('.field').click(function() { //onclick event, 'list' fadein
-                                        obj.find('.list').fadeIn(400);
+                            $('#commentsul').fadeIn(1000);
 
-                                        $(document).keyup(function(event) { //keypress event, fadeout on 'escape'
-                                            if(event.keyCode == 27) {
-                                                obj.find('.list').fadeOut(400);
-                                            }
+
+                            $(function () {
+                                $('.size').styleddropdown();
+                            });
+
+                            (function ($) {
+                                $.fn.styleddropdown = function () {
+                                    return this.each(function () {
+                                        var obj = $(this);
+                                        obj.find('.field').click(function () { //onclick event, 'list' fadein
+                                            obj.find('.list').fadeIn(400);
+
+                                            $(document).keyup(function (event) { //keypress event, fadeout on 'escape'
+                                                if (event.keyCode == 27) {
+                                                    obj.find('.list').fadeOut(400);
+                                                }
+                                            });
+
+                                            obj.find('.list').hover(function () {
+                                                },
+                                                function () {
+                                                    $(this).fadeOut(400);
+                                                });
+
                                         });
 
-                                        obj.find('.list').hover(function(){ },
-                                            function(){
-                                                $(this).fadeOut(400);
-                                            });
-
+                                        obj.find('.list li').click(function () { //onclick event, change field value with selected 'list' item and fadeout 'list'
+                                            obj.find('.field')
+                                                .val($(this).html())
+                                                .css({
+                                                    'background': '#fff',
+                                                    'color': '#333'
+                                                });
+                                            obj.find('.list').fadeOut(400);
+                                        });
                                     });
-
-                                    obj.find('.list li').click(function() { //onclick event, change field value with selected 'list' item and fadeout 'list'
-                                        obj.find('.field')
-                                            .val($(this).html())
-                                            .css({
-                                                'background':'#fff',
-                                                'color':'#333'
-                                            });
-                                        obj.find('.list').fadeOut(400);
-                                    });
-                                });
-                            };
-                        })(jQuery);
+                                };
+                            })(jQuery);
 
                         }, 400);
 
@@ -207,14 +203,13 @@
 
             function delComments(com_id) {
 
-                $ur = "{{ path('delComment') }}"+com_id;
-                $ur.replace(/<a\b[^>]*>(.*?)<\/a>/i,"");
+                $ur = "{{ path('delComment') }}" + com_id;
+                $ur.replace(/<a\b[^>]*>(.*?)<\/a>/i, "");
 
                 $.ajax({
                     url: $ur,
                     type: "POST",
-                    data: {
-                    },
+                    data: {},
 
                     beforeSend: function () {
 
@@ -238,7 +233,6 @@
             }
 
 
-
             function comment() {
 
                 var cmt = $("#cmt").val();
@@ -251,7 +245,7 @@
                 if (selected != null)
                     rate = selected;
 
-        //        alert(rate);
+                //        alert(rate);
 
 
                 $.ajax({
@@ -259,8 +253,9 @@
                     type: "POST",
                     data: {
                         id:{{ article.id }},
-                        comment:cmt,
-                        rate:rate},
+                        comment: cmt,
+                        rate: rate
+                    },
 
                     beforeSend: function () {
                         $("#cmt").val('');
@@ -272,33 +267,32 @@
                     success: function (data) {
                         var response = jQuery.parseJSON(data);
                         console.log(response);
-                        
-                     /*   $html ="<li class=\"comment-item bo3 \">\n" +
-                            "\n" +
-                            "                        <div class=\"circle\">\n" +
-                            "                            <img class=\"circular\" src=\""+response.img_user+"\" >\n" +
-                            "                        </div>\n" +
-                            "\n" +
-                            "                        <div >\n" +
-                            "                            <span class=\"s-text18\">\n" +
-                            "                                \n" +response.user_name+
-                            "                            </span> <br>\n" +
-                            "\n" +
-                            "                            <span class=\"\">\n" +
-                            "                                " +response.comment+
-                            "                            </span>\n" +
-                            "                        </div>\n" +
-                            "                    </li>";
 
-                        $("#commentsul").html($html + $("#commentsul").html());
+                        /*   $html ="<li class=\"comment-item bo3 \">\n" +
+                               "\n" +
+                               "                        <div class=\"circle\">\n" +
+                               "                            <img class=\"circular\" src=\""+response.img_user+"\" >\n" +
+                               "                        </div>\n" +
+                               "\n" +
+                               "                        <div >\n" +
+                               "                            <span class=\"s-text18\">\n" +
+                               "                                \n" +response.user_name+
+                               "                            </span> <br>\n" +
+                               "\n" +
+                               "                            <span class=\"\">\n" +
+                               "                                " +response.comment+
+                               "                            </span>\n" +
+                               "                        </div>\n" +
+                               "                    </li>";
 
-                        numcm++;
+                           $("#commentsul").html($html + $("#commentsul").html());
 
-                        $("#numcmt").html("Avis ("+(numcm)+")"); */
+                           numcm++;
+
+                           $("#numcmt").html("Avis ("+(numcm)+")"); */
 
 
                         getComments();
-
 
 
                     },
@@ -319,30 +313,30 @@
 
                 {% for opt in article.option %}
 
-                    $html ="";
+                $html = "";
 
-                    {% if opt.type == 'Couleur' %}
+                {% if opt.type == 'Couleur' %}
 
-                        $html =
-                            "<option>{{ opt.nom }}</option>" ;
+                $html =
+                    "<option>{{ opt.nom }}</option>";
 
-                            $("#selcol").append($html);
-
-
-                            $("#coldiv").show();
+                $("#selcol").append($html);
 
 
+                $("#coldiv").show();
 
-                    {% else %}
 
-                        $html=
-                            '<option>{{ opt.nom }}</option>';
 
-                            $("#selopt").append($html);
+                {% else %}
 
-                            $("#optdiv").show();
+                $html =
+                    '<option>{{ opt.nom }}</option>';
 
-                 {% endif %}
+                $("#selopt").append($html);
+
+                $("#optdiv").show();
+
+                {% endif %}
 
                 {% endfor %}
 
@@ -350,29 +344,17 @@
             }
 
 
-
-            $(document).ready(function() {
+            $(document).ready(function () {
                 first = true;
                 getOpt2();
                 getComments();
             });
 
 
-
-
-
-
-
         </script>
 
 
     {% endblock %}
-
-
-
-
-
-
 
 
     <title>Product Detail</title>
@@ -859,7 +841,7 @@
     </div>
 
     <!-- Menu Mobile -->
-    <div class="wrap-side-menu" >
+    <div class="wrap-side-menu">
         <nav class="side-menu">
             <ul class="main-menu">
                 <li class="item-topbar-mobile p-l-20 p-t-8 p-b-8">
@@ -959,15 +941,13 @@
                 <div class="wrap-slick3-dots"></div>
 
 
-
-
                 <div class="slick3">
 
                     {% for img in article.images %}
 
-                        <div class="item-slick3" data-thumb="/{{ img.url }}" >
+                        <div class="item-slick3" data-thumb="/{{ img.url }}">
                             <div class="wrap-pic-w">
-                                <img class ="IMG-PRODUCT1"  src="/{{ img.url }}" alt="IMG-PRODUCT">
+                                <img class="IMG-PRODUCT1" src="/{{ img.url }}" alt="IMG-PRODUCT">
                             </div>
                         </div>
                     {% endfor %}
@@ -976,7 +956,7 @@
         </div>
 
         <div class="w-size14 p-t-30 respon5">
-            <h4 id = "nom" class="product-detail-name m-text16 p-b-13">
+            <h4 id="nom" class="product-detail-name m-text16 p-b-13">
                 {{ article.nom }}
             </h4>
 
@@ -1000,36 +980,35 @@
             </div>
 
 
-
             <!--  -->
             <div class="p-t-33 p-b-30">
 
 
-                        <div id="coldiv" class="flex-m flex-w">
-                            <div class="s-text15 w-size15 t-center">
-                                Choisir une couleur
-                            </div>
+                <div id="coldiv" class="flex-m flex-w">
+                    <div class="s-text15 w-size15 t-center">
+                        Choisir une couleur
+                    </div>
 
-                            <div class="rs2-select2 rs3-select2 bo4 of-hidden w-size16">
-                                <select id="selcol" class="selection-2" name="color">
-                                    <option>Choisir une option</option>
-                                </select>
-                            </div>
-                        </div>
-                        <br>
+                    <div class="rs2-select2 rs3-select2 bo4 of-hidden w-size16">
+                        <select id="selcol" class="selection-2" name="color">
+                            <option>Choisir une option</option>
+                        </select>
+                    </div>
+                </div>
+                <br>
 
 
-                        <div id="optdiv" class="flex-m flex-w p-b-10">
-                            <div class="s-text15 w-size15 t-center">
-                                Choisir une option
-                            </div>
+                <div id="optdiv" class="flex-m flex-w p-b-10">
+                    <div class="s-text15 w-size15 t-center">
+                        Choisir une option
+                    </div>
 
-                            <div class="rs2-select2 rs3-select2 bo4 of-hidden w-size16">
-                                <select id="selopt" class="selection-2" name="size">
-                                    <option>Choisir une option</option>
-                                </select>
-                            </div>
-                        </div>
+                    <div class="rs2-select2 rs3-select2 bo4 of-hidden w-size16">
+                        <select id="selopt" class="selection-2" name="size">
+                            <option>Choisir une option</option>
+                        </select>
+                    </div>
+                </div>
 
 
                 <div class="flex-r-m flex-w p-t-10 p-l-40">
@@ -1039,7 +1018,8 @@
                                 <i class="fs-12 fa fa-minus" aria-hidden="true"></i>
                             </button>
 
-                            <input class="size8 m-text18 t-center num-product" type="number" name="num-product" value="1">
+                            <input class="size8 m-text18 t-center num-product" type="number" name="num-product"
+                                   value="1">
 
                             <button class="btn-num-product-up color1 flex-c-m size7 bg8 eff2">
                                 <i class="fs-12 fa fa-plus" aria-hidden="true"></i>
@@ -1077,7 +1057,8 @@
 
                 <div class="dropdown-content dis-none p-t-15 p-b-23">
                     <p class="s-text8">
-                        Fusce ornare mi vel risus porttitor dignissim. Nunc eget risus at ipsum blandit ornare vel sed velit. Proin gravida arcu nisl, a dignissim mauris placerat
+                        Fusce ornare mi vel risus porttitor dignissim. Nunc eget risus at ipsum blandit ornare vel sed
+                        velit. Proin gravida arcu nisl, a dignissim mauris placerat
                     </p>
                 </div>
             </div>
@@ -1103,14 +1084,15 @@
 
             <div class="w-size29 p-t-20 p-l-2 p-r-2 respon3 p-b-25">
 
-                <div class="effect1 w-size29   " >
+                <div class="effect1 w-size29   ">
                     <input id="cmt" class=" w-size29 p-b-8" type="text" placeholder="Ecrire un commentaire">
                     <span class="effect1-line"></span>
                 </div>
 
                 <div style="float: right;" class="w-size2 p-t-20 ">
                     <!-- Button -->
-                    <button id="addcmt" onclick="comment()"  class="flex-c-m size2 bg4 bo-rad-23 hov1 m-text3 trans-0-4 ">
+                    <button id="addcmt" onclick="comment()"
+                            class="flex-c-m size2 bg4 bo-rad-23 hov1 m-text3 trans-0-4 ">
                         Commenter
                     </button>
                 </div>
@@ -1133,22 +1115,18 @@
             </div>
 
 
-
-
-            <div  class="p-b-0 p-l-15  ">
-
+            <div class="p-b-0 p-l-15  ">
 
 
                 <div id="commentsul">
 
 
-
                     <div class="comment-item bo3 ">
 
-                        <div class="box w-size29" >
+                        <div class="box w-size29">
 
                             <div class="circle">
-                                <img class="circular" src="{{ asset('images/icons/logo.png') }}" >
+                                <img class="circular" src="{{ asset('images/icons/logo.png') }}">
 
                             </div>
 
@@ -1170,7 +1148,7 @@
                                         <label for="st1"></label>
                                         <input type="checkbox" id="st2" value="2" disabled/>
                                         <label for="st2"></label>
-                                        <input type="checkbox" id="st3" value="3" disabled checked='checked' />
+                                        <input type="checkbox" id="st3" value="3" disabled checked='checked'/>
                                         <label for="st3"></label>
                                         <input type="checkbox" id="st4" value="4" disabled/>
                                         <label for="st4"></label>
@@ -1178,16 +1156,16 @@
                                         <label for="st5"></label>
                                     </div>
 
-                                    <div class="end" >
-                                    <span >
+                                    <div class="end">
+                                    <span>
                                         15 h
                                     </span>
                                     </div>
 
 
-
                                     <div class="size">
-                                        <input type="image" src="{{ asset('images/icons/option_menu.png') }}" name="test" value=":" class="field" readonly="readonly" />
+                                        <input type="image" src="{{ asset('images/icons/option_menu.png') }}"
+                                               name="test" value=":" class="field" readonly="readonly"/>
                                         <ul class="list">
                                             <li>Signaler</li>
                                             <li onclick=delComments("?id=29")>Supprimer</li>
@@ -1206,8 +1184,6 @@
                         </div>
 
                     </div>
-
-
 
 
                 </div>
@@ -1520,7 +1496,8 @@
 
             <div>
                 <p class="s-text7 w-size27">
-                    Any questions? Let us know in store at 8th floor, 379 Hudson St, New York, NY 10018 or call us on (+1) 96 716 6879
+                    Any questions? Let us know in store at 8th floor, 379 Hudson St, New York, NY 10018 or call us on
+                    (+1) 96 716 6879
                 </p>
 
                 <div class="flex-m p-t-30">
@@ -1673,11 +1650,12 @@
         </a>
 
         <div class="t-center s-text8 p-t-20">
-            Copyright © 2018 All rights reserved. | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+            Copyright © 2018 All rights reserved. | This template is made with <i class="fa fa-heart-o"
+                                                                                  aria-hidden="true"></i> by <a
+                    href="https://colorlib.com" target="_blank">Colorlib</a>
         </div>
     </div>
 </footer>
-
 
 
 <!-- Back to top -->
@@ -1690,7 +1668,6 @@
 <!-- Container Selection -->
 <div id="dropDownSelect1"></div>
 <div id="dropDownSelect2"></div>
-
 
 
 <!--===============================================================================================-->
@@ -1719,67 +1696,65 @@
 <!--===============================================================================================-->
 <script type="text/javascript" src="{{ asset('vendor/sweetalert/sweetalert.min.js') }}"></script>
 <script type="text/javascript">
-    $('.block2-btn-addcart').each(function(){
+    $('.block2-btn-addcart').each(function () {
         var nameProduct = $(this).parent().parent().parent().find('.block2-name').html();
-        $(this).on('click', function(){
+        $(this).on('click', function () {
             swal(nameProduct, "is added to cart !", "success");
         });
     });
 
-    $('.block2-btn-addwishlist').each(function(){
+    $('.block2-btn-addwishlist').each(function () {
         var nameProduct = $(this).parent().parent().parent().find('.block2-name').html();
-        $(this).on('click', function(){
+        $(this).on('click', function () {
             swal(nameProduct, "is added to wishlist !", "success");
         });
     });
 
-    $('.btn-addcart-product-detail').each(function(){
+    $('.btn-addcart-product-detail').each(function () {
         var nameProduct = $('.product-detail-name').html();
-        $(this).on('click', function(){
+        $(this).on('click', function () {
             swal(nameProduct, "is added to wishlist !", "success");
         });
     });
 
 
-
-
-    $(function(){
+    $(function () {
         $('.size').styleddropdown();
     });
 
-    (function($){
-        $.fn.styleddropdown = function(){
-            return this.each(function(){
+    (function ($) {
+        $.fn.styleddropdown = function () {
+            return this.each(function () {
                 var obj = $(this);
-                obj.find('.field').click(function() { //onclick event, 'list' fadein
+                obj.find('.field').click(function () { //onclick event, 'list' fadein
                     obj.find('.list').fadeIn(400);
 
-                    $(document).keyup(function(event) { //keypress event, fadeout on 'escape'
-                        if(event.keyCode == 27) {
+                    $(document).keyup(function (event) { //keypress event, fadeout on 'escape'
+                        if (event.keyCode == 27) {
                             obj.find('.list').fadeOut(400);
                         }
                     });
 
-                    obj.find('.list').hover(function(){ },
-                        function(){
+                    obj.find('.list').hover(function () {
+                        },
+                        function () {
                             $(this).fadeOut(400);
                         });
 
                 });
 
-                obj.find('.list li').click(function() { //onclick event, change field value with selected 'list' item and fadeout 'list'
+                obj.find('.list li').click(function () { //onclick event, change field value with selected 'list' item and fadeout 'list'
                     obj.find('.field')
                         .val($(this).html())
                         .css({
-                            'background':'#fff',
-                            'color':'#333'
+                            'background': '#fff',
+                            'color': '#333'
                         });
                     obj.find('.list').fadeOut(400);
                 });
             });
         };
     })(jQuery);
-
 
 
 </script>
