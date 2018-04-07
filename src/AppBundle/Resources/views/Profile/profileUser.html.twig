@@ -6,7 +6,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<title>Home</title>
+<title>Profile</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -58,6 +58,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('css/util.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/main.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/grid.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/hover.css') }}">
 
 
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
@@ -136,23 +137,23 @@
                             </li>
 
                             <li class="sale-noti">
-                                <a href="product.html">Bon Plans</a>
+                                <a href="../articles/product.html">Bon Plans</a>
                             </li>
 
                             <li>
-                                <a href="cart.html">Nos Boutiques</a>
+                                <a href="../articles/cart.html">Nos Boutiques</a>
                             </li>
 
                             <li>
-                                <a href="blog.html">Blog</a>
+                                <a href="{{ path('blogs') }}">Blog</a>
                             </li>
 
                             <li>
-                                <a href="about.html">A Propos</a>
+                                <a href="../articles/about.html">A Propos</a>
                             </li>
 
                             <li>
-                                <a href="contact.html">Contact</a>
+                                <a href="{{ path('contact') }}">Contact</a>
                             </li>
                         </ul>
                     </nav>
@@ -238,7 +239,7 @@
                             <div class="header-cart-buttons">
                                 <div class="header-cart-wrapbtn">
                                     <!-- Button -->
-                                    <a href="cart.html" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
+                                    <a href="../articles/cart.html" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
                                         Voir panier
                                     </a>
                                 </div>
@@ -346,7 +347,7 @@
                             <div class="header-cart-buttons">
                                 <div class="header-cart-wrapbtn">
                                     <!-- Button -->
-                                    <a href="cart.html" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
+                                    <a href="../articles/cart.html" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
                                         View Cart
                                     </a>
                                 </div>
@@ -418,23 +419,23 @@
                     </li>
 
                     <li class="item-menu-mobile">
-                        <a href="product.html">Bon plans</a>
+                        <a href="../articles/product.html">Bon plans</a>
                     </li>
 
                     <li class="item-menu-mobile">
-                        <a href="cart.html">Features</a>
+                        <a href="../articles/cart.html">Features</a>
                     </li>
 
                     <li class="item-menu-mobile">
-                        <a href="blog.html">Blog</a>
+                        <a href="{{ path('blogs') }}">Blog</a>
                     </li>
 
                     <li class="item-menu-mobile">
-                        <a href="about.html">A propos</a>
+                        <a href="../articles/about.html">A propos</a>
                     </li>
 
                     <li class="item-menu-mobile">
-                        <a href="contact.html">Contact</a>
+                        <a href="{{ path('contact') }}">Contact</a>
                     </li>
                 </ul>
             </nav>
@@ -504,19 +505,19 @@
                     </div>
 
 
-                    <div class="market-updates col-8 -l-30">
+                    <div class="market-updates col-8 p-l-70 m-t-40">
 
 
                         <div class="row">
 
                             <div class="col-md-5 market-update-gd ">
                                 <div class="market-update-block clr-block-1">
-                                    <div class="col-md-5 market-update-left">
+                                    <div class="col-md-8 market-update-left">
                                         <h3>83</h3>
                                         <h4>Articles en Panier</h4>
                                         <p>Exemple des articles</p>
                                     </div>
-                                    <div class="col-md-6 market-update-right">
+                                    <div class="col-md-4 market-update-right">
                                         <i class="fa fa-file-text-o"> </i>
                                     </div>
                                     <div class="clearfix"> </div>
@@ -526,12 +527,12 @@
 
                             <div class="col-md-5 market-update-gd">
                                 <div class="market-update-block clr-block-2">
-                                    <div class="col-md-5 market-update-left">
+                                    <div class="col-md-8 market-update-left">
                                         <h3>135</h3>
                                         <h4>Liste de souhaits</h4>
                                         <p>Exemple des articles</p>
                                     </div>
-                                    <div class="col-md-6 market-update-right">
+                                    <div class="col-md-4 market-update-right">
                                         <i class="fa fa-eye"> </i>
                                     </div>
                                     <div class="clearfix"> </div>
@@ -545,75 +546,74 @@
 
                             <div class="col-md-5 market-update-gd">
                                 <div class="market-update-block clr-block-3">
-                                    <div class="col-md-5 market-update-left">
+                                    <div class="col-md-8 market-update-left">
                                         <h3>23</h3>
                                         <h4>Mes Messages</h4>
                                         <p>Exemple d'un message</p>
                                     </div>
-                                    <div class="col-md-6 market-update-right">
+                                    <div class="col-md-4 market-update-right">
                                         <i class="fa fa-envelope-o"> </i>
                                     </div>
                                     <div class="clearfix"> </div>
                                 </div>
                             </div>
 
-
-                            <div class="col-md-5 market-update-gd">
-                                <div class="market-update-block clr-block-3">
-                                    <div class="col-md-5 market-update-left">
-                                        <h3>23</h3>
-                                        <h4>Mes Messages</h4>
-                                        <p>Exemple d'un message</p>
-                                    </div>
-                                    <div class="col-md-6 market-update-right">
-                                        <i class="fa fa-envelope-o"> </i>
-                                    </div>
-                                    <div class="clearfix"> </div>
-                                </div>
-                            </div>
-
-
-                        </div>
-
-
-                        <div class="row m-t-25">
 
                             <div class="col-md-5 market-update-gd ">
-                                <div class="market-update-block clr-block-1">
-                                    <div class="col-md-5 market-update-left">
-                                        <h3>83</h3>
-                                        <h4>Articles en Panier</h4>
-                                        <p>Exemple des articles</p>
+                                <div class="market-update-block clr-block-3">
+                                    <div class="col-md-8 market-update-left">
+                                        <h3>23</h3>
+                                        <h4>Historique</h4>
+                                        <p>25 articles</p>
                                     </div>
-                                    <div class="col-md-6 market-update-right">
-                                        <i class="fa fa-file-text-o"> </i>
-                                    </div>
-                                    <div class="clearfix"> </div>
-                                </div>
-                            </div>
-
-
-                            <div class="col-md-5 market-update-gd">
-                                <div class="market-update-block clr-block-2">
-                                    <div class="col-md-5 market-update-left">
-                                        <h3>135</h3>
-                                        <h4>Liste de souhaits</h4>
-                                        <p>Exemple des articles</p>
-                                    </div>
-                                    <div class="col-md-6 market-update-right">
-                                        <i class="fa fa-eye"> </i>
+                                    <div class="col-md-4 market-update-right">
+                                        <i class="fa fa-envelope-o"> </i>
                                     </div>
                                     <div class="clearfix"> </div>
                                 </div>
                             </div>
-
 
                         </div>
 
 
+                        <div class="row m-t-25">
+
+                                <div class="col-md-5 market-update-gd ">
+                                    <div class="market-update-block clr-block-1">
+                                        <div class="col-md-8 market-update-left">
+                                            <h3>83</h3>
+                                            <h4>Mes encheres</h4>
+                                            <p>Exemple des articles</p>
+                                        </div>
+                                        <div class="col-md-4 market-update-right">
+                                            <i class="fa fa-file-text-o"> </i>
+                                        </div>
+                                        <div class="clearfix"> </div>
+                                    </div>
+                                </div>
 
 
-                    </div>
+                                <div class="col-md-5 market-update-gd">
+                                    <div class="market-update-block clr-block-2">
+                                        <div class="col-md-8 market-update-left">
+                                            <h3>135</h3>
+                                            <h4>Liste d'abonnements</h4>
+                                            <p>Exemple d'un vendeur</p>
+                                        </div>
+                                        <div class="col-md-4 market-update-right">
+                                            <i class="fa fa-eye"> </i>
+                                        </div>
+                                        <div class="clearfix"> </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+
+
+
+                        </div>
 
 
                 </div>

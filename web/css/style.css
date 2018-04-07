@@ -1734,7 +1734,7 @@ p.grid1 {
     padding: 6.5em 0em;
 }
 .login-head {
-    background: url(../images/login.jpg)no-repeat;
+    background: url(../images/categories/glasses.jpeg)no-repeat;
     background-size: cover;
     min-height: 150px;
 }
@@ -1777,7 +1777,7 @@ p.grid1 {
     font-family: 'Carrois Gothic', sans-serif;
 }
 .login-block input[type="submit"]:hover{
-	background:#68AE00;
+	background:#e65540;
 	transition: 0.5s all;
 	-webkit-transition: 0.5s all;
 	-moz-transition: 0.5s all;
@@ -1842,6 +1842,24 @@ p.grid1 {
 .login-icons i.fa.fa-facebook:hover, .login-icons i.fa.fa-twitter:hover, .login-icons i.fa.fa-google-plus:hover {
 	 border-radius: 35px;
 }
+
+
+
+.login-icons i.fa.fa-facebookk, .login-icons i.fa.fa-twitter, .login-icons i.fa.fa-google-plus {
+    font-size: 1em;
+    color: #FFFFFF;
+    width: 33px;
+    height: 33px;
+    line-height: 34px;
+    vertical-align: middle;
+    background: #3b5998;
+    transition: 0.5s all;
+}
+.login-icons i.fa.fa-facebookk:hover, .login-icons i.fa.fa-twitter:hover, .login-icons i.fa.fa-google-plus:hover {
+    border-radius: 35px;
+}
+
+
 .login-icons i.fa.fa-twitter{
 	background:#55acee;
 }

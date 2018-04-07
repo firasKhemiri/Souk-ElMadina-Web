@@ -1,0 +1,144 @@
+<!--Author: W3layouts
+Author URL: http://w3layouts.com
+License: Creative Commons Attribution 3.0 Unported
+License URL: http://creativecommons.org/licenses/by/3.0/
+-->
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet" type="text/css" media="all">
+    <!-- Custom Theme files -->
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet" type="text/css" media="all"/>
+    <!--js-->
+    <script src="{{ asset('vendor/jquery/jquery-3.2.1.min.js') }}"></script>
+    <!--icons-css-->
+    <link href="{{ asset('fonts/font-awesome-4.7.0/css/font-awesome.css') }}" rel="stylesheet">
+    <!--Google Fonts-->
+    <link href='//fonts.googleapis.com/css?family=Carrois+Gothic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Work+Sans:400,500,600' rel='stylesheet' type='text/css'>
+    <!--static chart-->
+
+
+
+    <div id="fb-root"></div>
+    <script>
+        window.fbAsyncInit = function() {
+            // init the FB JS SDK
+            FB.init({
+                appId      : '1823460334559586',                        // App ID from the app dashboard
+                //         channelUrl : '//yourdomain.com/channel.html',      // Channel file for x-domain comms
+                status     : true,                                 // Check Facebook Login status
+                xfbml      : true                                  // Look for social plugins on the page
+            });
+        };
+
+        // Load the SDK asynchronously
+        (function(d, s, id){
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {return;}
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/en_US/all.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+
+        function fb_login() {
+            FB.getLoginStatus(function(response) {
+                if (response.status === 'connected') {
+                    // connected
+                  //  alert('Already connected, redirect to login page to create token.');
+                    document.location = "{{ url("hwi_oauth_service_redirect", {service: "facebook"}) }}";
+                } else {
+                    // not_authorized
+                    FB.login(function(response) {
+                        if (response.authResponse) {
+                            document.location = "{{ url("hwi_oauth_service_redirect", {service: "check-facebook"}) }}";
+                        } else {
+                            alert('Permission refusé.');
+                        }
+                    }, {scope: 'email'});
+                }
+            });
+        }
+    </script>
+
+
+
+
+</head>
+<body>
+<div class="login-page">
+    <div class="login-main">
+        <div class="login-head">
+            <h1>Login</h1>
+        </div>
+        <div class="login-block">
+            <form action="{{ path("fos_user_security_check") }}" method="post">
+                {% if csrf_token %}
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+                {% endif %}
+
+
+
+                <label for="username">Nom d'utilisateur</label>
+                <input type="text" id="username" name="_username" value="{{ last_username }}" required="required" autocomplete="username" />
+
+
+
+                <label for="password">Mot de passe</label>
+
+                <input type="password" id="password" name="_password" required="required" autocomplete="current-password" class="lock" placeholder="Password" />
+                <div class="forgot-top-grids">
+                    <div class="forgot-grid">
+                        <ul>
+                            <li>
+                                <input type="checkbox" id="brand1" value="">
+                                <label for="brand1"><span></span>Se souvenir de moi</label>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="forgot">
+                        <a href="#">Mot de passe oublié ?</a>
+                    </div>
+                    <div class="clearfix"> </div>
+                </div>
+
+
+
+                <input type="submit" id="_submit" name="_submit" value="Se connecter" />
+
+                <h3>Pas un membre?<a href="{{ path('fos_user_registration_register') }}"> Créer un compte</a></h3>
+                <h2>ou se connecter avec</h2>
+                <div class="login-icons">
+                    <ul>
+                        <li><a href="#" onclick="fb_login();" class="facebook"><i class="fa fa-facebook"></i></a></li>
+                        <li><a href="#" class="twitter"><i class="fa fa-twitter"></i></a></li>
+                        <li><a href="#" class="google"><i class="fa fa-google-plus"></i></a></li>
+                    </ul>
+                </div>
+            </form>
+
+            <h5><a href="{{ path('accueil') }}">Accueil</a></h5>
+        </div>
+    </div>
+</div>
+<!--inner block end here-->
+
+
+
+<!--scrolling js-->
+<script src="{{ asset('scripts/jquery.nicescroll.js') }}"></script>
+<script src="{{ asset('scripts/scripts.js') }}"></script>
+<!--//scrolling js-->
+<script src="{{ asset('vendor/bootstrap/js/bootstrap.js') }}"> </script>
+<!-- mother grid end here-->
+</body>
+</html>
+
+
+
+

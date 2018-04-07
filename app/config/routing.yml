@@ -45,8 +45,14 @@ facebook_login:
 
 articles:
     resource: "@AppBundle/Routing/articles.xml"
-    prefix: /art
+    prefix: /
 
 profile:
     resource: "@AppBundle/Routing/profile.xml"
     prefix: /profile
+
+
+
+secondary:
+    resource: "@AppBundle/Routing/secondary.xml"
+    prefix: /

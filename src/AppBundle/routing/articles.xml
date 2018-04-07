@@ -14,7 +14,7 @@
         <default key="_controller">AppBundle:Article:getCats</default>
     </route>
 
-    <route id="accueil" path="/accueil">
+    <route id="accueil" path="/">
         <default key="_controller">AppBundle:Article:accueil</default>
     </route>
 

@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Avis;
 use AppBundle\Entity\User;
+use FOS\UserBundle\Controller\SecurityController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,11 +24,12 @@ class UserController extends Controller
 
             $user = $this->get('security.token_storage')->getToken()->getUser();
 
-            return $this->render('@App/articles/profileUser.html.twig', array('user'=>$user ));
+            return $this->render('@App/Profile/profileUser.html.twig', array('user'=>$user ));
         }
 
         else
-            return $this->render('@App/Security/newlogin.html.twig');
+            $sec = new SecurityController();
+            return $sec->loginAction();
     }
 
 
