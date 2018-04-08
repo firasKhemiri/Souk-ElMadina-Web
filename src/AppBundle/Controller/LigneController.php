@@ -52,7 +52,7 @@ class LigneController extends Controller
             return $this->redirectToRoute('ligne_show', array('id' => $ligne->getId()));
         }
 
-        return $this->render('ligne/new.html.twig', array(
+        return $this->render('@App/ligne/new.html.twig', array(
             'ligne' => $ligne,
             'form' => $form->createView(),
         ));
@@ -68,7 +68,7 @@ class LigneController extends Controller
     {
         $deleteForm = $this->createDeleteForm($ligne);
 
-        return $this->render('ligne/show.html.twig', array(
+        return $this->render('@App/ligne/show.html.twig', array(
             'ligne' => $ligne,
             'delete_form' => $deleteForm->createView(),
         ));
@@ -92,7 +92,7 @@ class LigneController extends Controller
             return $this->redirectToRoute('ligne_edit', array('id' => $ligne->getId()));
         }
 
-        return $this->render('ligne/edit.html.twig', array(
+        return $this->render('@App/ligne/edit.html.twig', array(
             'ligne' => $ligne,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
