@@ -2,11 +2,20 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Article;
 use AppBundle\Entity\Avis;
 use AppBundle\Entity\User;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+
+/**
+ * Commande controller.
+ *
+ * @Route("article")
+ */
 
 class ArticleController extends Controller
 {
@@ -466,5 +475,30 @@ class ArticleController extends Controller
         return new Response(json_encode("done"));
     }
 
+    /**
+     * Creates a new commande entity.
+     *
+     * @Route("/new", name="article_new")
+     * @Method({"GET", "POST"})
+     */
+    public function newAction(Request $request)
+    {
+        $article = new Article();
+        $form = $this->createForm('AppBundle\Form\ArticleType', $article);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($article);
+            $em->flush();
+
+            return $this->redirectToRoute('article_new', array('id' => $article->getId()));
+        }
+
+        return $this->render('@App/articles/newArticle.html.twig', array(
+            'article' => $article,
+            'form' => $form->createView(),
+        ));
+    }
 
 }
