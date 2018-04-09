@@ -222,4 +222,17 @@ class ArticleRepository extends \Doctrine\ORM\EntityRepository
     */
 
 
+    public function getArticleFromPanier($panier)
+    {
+        $query = $this->createQueryBuilder('c')->select(['c.id', 'c.nom', 'c.prix', 'c.ref', 'a.quantite'])
+            ->join('c.lignes', 'a')
+            ->where('a.panier = :panier')
+            ->setParameter('panier', $panier);
+
+        $results = $query->getQuery()->getResult();
+
+        return $results;
+    }
+
+
 }

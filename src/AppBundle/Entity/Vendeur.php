@@ -167,15 +167,6 @@ class Vendeur
         return $this;
     }
 
-    /**
-     * Get nom
-     *
-     * @return string
-     */
-    public function getNom()
-    {
-        return $this->nom;
-    }
 
     /**
      * Get note
@@ -239,15 +230,6 @@ class Vendeur
         return $this;
     }
 
-    /**
-     * Get state
-     *
-     * @return string
-     */
-    public function getState()
-    {
-        return $this->state;
-    }
 
     /**
      * Set ville
@@ -261,40 +243,6 @@ class Vendeur
         $this->ville = $ville;
 
         return $this;
-    }
-
-    /**
-     * Get ville
-     *
-     * @return string
-     */
-    public function getVille()
-    {
-        return $this->ville;
-    }
-
-    /**
-     * Set prenom
-     *
-     * @param string $prenom
-     *
-     * @return Vendeur
-     */
-    public function setPrenom($prenom)
-    {
-        $this->prenom = $prenom;
-
-        return $this;
-    }
-
-    /**
-     * Get prenom
-     *
-     * @return string
-     */
-    public function getPrenom()
-    {
-        return $this->prenom;
     }
 
     /**
@@ -319,150 +267,6 @@ class Vendeur
         $this->nom_boutique = $nomBoutique;
 
         return $this;
-    }
-
-    /**
-     * Set gender
-     *
-     * @param string $gender
-     *
-     * @return Vendeur
-     */
-    public function setGender($gender)
-    {
-        $this->gender = $gender;
-
-        return $this;
-    }
-
-    /**
-     * Get gender
-     *
-     * @return string
-     */
-    public function getGender()
-    {
-        return $this->gender;
-    }
-
-    /**
-     * Set birthday
-     *
-     * @param \DateTime $birthday
-     *
-     * @return Vendeur
-     */
-    public function setBirthday($birthday)
-    {
-        $this->birthday = $birthday;
-
-        return $this;
-    }
-
-    /**
-     * Get birthday
-     *
-     * @return \DateTime
-     */
-    public function getBirthday()
-    {
-        return $this->birthday;
-    }
-
-    /**
-     * Set phone
-     *
-     * @param string $phone
-     *
-     * @return Vendeur
-     */
-    public function setPhone($phone)
-    {
-        $this->phone = $phone;
-
-        return $this;
-    }
-
-    /**
-     * Get phone
-     *
-     * @return string
-     */
-    public function getPhone()
-    {
-        return $this->phone;
-    }
-
-    /**
-     * Set usertype
-     *
-     * @param string $usertype
-     *
-     * @return Vendeur
-     */
-    public function setUsertype($usertype)
-    {
-        $this->usertype = $usertype;
-
-        return $this;
-    }
-
-    /**
-     * Get usertype
-     *
-     * @return string
-     */
-    public function getUsertype()
-    {
-        return $this->usertype;
-    }
-
-    /**
-     * Set facebookId
-     *
-     * @param string $facebookId
-     *
-     * @return Vendeur
-     */
-    public function setFacebookId($facebookId)
-    {
-        $this->facebook_id = $facebookId;
-
-        return $this;
-    }
-
-    /**
-     * Get facebookId
-     *
-     * @return string
-     */
-    public function getFacebookId()
-    {
-        return $this->facebook_id;
-    }
-
-    /**
-     * Set facebookAccessToken
-     *
-     * @param string $facebookAccessToken
-     *
-     * @return Vendeur
-     */
-    public function setFacebookAccessToken($facebookAccessToken)
-    {
-        $this->facebook_access_token = $facebookAccessToken;
-
-        return $this;
-    }
-
-    /**
-     * Get facebookAccessToken
-     *
-     * @return string
-     */
-    public function getFacebookAccessToken()
-    {
-        return $this->facebook_access_token;
     }
 
     /**

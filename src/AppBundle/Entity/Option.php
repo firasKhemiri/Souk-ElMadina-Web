@@ -34,11 +34,9 @@ class Option
      */
     private $id;
 
-
     /**
-     * Many Features have One Product.
-     * @ManyToOne(targetEntity="AppBundle\Entity\Article", inversedBy="option")
-     * @JoinColumn(name="article_id", referencedColumnName="id",onDelete="CASCADE")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Article", inversedBy="option")
+     * @ORM\JoinColumn(name="article_id", referencedColumnName="id",onDelete="CASCADE",nullable=true)
      */
     private $article;
 

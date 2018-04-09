@@ -2,11 +2,17 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Ligne;
 use AppBundle\Entity\Panier;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
 
 /**
  * Panier controller.
@@ -24,11 +30,12 @@ class PanierController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
 
-        $paniers = $em->getRepository('AppBundle:Panier')->findAll();
 
         return $this->render('@App/panier/index.html.twig', array(
-            'paniers' => $paniers,
+            'user' => $user,
+            'articles' => $em->getRepository('AppBundle:Article')->getArticleFromPanier($user->getPanier())
         ));
     }
 
@@ -131,7 +138,71 @@ class PanierController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('panier_delete', array('id' => $panier->getId())))
             ->setMethod('DELETE')
-            ->getForm()
-        ;
+            ->getForm();
     }
+
+    /**
+     * Creates a form to delete a panier entity.
+     *
+     * @Route("/addToPanier", name="addToPanier")
+     * @Method("POST")
+     */
+    public function addToPanier(Request $request)
+    {
+
+
+        $user = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+        $article = $em->getRepository('AppBundle:Article')->find($request->request->get('article_id'));
+        $panier = $user->getPanier();
+        if ($panier) {
+
+            $ligne = $em->getRepository('AppBundle:Ligne')->findOneBy(['article' => $article, 'panier' => $panier]);
+            if (!$ligne) {
+                $ligne = new Ligne();
+                $ligne->setPanier($panier);
+                $ligne->setArticle($article);
+            }
+
+            $ligne->setQuantite($ligne->getQuantite() + 1);
+            $panier->addUserRecipeAssociation($ligne);
+            $em->persist($panier);
+            $em->flush();
+            $em->persist($ligne);
+            $em->flush();
+
+
+        } else {
+            $panier = new Panier();
+            $user->setPanier($panier);
+            $ligne = new Ligne();
+
+            $ligne->setPanier($panier);
+            $ligne->setArticle($article);
+            $ligne->setQuantite(1);
+            $panier->addUserRecipeAssociation($ligne);
+            $em->persist($panier);
+            $em->flush();
+            $em->persist($user);
+            $em->flush();
+            $em->persist($ligne);
+            $em->flush();
+
+        }
+        $s = $em->getRepository('AppBundle:Article')->getArticleFromPanier($panier);
+
+        $normalizer = new ObjectNormalizer();
+        $normalizer->setCircularReferenceLimit(1);
+        // Add Circular reference handler
+        $normalizer->setCircularReferenceHandler(function ($object) {
+            return $object->getId();
+        });
+        $encoders = array(new JsonEncoder());
+        $normalizers = array($normalizer);
+        $serializer = new Serializer($normalizers, $encoders);
+
+        return new Response($serializer->serialize($s, 'json'));
+    }
+
+
 }

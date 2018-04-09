@@ -90,6 +90,13 @@ class User extends BaseUser
 
 
     /**
+     * @var string $panier
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Panier")
+     */
+    protected $panier;
+
+
+    /**
      * Get id
      *
      * @return int
@@ -362,4 +369,22 @@ class User extends BaseUser
 
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function getPanier()
+    {
+        return $this->panier;
+    }
+
+    /**
+     * @param string $panier
+     */
+    public function setPanier($panier)
+    {
+        $this->panier = $panier;
+    }
+
+
 }

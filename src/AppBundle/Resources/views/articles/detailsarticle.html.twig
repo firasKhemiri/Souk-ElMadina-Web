@@ -311,34 +311,34 @@
                 $("#optdiv").hide();
 
 
-                {% for opt in article.option %}
+                {#{% for opt in article.option %}#}
 
-                $html = "";
+                {#$html = "";#}
 
-                {% if opt.type == 'Couleur' %}
+                {#{% if opt.type == 'Couleur' %}#}
 
-                $html =
-                    "<option>{{ opt.nom }}</option>";
+                {#$html =#}
+                {#"<option>{{ opt.nom }}</option>";#}
 
-                $("#selcol").append($html);
-
-
-                $("#coldiv").show();
+                {#$("#selcol").append($html);#}
 
 
+                {#$("#coldiv").show();#}
 
-                {% else %}
 
-                $html =
-                    '<option>{{ opt.nom }}</option>';
 
-                $("#selopt").append($html);
+                {#{% else %}#}
 
-                $("#optdiv").show();
+                {#$html =#}
+                {#'<option>{{ opt.nom }}</option>';#}
 
-                {% endif %}
+                {#$("#selopt").append($html);#}
 
-                {% endfor %}
+                {#$("#optdiv").show();#}
+
+                {#{% endif %}#}
+
+                {#{% endfor %}#}
 
 
             }

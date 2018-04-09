@@ -80,7 +80,6 @@
                             }
 
                             for (i=0;i<response.nbrc;i++) {
-
                                 if (response[i].oldprix === "" && !response[i].new) {
                                     $html =
                                         "<div class=\" col-sm-12 col-md-6 col-lg-4 p-b-50\">\n" +
@@ -126,7 +125,7 @@
 
                                     "                                    <div class=\"block2-btn-addcart w-size2 trans-0-4\">\n" +
                                     "                                        <!-- Button -->\n" +
-                                    "                                        <button class=\"flex-c-m size2 bg4 bo-rad-23 hov1 s-text1 trans-0-4\">\n" +
+                                    "                                        <button class=\"flex-c-m size2 bg4 bo-rad-23 hov1 s-text1 trans-0-4\" onclick='addToPanier(" + JSON.stringify(response[i]) + ")'>\n" +
                                     "                                            Ajouter au panier\n" +
                                     "                                        </button>\n" +
                                     "                                    </div>\n" +
@@ -610,58 +609,12 @@
                         <span class="header-icons-noti">10</span>
                         <!-- Header cart noti -->
                         <div class="header-cart header-dropdown">
-                            <ul class="header-cart-wrapitem">
-                                <li class="header-cart-item">
-                                    <div class="header-cart-item-img">
-                                        <img src="/images/item-cart-01.jpg" alt="IMG">
-                                    </div>
+                            <ul class="header-cart-wrapitem" id="panier">
 
-                                    <div class="header-cart-item-txt">
-                                        <a href="#" class="header-cart-item-name">
-                                            Chacheyya
-                                        </a>
-
-                                        <span class="header-cart-item-info">
-											2 x 10DT
-										</span>
-                                    </div>
-                                </li>
-
-                                <li class="header-cart-item">
-                                    <div class="header-cart-item-img">
-                                        <img src="/images/item-cart-02.jpg" alt="IMG">
-                                    </div>
-
-                                    <div class="header-cart-item-txt">
-                                        <a href="#" class="header-cart-item-name">
-                                            Vase rouge
-                                        </a>
-
-                                        <span class="header-cart-item-info">
-											1 x 40DT
-										</span>
-                                    </div>
-                                </li>
-
-                                <li class="header-cart-item">
-                                    <div class="header-cart-item-img">
-                                        <img src="/images/item-cart-03.jpg" alt="IMG">
-                                    </div>
-
-                                    <div class="header-cart-item-txt">
-                                        <a href="#" class="header-cart-item-name">
-                                            Faza
-                                        </a>
-
-                                        <span class="header-cart-item-info">
-											1 x 15DT
-										</span>
-                                    </div>
-                                </li>
                             </ul>
 
-                            <div class="header-cart-total">
-                                Total: 75.00DT
+                            <div class="header-cart-total" id="total">
+
                             </div>
 
                             <div class="header-cart-buttons">
@@ -1232,6 +1185,85 @@
 
     <script type="text/javascript" src="{{ asset('vendor/bootstrap/js/bootstrap.min.js') }}"></script>
 
+
+    <!--===============================================================================================-->
+    <script type="text/javascript" src="{{ asset('vendor/daterangepicker/moment.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('vendor/daterangepicker/daterangepicker.js') }}"></script>
+    <!--===============================================================================================-->
+    <script type="text/javascript" src="{{ asset('vendor/slick/slick.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/slick-custom.js') }}"></script>
+
+
+    <script src="{{ asset('js/semantic.js') }}"></script>
+
+    <!--===============================================================================================-->
+    <script type="text/javascript" src="{{ asset('vendor/sweetalert/sweetalert.min.js') }}"></script>
+
+
+    <!--===============================================================================================-->
+    <script type="text/javascript" src="{{ asset('vendor/noui/nouislider.min.js') }}"></script>
+    <!--===============================================================================================-->
+    <script src="{{ asset('js/main.js') }}"></script>
+    <script type="text/javascript">
+        function addToPanier(data) {
+            $.ajax({
+                url: '{{ url('addToPanier') }}',
+                type: "POST",
+                dataType: "json",
+                data: {
+                    "article_id": data.id
+                },
+                async: true,
+                success: function (d) {
+                    d.total = 0;
+                    var output = "";
+                    d.forEach(function (e) {
+                        for (var i = 0; i < e.quantite; i++) {
+                            d.total += e.prix;
+                        }
+
+                        output += "<li class=\"header-cart-item\">\n" +
+                            "<div class=\"header-cart-item-img\">\n" +
+                            "<img src=\"images/item-cart-01.jpg\" alt=\"IMG\">\n" +
+                            "</div>\n" +
+                            "<div class=\"header-cart-item-txt\">\n" +
+                            "<a href=\"#\" class=\"header-cart-item-name\">\n" +
+                            e.nom +
+                            "</a>\n" +
+                            "<span class=\"header-cart-item-info\">\n" +
+                            e.quantite + " * " + e.prix +
+                            "DT</span>\n" +
+                            "</div>\n" +
+                            "</li>";
+                    })
+                    console.log(d.total);
+
+                    $('#panier').html(output);
+                    $('#total').html("Total : " + d.total + " DT");
+
+                    swal(data.name, "est ajouté au panier !", "success");
+                }
+            });
+        }
+
+
+        $('.block2-btn-addcart').each(function () {
+            var nameProduct = $(this).parent().parent().parent().find('.block2-name').html();
+            $(this).on('click', function () {
+                swal(nameProduct, "is added to cart !", "success");
+            });
+        });
+
+        $('.block2-btn-addwishlist').each(function () {
+            var nameProduct = $(this).parent().parent().parent().find('.block2-name').html();
+            $(this).on('click', function () {
+                swal(nameProduct, "is added to wishlist !", "success");
+            });
+        });
+    </script>
+    <script>
+        $('select.dropdown').dropdown('set selected', ['meteor', 'ember']);
+    </script>
     <script type="text/javascript">
         $(".selection-1").select2({
             minimumResultsForSearch: 20,
@@ -1243,45 +1275,13 @@
             dropdownParent: $('#dropDownSelect2')
         });
     </script>
-    <!--===============================================================================================-->
-    <script type="text/javascript" src="{{ asset('vendor/daterangepicker/moment.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('vendor/daterangepicker/daterangepicker.js') }}"></script>
-    <!--===============================================================================================-->
-    <script type="text/javascript" src="{{ asset('vendor/slick/slick.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('js/slick-custom.js') }}"></script>
-
-
-    <script src="{{ asset('js/semantic.js') }}"></script>
-    <script>
-        $('select.dropdown').dropdown('set selected', ['meteor', 'ember']);
-    </script>
-    <!--===============================================================================================-->
-    <script type="text/javascript" src="{{ asset('vendor/sweetalert/sweetalert.min.js') }}"></script>
-    <script type="text/javascript">
-        $('.block2-btn-addcart').each(function(){
-            var nameProduct = $(this).parent().parent().parent().find('.block2-name').html();
-            $(this).on('click', function(){
-                swal(nameProduct, "is added to cart !", "success");
-            });
-        });
-
-        $('.block2-btn-addwishlist').each(function(){
-            var nameProduct = $(this).parent().parent().parent().find('.block2-name').html();
-            $(this).on('click', function(){
-                swal(nameProduct, "is added to wishlist !", "success");
-            });
-        });
-    </script>
-
-    <!--===============================================================================================-->
-    <script type="text/javascript" src="{{ asset('vendor/noui/nouislider.min.js') }}"></script>
     <script type="text/javascript">
         /*[ No ui ]
         ===========================================================*/
         var filterBar = document.getElementById('filter-bar');
 
         noUiSlider.create(filterBar, {
-            start: [ 0, 1000 ],
+            start: [0, 1000],
             connect: true,
             range: {
                 'min': 0,
@@ -1294,15 +1294,13 @@
             document.getElementById('value-upper')
         ];
 
-        filterBar.noUiSlider.on('update', function( values, handle ) {
-            skipValues[handle].innerHTML = Math.round(values[handle]) ;
+        filterBar.noUiSlider.on('update', function (values, handle) {
+            skipValues[handle].innerHTML = Math.round(values[handle]);
 
             sliderValue = filterBar.noUiSlider.get();
             //   console.log("sliderValue: ", sliderValue);
         });
     </script>
-    <!--===============================================================================================-->
-    <script src="{{ asset('js/main.js') }}"></script>
 
     </body>
 

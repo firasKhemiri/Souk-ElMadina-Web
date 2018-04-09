@@ -12,6 +12,7 @@ namespace AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints\Type;
+use JMS\Serializer\Annotation as Serializer;
 
 
 /**
@@ -40,9 +41,12 @@ class Article
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Categorie", mappedBy="article")
      */
     private $categorie;
+
+
     /**
      * Many Groups have Many Users.
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Option", mappedBy="article")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Option", mappedBy="article",fetch="EXTRA_LAZY")
+     * @Serializer\SkipWhenEmpty
      */
     private $option;
     /**
@@ -97,9 +101,9 @@ class Article
      */
     public function __construct()
     {
-        $this->avis = new ArrayCollection();
         $this->images = new ArrayCollection();
         $this->lignes = new ArrayCollection();
+        $this->option = new ArrayCollection();
     }
 
     /**
@@ -160,29 +164,6 @@ class Article
         return $this;
     }
 
-    /**
-     * Set commande
-     *
-     * @param \AppBundle\Entity\Commande $commande
-     *
-     * @return Article
-     */
-    public function setCommande(\AppBundle\Entity\Commande $commande = null)
-    {
-        $this->commande = $commande;
-
-        return $this;
-    }
-
-    /**
-     * Get commande
-     *
-     * @return \AppBundle\Entity\Commande
-     */
-    public function getCommande()
-    {
-        return $this->commande;
-    }
 
     /**
      * Get images
@@ -232,39 +213,7 @@ class Article
         return $this;
     }
 
-    /**
-     * Add avi
-     *
-     * @param \AppBundle\Entity\Avis $avi
-     *
-     * @return Article
-     */
-    public function addAvi(\AppBundle\Entity\Avis $avi)
-    {
-        $this->avis[] = $avi;
 
-        return $this;
-    }
-
-    /**
-     * Remove avi
-     *
-     * @param \AppBundle\Entity\Avis $avi
-     */
-    public function removeAvi(\AppBundle\Entity\Avis $avi)
-    {
-        $this->avis->removeElement($avi);
-    }
-
-    /**
-     * Get avis
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getAvis()
-    {
-        return $this->avis;
-    }
 
     /**
      * Add image
