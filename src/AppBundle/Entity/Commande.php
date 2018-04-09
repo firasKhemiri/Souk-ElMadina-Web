@@ -127,7 +127,7 @@ class Commande
     /**
      * Get acheteur
      *
-     * @return \AppBundle\Entity\Acheteur
+     * @return \AppBundle\Entity\User
      */
     public function getAcheteur()
     {
@@ -141,7 +141,7 @@ class Commande
      *
      * @return Commande
      */
-    public function setAcheteur(\AppBundle\Entity\Acheteur $acheteur = null)
+    public function setAcheteur(\AppBundle\Entity\User $acheteur = null)
     {
         $this->acheteur = $acheteur;
 

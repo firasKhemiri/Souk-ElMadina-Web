@@ -145,4 +145,24 @@ class PanierController extends Controller
         $em->flush();
         return new JsonResponse('success');
     }
+
+
+    /**
+     * @Route("/updateItem",name="updateItem")
+     * @Method("Post")
+     */
+    public function updateItem(Request $request){
+
+        $user = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+        $panier=$user->getPanier();
+        $ligne=$em->getRepository('AppBundle:Ligne')->findOneBy(
+            [
+                'panier'=>$panier,
+                'article'=>$em->getRepository('AppBundle:Article')->find($request->request->get('id'))]);
+        $ligne->setQuantite($request->request->get('quantite'));
+        $em->persist($ligne);
+        $em->flush();
+        return new JsonResponse('success');
+    }
 }
