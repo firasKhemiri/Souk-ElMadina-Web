@@ -531,29 +531,10 @@
         <!-- Cart item -->
         <div class="container-table-cart pos-relative">
             <div class="wrap-table-shopping-cart bgwhite">
-                <table class="table-shopping-cart">
-                    <tr class="table-head">
-                        <th class="column-1"></th>
-                        <th class="column-2">Article</th>
-                        <th class="column-3">Prix</th>
-                        <th class="column-4 p-l-70">Qantite</th>
-                        <th class="column-5">Totale</th>
-                    </tr>
-                    {% for a in articles %}
-                        <tr class="table-row">
-                            <td class="column-1">
-                                <div class="cart-img-product b-rad-4 o-f-hidden">
-                                    <img src="{{ asset('images/item-10.jpg') }}" alt="IMG-PRODUCT">
-                                </div>
-                            </td>
-                            <td class="column-2">{{ a.nom }}</td>
-                            <td class="column-3">{{ a.prix }} DT</td>
-                            <td class="column-4">
-                                {{ a.quantite }} piece(s)
-                            </td>
-                            <td class="column-5">{{ a.prix*a.quantite }} DT</td>
-                        </tr>
-                    {% endfor %}
+                <table class="table-shopping-cart" id="table">
+
+
+
 
                 </table>
             </div>
@@ -846,9 +827,10 @@
 <script type="text/javascript" src="{{ asset('vendor/slick/slick.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/slick-custom.js') }}"></script>
 
-
+<script type="text/javascript" src="{{ asset('vendor/sweetalert/sweetalert.min.js') }}"></script>
 <script src="{{ asset('js/semantic.js') }}"></script>
 <script src="{{ asset('js/main.js') }}"></script>
+
 <script type="text/javascript">
     $(".selection-1").select2({
         minimumResultsForSearch: 20,
@@ -859,6 +841,76 @@
         minimumResultsForSearch: 20,
         dropdownParent: $('#dropDownSelect2')
     });
+</script>
+<script>
+    $(document).ready(function () {
+        refresh();
+    });
+
+
+    function deleteItem(e) {
+        $.ajax({
+            url: '{{ url('deleteItem') }}',
+            type: "POST",
+            data:{
+              id: e
+            },
+            dataType: "json",
+            success: function (r) {
+                swal("", "Article supprimer", "success");
+                refresh();
+            }
+        });
+
+    }
+
+
+    function refresh() {
+        $.ajax({
+            url: '{{ url('panierItems') }}',
+            type: "GET",
+            dataType: "json",
+            success: function (d) {
+                d.total = 0;
+                var output = "<tr class=\"table-head\">\n" +
+                    "                        <th class=\"column-1\"></th>\n" +
+                    "                        <th class=\"column-2\">Article</th>\n" +
+                    "                        <th class=\"column-3\">Prix</th>\n" +
+                    "                        <th class=\"column-4\">Qantite</th>\n" +
+                    "                        <th class=\"column-5\">Totale</th>\n" +
+                    "                        <th class=\"column-6\"></th>\n" +
+                    "                    </tr>";
+                d.forEach(function (e) {
+                    for (var i = 0; i < e.quantite; i++) {
+                        d.total += e.prix;
+                    }
+
+                    output += "<tr class=\"table-row\">\n" +
+                        "<td class=\"column-1\">\n" +
+                        "<div class=\"cart-img-product b-rad-4 o-f-hidden\">\n" +
+                        "<img src=\"{{ asset('images/item-10.jpg') }}\" alt=\"IMG-PRODUCT\">\n" +
+                        "</div>\n" +
+                        "</td>\n" +
+                        "<td class=\"column-2\">"+e.nom+"</td>\n" +
+                        "<td class=\"column-3\">"+e.prix+" DT</td>\n" +
+                        "<td class=\"column-4\">"+e.quantite+"</td>\n" +
+                        "<td class=\"column-5\">"+e.prix*e.quantite+" DT</td>\n" +
+                        "<td class=\"column-6\">\n" +
+                        "<div class=\"size12 trans-0-4 m-t-10 m-b-10 m-r-10\">\n" +
+                        "<!-- Button -->\n" +
+                        "<button onclick=\"deleteItem("+e.id+") \" class=\"flex-c-m sizefull bg-danger bo-rad-23 hov1 s-text1 trans-0-4\" >Supprimer</button>\n" +
+                        "</div>\n" +
+                        "</td>\n" +
+                        "</tr>";
+                })
+
+                $('#table').html(output);
+                $('#total').html("Total : " + d.total + " DT");
+            }
+
+        });
+
+    }
 </script>
 </body>
 </html>

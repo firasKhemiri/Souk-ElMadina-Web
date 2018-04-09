@@ -116,3 +116,8 @@ hwi_oauth:
 services:
     hwi_oauth.user.provider.entity:
         class: HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUserProvider
+
+sensio_framework_extra:
+    request:
+        converters: true
+        auto_convert: false
