@@ -33,6 +33,7 @@ class CommandeController extends Controller
         $commande=$em->getRepository('AppBundle:Commande')->findOneBy(['acheteur'=>$user]);
         if(!$commande){
         $commande=new Commande();
+        }
         $commande->setPanier($panier);
         $commande->setAcheteur($user);
         $commande->setMethLivraison($request->request->get('livraison'));
@@ -43,8 +44,7 @@ class CommandeController extends Controller
 
         $em->persist($commande);
         $em->flush();
-        }
-        return $this->redirectToRoute('showCommande',['commande'=>$commande]);
+        return $this->redirectToRoute('showCommande',['id'=>$commande->getId()]);
     }
 
 
@@ -54,17 +54,54 @@ class CommandeController extends Controller
      * @Route("/{id}", name="showCommande")
      * @Method("GET")
      */
-    public function showAction(Request $request)
-    {   return new JsonResponse($request->query->all());
+    public function showAction(Request $request,$id)
+    {
+
         $em=$this->getDoctrine()->getManager();
-        $commande=$em->getRepository('AppBundle:Commande')->find();
-
-
+        $commande=$em->getRepository('AppBundle:Commande')->find($id);
+        $totale=0;
+        foreach ($commande->getPanier()->getUserRecipeAssociations() as $ligne){
+          $totale+=  ($ligne->getArticle()->getPrix() * $ligne->getQuantite());
+        }
         return $this->render('@App/commande/show.html.twig', array(
             'commande' => $commande,
-            'user' => $this->getUser()
+            'user' => $this->getUser(),
+            'totale'=>$totale
         ));
     }
 
+    /**
+     * Finds and displays a ligne entity.
+     *
+     * @Route("/{id}/payer", name="payerCommande")
+     * @Method("POST")
+     */
+    public function payAction(Request $request,$id)
+    {
+        $em=$this->getDoctrine()->getManager();
+        $commande=$em->getRepository('AppBundle:Commande')->find($id);
+        $totale=0;
+        foreach ($commande->getPanier()->getUserRecipeAssociations() as $ligne){
+            $totale+=  ($ligne->getArticle()->getPrix() * $ligne->getQuantite());
+        }
+        \Stripe\Stripe::setApiKey("sk_test_2NJiT6SqEHyBuR9D5oKFAjHR");
+        $token = $request->request->get('stripeToken');
+        $charge = \Stripe\Charge::create([
+            'amount' => $totale*100,
+            'currency' => 'eur',
+            'description' => 'Payment',
+            'source' => $token,
+        ]);
+        foreach ($commande->getPanier()->getUserRecipeAssociations() as $ligne){
+            $em->remove($ligne);
+        }
+        $this->getUser()->setPanier(null);
+        $em->flush();
+        $em->remove($commande->getPanier());
+        $em->flush();
+        $em->remove($commande);
+        $em->flush();
 
+        return new JsonResponse('success');
+    }
 }

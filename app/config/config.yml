@@ -99,8 +99,8 @@ hwi_oauth:
     resource_owners:
         facebook:
             type:                facebook
-            client_id:           "%facebook_app_id%"
-            client_secret:       "%facebook_app_secret%"
+            client_id:           451355188634464
+            client_secret:       a0a7089604ad4d32d55f5d0dcaf4fe5a
 
             scope:               "email, basic_info, user_birthday"
             infos_url:           "https://graph.facebook.com/me?fields=id,name,email,picture.type(square).height(961),friends"
@@ -116,8 +116,3 @@ hwi_oauth:
 services:
     hwi_oauth.user.provider.entity:
         class: HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUserProvider
-
-sensio_framework_extra:
-    request:
-        converters: true
-        auto_convert: false

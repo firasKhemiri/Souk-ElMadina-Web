@@ -526,30 +526,140 @@
 <!-- content page -->
 <section class="bgwhite p-t-66 p-b-38">
     <div class="container">
+        <h3 class="m-text26 p-t-15 p-b-16">
+            Commande n: {{ commande.id }}
+        </h3>
         <div class="row">
-            <div class="col-md-4 p-b-30">
-                <div class="hov-img-zoom">
-                    <img src="images/banner-14.jpg" alt="IMG-ABOUT">
-                </div>
+            <div class="col-md-8">
+
+                <h5 class="">
+                    Les articles
+                </h5>
+                <br>
+                <br>
+
+                <table class="table-shopping-cart">
+                    <tr>
+                        <th>Article</th>
+                        <th>Quantite</th>
+                        <th>Prix</th>
+                        <th>Prix totale</th>
+                    </tr>
+                    {% for e in commande.panier.userRecipeAssociations %}
+                        <tr>
+                            <td>{{ e.article.nom }}</td>
+                            <td>{{ e.quantite }}</td>
+                            <td>{{ e.article.prix }} DT</td>
+                            <td>{{ e.article.prix * e.quantite }} DT</td>
+                        </tr>
+                    {% endfor %}
+
+                </table>
             </div>
+            <div class="col-md-4">
+                <div class="row">
+                    <div class="col-md-12 w-size2 p-t-20">
+                        <!-- Button -->
+                        <a href="{{ url('panier_index') }}" class="flex-c-m size2 bg-warning bo-rad-23 hov6 m-text3 trans-0-4">
+                            Modifier
+                        </a>
+                    </div>
+                    <div class="col-md-12 w-size2 p-t-20">
+                        <!-- Button -->
+                        <a href="" class="flex-c-m size2 bg-danger bo-rad-23 hov6 m-text3 trans-0-4">
+                            Annuler
+                        </a>
+                    </div>
+                </div>
 
-            <div class="col-md-8 p-b-30">
-                <h3 class="m-text26 p-t-15 p-b-16">
-                    Our story
-                </h3>
+                <br>
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table table-active">
+                            <tr>
+                                <td><strong>A l'ordre de : </strong></td>
+                                <td>{{ user.nom }} {{ user.prenom }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Moantant sans TVA : </strong></td>
+                                <td>{{ totale }} DT</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Mantant avec TVA :</strong></td>
+                                <td>{{ totale * 1.18 }} DT</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Adresse de livraison : </strong></td>
+                                <td>{{ commande.adressLiv }}</td>
+                            </tr>
+                        </table>
 
-                <p class="p-b-28">
-                    Phasellus egestas nisi nisi, lobortis ultricies risus semper nec. Vestibulum pharetra ac ante ut pellentesque. Curabitur fringilla dolor quis lorem accumsan, vitae molestie urna dapibus. Pellentesque porta est ac neque bibendum viverra. Vivamus lobortis magna ut interdum laoreet. Donec gravida lorem elit, quis condimentum ex semper sit amet. Fusce eget ligula magna. Aliquam aliquam imperdiet sodales. Ut fringilla turpis in vehicula vehicula. Pellentesque congue ac orci ut gravida. Aliquam erat volutpat. Donec iaculis lectus a arcu facilisis, eu sodales lectus sagittis. Etiam pellentesque, magna vel dictum rutrum, neque justo eleifend elit, vel tincidunt erat arcu ut sem. Sed rutrum, turpis ut commodo efficitur, quam velit convallis ipsum, et maximus enim ligula ac ligula. Vivamus tristique vulputate ultricies. Sed vitae ultrices orci.
-                </p>
 
-                <div class="bo13 p-l-29 m-l-9 p-b-10">
-                    <p class="p-b-11">
-                        Creativity is just connecting things. When you ask creative people how they did something, they feel a little guilty because they didn't really do it, they just saw something. It seemed obvious to them after a while.
-                    </p>
+                    </div>
+                </div>
+                 <div class="row margin-top">
+                    <div class="col-md-12">
+                        <table class="table table-active">
+                            <tr>
+                                <td>
+                                    <strong> Methode de paiemant : </strong>
+                                    {% if commande.methPaiment== 'Visa card' %}
+                                        Visa Card
+                                        <p class="font-weight-bold">
+                                            veuillez entrer vos information de payment
+                                        </p>
 
-                    <span class="s-text7">
-							- Steve Job’s
-						</span>
+                                        <form class="form" method="post" id="payment-form"
+                                              action="{{ url('payerCommande',{'id': commande.id}) }}">
+                                            <div class="form-control">
+                                                <label class="label">
+                                                    Votre numero de carte :
+                                                </label>
+                                                <input type="text" placeholder="4242 4242 4242 4242" required
+                                                       data-stripe="number">
+                                            </div>
+
+                                            <div class="form-control">
+                                                <label class="label">
+                                                    Mois :
+                                                </label>
+                                                <input type="text" placeholder="MM" required data-stripe="exp_month">
+                                            </div>
+
+                                            <div class="form-control">
+                                                <label class="label">
+                                                    Annee :
+                                                </label>
+                                                <input type="text" placeholder="AA" required data-stripe="exp_year">
+                                            </div>
+                                            <div class="form-control">
+                                                <label class="label">
+                                                    CVC :
+                                                </label>
+                                                <input type="text" placeholder="CVC" required data-stripe="cvc">
+                                            </div>
+
+                                            <div class="w-size2 p-t-20">
+                                                <!-- Button -->
+                                                <button type="submit"
+                                                        class="flex-c-m size2 bg4 bo-rad-23 hov1 m-text3 trans-0-4">
+                                                    Payer
+                                                </button>
+                                            </div>
+
+                                        </form>
+                                    {% elseif commande.methPaiment== 'Espece' %}
+                                        Espece
+                                        <p>Paiemant lors de la livraison</p>
+                                    {% else %}
+                                        Cheque
+                                        <p>Paiemant lors de la livraison</p>
+                                    {% endif %}
+                                </td>
+                            </tr>
+
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -567,7 +677,8 @@
 
             <div>
                 <p class="s-text7 w-size27">
-                    Any questions? Let us know in store at 8th floor, 379 Hudson St, New York, NY 10018 or call us on (+1) 96 716 6879
+                    Any questions? Let us know in store at 8th floor, 379 Hudson St, New York, NY 10018 or call us on
+                    (+1) 96 716 6879
                 </p>
 
                 <div class="flex-m p-t-30">
@@ -694,37 +805,11 @@
                     </button>
                 </div>
 
+
             </form>
         </div>
     </div>
-
-    <div class="t-center p-l-15 p-r-15">
-        <a href="#">
-            <img class="h-size2" src="images/icons/paypal.png" alt="IMG-PAYPAL">
-        </a>
-
-        <a href="#">
-            <img class="h-size2" src="images/icons/visa.png" alt="IMG-VISA">
-        </a>
-
-        <a href="#">
-            <img class="h-size2" src="images/icons/mastercard.png" alt="IMG-MASTERCARD">
-        </a>
-
-        <a href="#">
-            <img class="h-size2" src="images/icons/express.png" alt="IMG-EXPRESS">
-        </a>
-
-        <a href="#">
-            <img class="h-size2" src="images/icons/discover.png" alt="IMG-DISCOVER">
-        </a>
-
-        <div class="t-center s-text8 p-t-20">
-            Copyright © 2018. All rights reserved. | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-        </div>
-    </div>
 </footer>
-
 
 
 <!-- Back to top -->
@@ -739,16 +824,15 @@
 <div id="dropDownSelect2"></div>
 
 
-
 <!--===============================================================================================-->
-<script type="text/javascript" src="vendor/jquery/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="{{ asset('vendor/jquery/jquery-3.2.1.min.js') }}"></script>
 <!--===============================================================================================-->
-<script type="text/javascript" src="vendor/animsition/js/animsition.min.js"></script>
+<script type="text/javascript" src="{{ asset('vendor/animsition/js/animsition.min.js') }}"></script>
 <!--===============================================================================================-->
-<script type="text/javascript" src="vendor/bootstrap/js/popper.js"></script>
-<script type="text/javascript" src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="{{ asset('vendor/bootstrap/js/popper.js') }}"></script>
+<script type="text/javascript" src="{{ asset('vendor/bootstrap/js/bootstrap.min.js') }}"></script>
 <!--===============================================================================================-->
-<script type="text/javascript" src="vendor/select2/select2.min.js"></script>
+<script type="text/javascript" src="{{ asset('vendor/select2/select2.min.js') }}"></script>
 <script type="text/javascript">
     $(".selection-1").select2({
         minimumResultsForSearch: 20,
@@ -761,7 +845,30 @@
     });
 </script>
 <!--===============================================================================================-->
-<script src="js/main.js"></script>
+<script src="{{ asset('js/main.js') }}"></script>
 
+<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+<script>
+
+    Stripe.setPublishableKey('pk_test_WqnDudojXvZYODnkgy4VM6ZZ');
+
+    var $form = $('#payment-form'); // On récupère le formulaire
+    $form.submit(function (e) {
+        e.preventDefault();
+        $form.find('button').prop('disabled', true); // On désactive le bouton submit
+        Stripe.card.createToken($form, function (status, response) {
+            if (response.error) { // Ah une erreur !
+                // On affiche les erreurs
+                $form.find('.payment-errors').text(response.error.message);
+                $form.find('button').prop('disabled', false); // On réactive le bouton
+            } else { // Le token a bien été créé
+                var token = response.id; // On récupère le token
+                // On crée un champs cachée qui contiendra notre token
+                $form.append($('<input type="hidden" name="stripeToken" />').val(token));
+                $form.get(0).submit(); // On soumet le formulaire
+            }
+        });
+    });
+</script>
 </body>
 </html>
