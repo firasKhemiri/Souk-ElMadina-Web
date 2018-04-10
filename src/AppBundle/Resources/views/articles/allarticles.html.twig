@@ -1205,6 +1205,18 @@
     <!--===============================================================================================-->
     <script src="{{ asset('js/main.js') }}"></script>
     <script type="text/javascript">
+
+        $(document).ready(function () {
+            $.ajax({
+                url: '{{ url('panierItems') }}',
+                type: "GET",
+                dataType: "json",
+                async: true,
+                success: function (d) {
+                    fillPanier(d);
+                }
+            });
+        });
         function addToPanier(data) {
             $.ajax({
                 url: '{{ url('addToPanier') }}',
@@ -1215,35 +1227,39 @@
                 },
                 async: true,
                 success: function (d) {
-                    d.total = 0;
-                    var output = "";
-                    d.forEach(function (e) {
-                        for (var i = 0; i < e.quantite; i++) {
-                            d.total += e.prix;
-                        }
 
-                        output += "<li class=\"header-cart-item\">\n" +
-                            "<div class=\"header-cart-item-img\">\n" +
-                            "<img src=\"images/item-cart-01.jpg\" alt=\"IMG\">\n" +
-                            "</div>\n" +
-                            "<div class=\"header-cart-item-txt\">\n" +
-                            "<a href=\"#\" class=\"header-cart-item-name\">\n" +
-                            e.nom +
-                            "</a>\n" +
-                            "<span class=\"header-cart-item-info\">\n" +
-                            e.quantite + " * " + e.prix +
-                            "DT</span>\n" +
-                            "</div>\n" +
-                            "</li>";
-                    })
-                    console.log(d.total);
-
-                    $('#panier').html(output);
-                    $('#total').html("Total : " + d.total + " DT");
-
+                    fillPanier(d);
                     swal(data.name, "est ajouté au panier !", "success");
                 }
             });
+        }
+
+        function fillPanier(d) {
+            d.total = 0;
+            var output = "";
+            d.forEach(function (e) {
+                for (var i = 0; i < e.quantite; i++) {
+                    d.total += e.prix;
+                }
+
+                output += "<li class=\"header-cart-item\">\n" +
+                    "<div class=\"header-cart-item-img\">\n" +
+                    "<img src=\"images/item-cart-01.jpg\" alt=\"IMG\">\n" +
+                    "</div>\n" +
+                    "<div class=\"header-cart-item-txt\">\n" +
+                    "<a href=\"#\" class=\"header-cart-item-name\">\n" +
+                    e.nom +
+                    "</a>\n" +
+                    "<span class=\"header-cart-item-info\">\n" +
+                    e.quantite + " * " + e.prix +
+                    "DT</span>\n" +
+                    "</div>\n" +
+                    "</li>";
+            })
+            console.log(d.total);
+
+            $('#panier').html(output);
+            $('#total').html("Total : " + d.total + " DT");
         }
 
 
