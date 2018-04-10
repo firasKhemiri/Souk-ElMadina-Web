@@ -306,7 +306,7 @@
 
                 <div class="header-wrapicon2">
                     <img src="/images/icons/icon-header-02.png" class="header-icon1 js-show-header-dropdown" alt="ICON">
-                    <span class="header-icons-noti">10</span>
+                    <span class="header-icons-noti" id="nbitems"> </span>
                     <!-- Header cart noti -->
                     <div class="header-cart header-dropdown">
                         <ul class="header-cart-wrapitem" id="panier">
@@ -552,16 +552,22 @@
             </div>
             <div class="col-md-4">
                 <div class="row">
-                    <div class="col-md-12 w-size2 p-t-20">
+                    <div class="col-md-4 w-size2 p-t-20">
                         <!-- Button -->
                         <a href="{{ url('panier_index') }}" class="flex-c-m size2 bg-warning bo-rad-23 hov6 m-text3 trans-0-4">
                             Modifier
                         </a>
                     </div>
-                    <div class="col-md-12 w-size2 p-t-20">
+                    <div class="col-md-4 w-size2 p-t-20">
                         <!-- Button -->
-                        <a href="" class="flex-c-m size2 bg-danger bo-rad-23 hov6 m-text3 trans-0-4">
+                        <a href="{{ url('removeCommande',{id : commande.id}) }}" class="flex-c-m size2 bg-danger bo-rad-23 hov6 m-text3 trans-0-4">
                             Annuler
+                        </a>
+                    </div>
+                    <div class="col-md-4 w-size2 p-t-20">
+                        <!-- Button -->
+                        <a href="{{ url('pdfCommande',{id: commande.id}) }}" class="flex-c-m size2 bg-success bo-rad-23 hov6 m-text3 trans-0-4">
+                            Imprimer
                         </a>
                     </div>
                 </div>
@@ -946,7 +952,7 @@
 
             output += "<li class=\"header-cart-item\">\n" +
                 "<div class=\"header-cart-item-img\">\n" +
-                "<img src=\"images/item-cart-01.jpg\" alt=\"IMG\">\n" +
+                "<img src=\" {{ asset('images/item-cart-01.jpg') }}\" alt=\"IMG\">\n" +
                 "</div>\n" +
                 "<div class=\"header-cart-item-txt\">\n" +
                 "<a href=\"#\" class=\"header-cart-item-name\">\n" +
@@ -958,10 +964,12 @@
                 "</div>\n" +
                 "</li>";
         })
-        console.log(d.total);
+        console.log(d.length);
 
         $('#panier').html(output);
         $('#total').html("Total : " + d.total + " DT");
+        $('#nbitems').html(d.length);
+
     }
 </script>
 </body>

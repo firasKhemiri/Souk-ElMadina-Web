@@ -5,7 +5,9 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Acheteur;
 use AppBundle\Entity\Commande;
 use GuzzleHttp\Psr7\Response;
+use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Serializer\Serializer;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -87,7 +89,7 @@ class CommandeController extends Controller
         \Stripe\Stripe::setApiKey("sk_test_2NJiT6SqEHyBuR9D5oKFAjHR");
         $token = $request->request->get('stripeToken');
         $charge = \Stripe\Charge::create([
-            'amount' => $totale*100,
+            'amount' => $totale*118,
             'currency' => 'eur',
             'description' => 'Payment',
             'source' => $token,
@@ -104,4 +106,59 @@ class CommandeController extends Controller
 
         return new JsonResponse('success');
     }
+
+    /**
+     *
+     * @Route("/{id}/pdfCommande", name="pdfCommande")
+     * @Method("GET")
+     */
+    public function pdfCommandeAction(Request $request,$id)
+    {   $em=$this->getDoctrine()->getManager();
+        $user=$this->getUser();
+
+        $commande=$em->getRepository('AppBundle:Commande')->find($id);
+        $totale=0;
+        foreach ($commande->getPanier()->getUserRecipeAssociations() as $ligne){
+            $totale+=  ($ligne->getArticle()->getPrix() * $ligne->getQuantite());
+        }
+        $html= $this->renderView('@App/commande/template.html.twig',array(
+            'user'=> $user,
+            'commande'=>$commande,
+            'totale'=>$totale,
+            'local'=> $this->get('kernel')->getRootDir() . '/../web/'
+        ));
+
+
+
+        return new PdfResponse(
+            $this->get('knp_snappy.pdf')->getOutputFromHtml($html),
+            'commande.pdf'
+        );
+    }
+
+
+
+    /**
+     *
+     * @Route("/{id}/removeCommande", name="removeCommande")
+     * @Method("Get")
+     */
+    public function removeCommandeAction(Request $request,$id)
+    {   $em=$this->getDoctrine()->getManager();
+        $commande=$em->getRepository('AppBundle:Commande')->find($id);
+        foreach ($commande->getPanier()->getUserRecipeAssociations() as $ligne){
+            $em->remove($ligne);
+        }
+        $this->getUser()->setPanier(null);
+        $em->flush();
+        $em->remove($commande->getPanier());
+        $em->flush();
+        $em->remove($commande);
+        $em->flush();
+
+        return $this->redirectToRoute('allarticles',array(
+            'user'=>$this->getUser()
+        ));
+    }
+
 }

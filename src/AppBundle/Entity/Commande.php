@@ -177,7 +177,7 @@ class Commande
      *
      * @return string
      */
-    public function getAdressLiv()
+    public function getadress_liv()
     {
         return $this->adress_liv;
     }
@@ -201,7 +201,17 @@ class Commande
      *
      * @return string
      */
-    public function getMethPaiment()
+    public function getmeth_paiment()
+    {
+        return $this->meth_paiment;
+    }
+
+    /**
+     * Get methPaiment
+     *
+     * @return string
+     */
+    public function getmethPaiment()
     {
         return $this->meth_paiment;
     }
@@ -315,4 +325,16 @@ class Commande
 
         return $this;
     }
+
+
+    /**
+     * Get adressLiv
+     *
+     * @return string
+     */
+    public function getadressLiv()
+    {
+        return $this->adress_liv;
+    }
+
 }

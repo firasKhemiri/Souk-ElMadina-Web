@@ -606,7 +606,7 @@
 
                     <div class="header-wrapicon2">
                         <img src="/images/icons/icon-header-02.png" class="header-icon1 js-show-header-dropdown" alt="ICON">
-                        <span class="header-icons-noti">10</span>
+                        <span class="header-icons-noti" id="nbitems"> </span>
                         <!-- Header cart noti -->
                         <div class="header-cart header-dropdown">
                             <ul class="header-cart-wrapitem" id="panier">
@@ -1260,6 +1260,7 @@
 
             $('#panier').html(output);
             $('#total').html("Total : " + d.total + " DT");
+            $('#nbitems').html( d.length );
         }
 
 
