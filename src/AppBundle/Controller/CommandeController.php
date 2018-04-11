@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Acheteur;
 use AppBundle\Entity\Commande;
+use AppBundle\Entity\Rating;
 use GuzzleHttp\Psr7\Response;
 use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -15,7 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Validator\Constraints\DateTime;
+
 
 /**
  * Commande controller.
@@ -65,10 +66,12 @@ class CommandeController extends Controller
         foreach ($commande->getPanier()->getUserRecipeAssociations() as $ligne){
           $totale+=  ($ligne->getArticle()->getPrix() * $ligne->getQuantite());
         }
+        $diffInSeconds = (new \DateTime())->getTimestamp() - $commande->getDate()->getTimestamp();
         return $this->render('@App/commande/show.html.twig', array(
             'commande' => $commande,
             'user' => $this->getUser(),
-            'totale'=>$totale
+            'totale'=>$totale,
+            'interval'=>$diffInSeconds
         ));
     }
 
@@ -85,6 +88,9 @@ class CommandeController extends Controller
         $totale=0;
         foreach ($commande->getPanier()->getUserRecipeAssociations() as $ligne){
             $totale+=  ($ligne->getArticle()->getPrix() * $ligne->getQuantite());
+            $ligne->getArticle()->setQuantity($ligne->getArticle()->getQuantity() - $ligne->getQuantite());
+            $em->persist($ligne->getArticle());
+            $em->flush();
         }
         \Stripe\Stripe::setApiKey("sk_test_2NJiT6SqEHyBuR9D5oKFAjHR");
         $token = $request->request->get('stripeToken');
@@ -104,7 +110,7 @@ class CommandeController extends Controller
         $em->remove($commande);
         $em->flush();
 
-        return new JsonResponse('success');
+        return $this->redirectToRoute('newRating');
     }
 
     /**
@@ -160,5 +166,33 @@ class CommandeController extends Controller
             'user'=>$this->getUser()
         ));
     }
+
+    /**
+     *
+     * @Route("/{id}/validateCommande", name="validateCommande")
+     * @Method("Get")
+     */
+    public function validateCommandeAction(Request $request,$id)
+    {   $em=$this->getDoctrine()->getManager();
+        $commande=$em->getRepository('AppBundle:Commande')->find($id);
+        foreach ($commande->getPanier()->getUserRecipeAssociations() as $ligne){
+            $ligne->getArticle()->setQuantity($ligne->getArticle()->getQuantity() - $ligne->getQuantite());
+            $em->persist($ligne->getArticle());
+            $em->flush();
+            $em->remove($ligne);
+        }
+        $this->getUser()->setPanier(null);
+        $em->flush();
+        $em->remove($commande->getPanier());
+        $em->flush();
+        $em->remove($commande);
+        $em->flush();
+
+       return new JsonResponse('success');
+    }
+
+
+
+
 
 }

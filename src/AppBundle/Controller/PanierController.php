@@ -53,8 +53,8 @@ class PanierController extends Controller
         $em = $this->getDoctrine()->getManager();
         $article = $em->getRepository('AppBundle:Article')->find($request->request->get('article_id'));
         $panier = $user->getPanier();
+        if($article->getQuantity()){
         if ($panier) {
-
             $ligne = $em->getRepository('AppBundle:Ligne')->findOneBy(['article' => $article, 'panier' => $panier]);
             if (!$ligne) {
                 $ligne = new Ligne();
@@ -100,6 +100,11 @@ class PanierController extends Controller
         $serializer = new Serializer($normalizers, $encoders);
 
         return new Response($serializer->serialize($s, 'json'));
+        }
+        else{
+          return new JsonResponse('failed');
+        }
+
     }
 
 

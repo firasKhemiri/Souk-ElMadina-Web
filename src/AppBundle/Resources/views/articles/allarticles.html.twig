@@ -1228,8 +1228,13 @@
                 async: true,
                 success: function (d) {
 
+                    if (d!=='failed'){
                     fillPanier(d);
                     swal(data.name, "est ajouté au panier !", "success");
+                    }else {
+                        swal(data.name, "est epuisee", "warning");
+                    }
+
                 }
             });
         }

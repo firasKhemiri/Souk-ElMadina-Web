@@ -1754,8 +1754,12 @@
             async: true,
             success: function (d) {
 
-                fillPanier(d);
-                swal("{{ article.nom }}", "est ajouté au panier !", "success");
+                if (d!=='failed'){
+                    fillPanier(d);
+                    swal('{{ article.nom }}', "est ajouté au panier !", "success");
+                }else {
+                    swal('{{ article.nom }}', "est epuisee", "warning");
+                }
             }
         });
     }
