@@ -12,7 +12,6 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
-use Doctrine\ORM\Mapping\OneToOne;
 use Symfony\Component\Validator\Constraints\Type;
 
 
@@ -35,12 +34,9 @@ class Option
      */
     private $id;
 
-
-
     /**
-     * Many Features have One Product.
-     * @ManyToOne(targetEntity="AppBundle\Entity\Article", inversedBy="option")
-     * @JoinColumn(name="article_id", referencedColumnName="id",onDelete="CASCADE")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Article", inversedBy="option")
+     * @ORM\JoinColumn(name="article_id", referencedColumnName="id",onDelete="CASCADE",nullable=true)
      */
     private $article;
 
@@ -59,8 +55,6 @@ class Option
     private $nom;
 
 
-
-
     /**
      * Get id
      *
@@ -69,6 +63,16 @@ class Option
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Get nom
+     *
+     * @return string
+     */
+    public function getNom()
+    {
+        return $this->nom;
     }
 
     /**
@@ -86,13 +90,13 @@ class Option
     }
 
     /**
-     * Get nom
+     * Get type
      *
      * @return string
      */
-    public function getNom()
+    public function getType()
     {
-        return $this->nom;
+        return $this->type;
     }
 
     /**
@@ -110,13 +114,13 @@ class Option
     }
 
     /**
-     * Get type
+     * Get article
      *
-     * @return string
+     * @return \AppBundle\Entity\Article
      */
-    public function getType()
+    public function getArticle()
     {
-        return $this->type;
+        return $this->article;
     }
 
     /**
@@ -131,15 +135,5 @@ class Option
         $this->article = $article;
 
         return $this;
-    }
-
-    /**
-     * Get article
-     *
-     * @return \AppBundle\Entity\Article
-     */
-    public function getArticle()
-    {
-        return $this->article;
     }
 }

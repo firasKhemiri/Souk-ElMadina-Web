@@ -7,10 +7,10 @@
  */
 
 namespace AppBundle\Entity;
-use Doctrine\ORM\Mapping\JoinColumn;
-use Doctrine\ORM\Mapping\OneToOne;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\OneToOne;
 use Symfony\Component\Validator\Constraints\Type;
 
 /**
@@ -80,7 +80,6 @@ class Notification
     private $bonplan;
 
 
-
     /**
      * One Product has One Shipment.
      * @OneToOne(targetEntity="AppBundle\Entity\Enchere")
@@ -100,6 +99,16 @@ class Notification
     }
 
     /**
+     * Get user
+     *
+     * @return \AppBundle\Entity\User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
      * Set user
      *
      * @param \AppBundle\Entity\User $user
@@ -114,13 +123,13 @@ class Notification
     }
 
     /**
-     * Get user
+     * Get article
      *
-     * @return \AppBundle\Entity\User
+     * @return \AppBundle\Entity\Article
      */
-    public function getUser()
+    public function getArticle()
     {
-        return $this->user;
+        return $this->article;
     }
 
     /**
@@ -138,13 +147,13 @@ class Notification
     }
 
     /**
-     * Get article
+     * Get vendeur
      *
-     * @return \AppBundle\Entity\Article
+     * @return \AppBundle\Entity\Vendeur
      */
-    public function getArticle()
+    public function getVendeur()
     {
-        return $this->article;
+        return $this->vendeur;
     }
 
     /**
@@ -162,13 +171,13 @@ class Notification
     }
 
     /**
-     * Get vendeur
+     * Get bonplan
      *
-     * @return \AppBundle\Entity\Vendeur
+     * @return \AppBundle\Entity\BonPlan
      */
-    public function getVendeur()
+    public function getBonplan()
     {
-        return $this->vendeur;
+        return $this->bonplan;
     }
 
     /**
@@ -186,13 +195,13 @@ class Notification
     }
 
     /**
-     * Get bonplan
+     * Get enchere
      *
-     * @return \AppBundle\Entity\BonPlan
+     * @return \AppBundle\Entity\Enchere
      */
-    public function getBonplan()
+    public function getEnchere()
     {
-        return $this->bonplan;
+        return $this->enchere;
     }
 
     /**
@@ -210,13 +219,13 @@ class Notification
     }
 
     /**
-     * Get enchere
+     * Get messageNotif
      *
-     * @return \AppBundle\Entity\Enchere
+     * @return string
      */
-    public function getEnchere()
+    public function getMessageNotif()
     {
-        return $this->enchere;
+        return $this->message_notif;
     }
 
     /**
@@ -234,13 +243,13 @@ class Notification
     }
 
     /**
-     * Get messageNotif
+     * Get type
      *
      * @return string
      */
-    public function getMessageNotif()
+    public function getType()
     {
-        return $this->message_notif;
+        return $this->type;
     }
 
     /**
@@ -258,13 +267,13 @@ class Notification
     }
 
     /**
-     * Get type
+     * Get imageUrl
      *
      * @return string
      */
-    public function getType()
+    public function getImageUrl()
     {
-        return $this->type;
+        return $this->image_url;
     }
 
     /**
@@ -279,15 +288,5 @@ class Notification
         $this->image_url = $imageUrl;
 
         return $this;
-    }
-
-    /**
-     * Get imageUrl
-     *
-     * @return string
-     */
-    public function getImageUrl()
-    {
-        return $this->image_url;
     }
 }

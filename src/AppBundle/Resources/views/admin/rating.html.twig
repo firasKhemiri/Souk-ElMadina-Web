@@ -1,0 +1,40 @@
+{% extends '@App/admin/indexadmin.html.twig' %}
+
+{% block container %}
+    <div class="container">
+        <h2>
+         Liste des ratings
+        </h2>
+        <br>
+        <div class="row">
+            <div class="col-md-8">
+                <div class="container-table-cart pos-relative">
+            <div class="wrap-table-shopping-cart bgwhite">
+                <table class="table-shopping-cart">
+                    <tr class="table-head">
+                        <th class="column-1">Rating</th>
+                        <th class="column-2">commantaire</th>
+                    </tr>
+                {% for r in ratings %}
+                    <tr class="table-row">
+                        <td class="column-1">{{ r.rating }} Etoiles</td>
+                        <td class="column-2">{{ r.commentaire }}</td>
+                    </tr>
+                {% endfor %}
+                </table>
+            </div>
+        </div>
+            </div>
+            <div class="col-md-4">
+                <p class="form-control  bg-success">
+                <strong> Nombre totale de rating :</strong> {{ ratings|length }} rating(s)
+                </p>
+
+                <p class="form-control bg-danger">
+                    <strong> Moyenne de rating :</strong> {{ moyenne }} etoile(s)
+                </p>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

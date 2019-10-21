@@ -9,15 +9,10 @@
 namespace AppBundle\Entity;
 
 
-use Doctrine\ORM\Mapping\JoinTable;
-use Doctrine\ORM\Mapping\ManyToMany;
-use Doctrine\ORM\Mapping\OneToMany;
-use Symfony\Component\Validator\Constraints\Type;
-
-use Doctrine\ORM\Mapping\OneToOne;
-use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\JoinColumn;
+use Symfony\Component\Validator\Constraints\Type;
+use JMS\Serializer\Annotation as Serializer;
 
 
 /**
@@ -29,6 +24,11 @@ use Doctrine\ORM\Mapping\JoinColumn;
 class Article
 {
     /**
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Ligne", mappedBy="article",cascade={"persist"})
+     */
+    protected $lignes;
+    /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer")
@@ -36,78 +36,75 @@ class Article
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
-
     /**
      * Many Groups have Many Users.
-     * @ManyToMany(targetEntity="AppBundle\Entity\Categorie", mappedBy="article")
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Categorie", mappedBy="article")
      */
     private $categorie;
 
 
     /**
      * Many Groups have Many Users.
-     * @OneToMany(targetEntity="AppBundle\Entity\Option", mappedBy="article")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Option", mappedBy="article",fetch="EXTRA_LAZY")
+     * @Serializer\SkipWhenEmpty
      */
     private $option;
-
-
-
     /**
      * @ORM\Column(type="datetime", nullable=false)
      * @Type("datetime")
      */
     private $date_pub;
-
-
     /**
      * @ORM\Column(type="string", nullable=true)
      * @Type("string")
      */
     private $nom;
-
     /**
      * @ORM\Column(type="string", nullable=true)
      * @Type("string")
      */
     private $description;
-
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     * @Type("integer")
+     */
+    private $quantity = 0;
     /**
      * @ORM\Column(type="float", nullable=true)
      * @Type("float")
      */
     private $prix;
-
-
     /**
      * @ORM\Column(type="float", nullable=true)
      * @Type("float")
      */
     private $oldprix;
-
-
     /**
      * @ORM\Column(type="string", nullable=true)
      * @Type("string")
      */
     private $ref;
-
-
-
     /**
      * Many Features have One Product.
-     * @ManyToOne(targetEntity="AppBundle\Entity\Vendeur", inversedBy="articles")
-     * @JoinColumn(name="vendeur_id", referencedColumnName="id",onDelete="CASCADE")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Vendeur", inversedBy="articles")
+     * @ORM\JoinColumn(name="vendeur_id", referencedColumnName="id",onDelete="CASCADE")
      */
     private $vendeur;
-
-
     /**
      * One Product has Many Features.
-     * @OneToMany(targetEntity="AppBundle\Entity\Images", mappedBy="article")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Images", mappedBy="article")
      */
     private $images;
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->images = new ArrayCollection();
+        $this->lignes = new ArrayCollection();
+        $this->option = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -117,6 +114,16 @@ class Article
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Get nom
+     *
+     * @return string
+     */
+    public function getNom()
+    {
+        return $this->nom;
     }
 
     /**
@@ -134,13 +141,13 @@ class Article
     }
 
     /**
-     * Get nom
+     * Get description
      *
      * @return string
      */
-    public function getNom()
+    public function getDescription()
     {
-        return $this->nom;
+        return $this->description;
     }
 
     /**
@@ -157,40 +164,15 @@ class Article
         return $this;
     }
 
+
     /**
-     * Get description
+     * Get images
      *
      * @return string
      */
-    public function getDescription()
+    public function getImages()
     {
-        return $this->description;
-    }
-
-
-
-    /**
-     * Set commande
-     *
-     * @param \AppBundle\Entity\Commande $commande
-     *
-     * @return Article
-     */
-    public function setCommande(\AppBundle\Entity\Commande $commande = null)
-    {
-        $this->commande = $commande;
-
-        return $this;
-    }
-
-    /**
-     * Get commande
-     *
-     * @return \AppBundle\Entity\Commande
-     */
-    public function getCommande()
-    {
-        return $this->commande;
+        return $this->images;
     }
 
     /**
@@ -208,21 +190,13 @@ class Article
     }
 
     /**
-     * Get images
+     * Get categorie
      *
      * @return string
      */
-    public function getImages()
+    public function getCategorie()
     {
-        return $this->images;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->avis = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->images = new \Doctrine\Common\Collections\ArrayCollection();
+        return $this->categorie;
     }
 
     /**
@@ -239,49 +213,7 @@ class Article
         return $this;
     }
 
-    /**
-     * Get categorie
-     *
-     * @return string
-     */
-    public function getCategorie()
-    {
-        return $this->categorie;
-    }
 
-    /**
-     * Add avi
-     *
-     * @param \AppBundle\Entity\Avis $avi
-     *
-     * @return Article
-     */
-    public function addAvi(\AppBundle\Entity\Avis $avi)
-    {
-        $this->avis[] = $avi;
-
-        return $this;
-    }
-
-    /**
-     * Remove avi
-     *
-     * @param \AppBundle\Entity\Avis $avi
-     */
-    public function removeAvi(\AppBundle\Entity\Avis $avi)
-    {
-        $this->avis->removeElement($avi);
-    }
-
-    /**
-     * Get avis
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getAvis()
-    {
-        return $this->avis;
-    }
 
     /**
      * Add image
@@ -308,6 +240,16 @@ class Article
     }
 
     /**
+     * Get prix
+     *
+     * @return float
+     */
+    public function getPrix()
+    {
+        return $this->prix;
+    }
+
+    /**
      * Set prix
      *
      * @param float $prix
@@ -322,13 +264,13 @@ class Article
     }
 
     /**
-     * Get prix
+     * Get datePub
      *
-     * @return float
+     * @return \DateTime
      */
-    public function getPrix()
+    public function getDatePub()
     {
-        return $this->prix;
+        return $this->date_pub;
     }
 
     /**
@@ -346,13 +288,13 @@ class Article
     }
 
     /**
-     * Get datePub
+     * Get oldprix
      *
-     * @return \DateTime
+     * @return float
      */
-    public function getDatePub()
+    public function getOldprix()
     {
-        return $this->date_pub;
+        return $this->oldprix;
     }
 
     /**
@@ -370,13 +312,13 @@ class Article
     }
 
     /**
-     * Get oldprix
+     * Get vendeur
      *
-     * @return float
+     * @return \AppBundle\Entity\Vendeur
      */
-    public function getOldprix()
+    public function getVendeur()
     {
-        return $this->oldprix;
+        return $this->vendeur;
     }
 
     /**
@@ -391,16 +333,6 @@ class Article
         $this->vendeur = $vendeur;
 
         return $this;
-    }
-
-    /**
-     * Get vendeur
-     *
-     * @return \AppBundle\Entity\Vendeur
-     */
-    public function getVendeur()
-    {
-        return $this->vendeur;
     }
 
     /**
@@ -428,6 +360,16 @@ class Article
     }
 
     /**
+     * Get ref
+     *
+     * @return string
+     */
+    public function getRef()
+    {
+        return $this->ref;
+    }
+
+    /**
      * Set ref
      *
      * @param string $ref
@@ -439,16 +381,6 @@ class Article
         $this->ref = $ref;
 
         return $this;
-    }
-
-    /**
-     * Get ref
-     *
-     * @return string
-     */
-    public function getRef()
-    {
-        return $this->ref;
     }
 
     /**
@@ -484,4 +416,55 @@ class Article
     {
         return $this->option;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getQuantity()
+    {
+        return $this->quantity;
+    }
+
+    /**
+     * @param mixed $quantity
+     */
+    public function setQuantity($quantity)
+    {
+        $this->quantity = $quantity;
+    }
+
+
+    /**
+     * Add lignes
+     *
+     * @param Ligne $ligne
+     * @return Article
+     */
+    public function addUserRecipeAssociation(Ligne $ligne)
+    {
+        $this->lignes[] = $ligne;
+        return $this;
+    }
+
+    /**
+     * Remove lignes
+     *
+     * @param Ligne $ligne
+     */
+    public function removeUserRecipeAssociation(Ligne $ligne)
+    {
+        $this->lignes->removeElement($ligne);
+    }
+
+    /**
+     * Get ligne
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getUserRecipeAssociations()
+    {
+        return $this->lignes;
+    }
+
+
 }

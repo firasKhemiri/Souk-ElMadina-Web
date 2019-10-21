@@ -9,24 +9,20 @@
 namespace AppBundle\Entity;
 
 
-use Doctrine\ORM\Mapping\JoinColumn;
-use Doctrine\ORM\Mapping\JoinTable;
-use Doctrine\ORM\Mapping\ManyToMany;
-use Doctrine\ORM\Mapping\OneToOne;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-
-use Symfony\Component\Validator\Constraints\Type;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 
 /**
- * Acheteur
+ * Panier
  *
  * @ORM\Table(name="panier")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\PanierRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class Panier
 {
-
 
     /**
      * @var int
@@ -36,45 +32,45 @@ class Panier
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
+    /**
+     * @var DateTime
+     *
+     * @ORM\Column(name="date_creation", type="datetime" , nullable=true)
+     */
+    private $date_creation;
+    /**
+     * @var DateTime
+     *
+     * @ORM\Column(name="date_facturation", type="datetime" , nullable=true)
+     */
+    private $date_facturation;
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="montant", type="float" , nullable=true)
+     */
+    private $montant;
 
     /**
-     * One Product has One Shipment.
-     * @OneToOne(targetEntity="AppBundle\Entity\User")
-     * @JoinColumn(name="user_id", referencedColumnName="id",unique=true,onDelete="CASCADE")
+     * @var User
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
+     * @ORM\JoinColumn(name="user", referencedColumnName="id")
      */
     private $user;
-
     /**
-     * Many User have Many Phonenumbers.
-     * @ManyToMany(targetEntity="AppBundle\Entity\Article")
-     * @JoinTable(name="panier_articles",
-     *      joinColumns={@JoinColumn(name="panier_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@JoinColumn(name="article_id", referencedColumnName="id")}
-     *      )
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Ligne", mappedBy="panier",cascade={"persist"})
      */
-    private $article;
+    private $lignes;
 
-
-
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     * @Type("datetime")
-     */
-    private $date_modif;
-
-    /**
-     * Constructor
-     */
     public function __construct()
     {
-        $this->article = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->lignes = new ArrayCollection();
     }
 
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -82,108 +78,106 @@ class Panier
     }
 
     /**
-     * Set dateModif
-     *
-     * @param \DateTime $dateModif
-     *
-     * @return Panier
+     * @return DateTime
      */
-    public function setDateModif($dateModif)
+    public function getDateCreation()
     {
-        $this->date_modif = $dateModif;
-
-        return $this;
+        return $this->date_creation;
     }
 
     /**
-     * Get dateModif
-     *
-     * @return \DateTime
+     * @param DateTime $date_creation
      */
-    public function getDateModif()
+    public function setDateCreation($date_creation)
     {
-        return $this->date_modif;
+        $this->date_creation = $date_creation;
     }
 
     /**
-     * Set acheteur
-     *
-     * @param \AppBundle\Entity\Acheteur $acheteur
-     *
-     * @return Panier
+     * @return DateTime
      */
-    public function setAcheteur(\AppBundle\Entity\Acheteur $acheteur = null)
+    public function getDateFacturation()
     {
-        $this->acheteur = $acheteur;
-
-        return $this;
+        return $this->date_facturation;
     }
 
     /**
-     * Get acheteur
-     *
-     * @return \AppBundle\Entity\Acheteur
+     * @param DateTime $date_facturation
      */
-    public function getAcheteur()
+    public function setDateFacturation($date_facturation)
     {
-        return $this->acheteur;
+        $this->date_facturation = $date_facturation;
     }
 
     /**
-     * Add article
-     *
-     * @param \AppBundle\Entity\Article $article
-     *
-     * @return Panier
+     * @return float
      */
-    public function addArticle(\AppBundle\Entity\Article $article)
+    public function getMontant()
     {
-        $this->article[] = $article;
-
-        return $this;
+        return $this->montant;
     }
 
     /**
-     * Remove article
-     *
-     * @param \AppBundle\Entity\Article $article
+     * @param float $montant
      */
-    public function removeArticle(\AppBundle\Entity\Article $article)
+    public function setMontant($montant)
     {
-        $this->article->removeElement($article);
+        $this->montant = $montant;
     }
 
     /**
-     * Get article
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getArticle()
-    {
-        return $this->article;
-    }
-
-    /**
-     * Set user
-     *
-     * @param \AppBundle\Entity\User $user
-     *
-     * @return Panier
-     */
-    public function setUser(\AppBundle\Entity\User $user = null)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
-     * Get user
-     *
-     * @return \AppBundle\Entity\User
+     * @return User
      */
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * @param User $user
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+    }
+
+    /**
+     * Add user_recipe_associations
+     *
+     * @param Ligne $ligne
+     * @return Panier
+     */
+    public function addUserRecipeAssociation(Ligne $ligne)
+    {
+        $this->lignes[] = $ligne;
+        return $this;
+    }
+
+    /**
+     * Remove ligne
+     *
+     * @param Ligne $ligne
+     */
+    public function removeUserRecipeAssociation(Ligne $ligne)
+    {
+        $this->lignes->removeElement($ligne);
+    }
+
+    /**
+     * Get lignes
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getUserRecipeAssociations()
+    {
+        return $this->lignes;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function onPrePersistSetRegistrationDate()
+    {
+        $this->date_creation = new \DateTime();
     }
 }

@@ -9,14 +9,12 @@
 namespace AppBundle\Entity;
 
 
-
+use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\JoinTable;
 use Doctrine\ORM\Mapping\ManyToMany;
 use Doctrine\ORM\Mapping\OneToMany;
-use Doctrine\ORM\Mapping as ORM;
 
-use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Acheteur
  *
@@ -39,7 +37,7 @@ class Acheteur extends User
      * One Product has Many Features.
      * @OneToMany(targetEntity="Commande", mappedBy="acheteur")
      */
-    private $cmd  ;
+    private $cmd;
 
 
     /**
@@ -60,6 +58,16 @@ class Acheteur extends User
      */
     private $watchlist;
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->abonnements = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->cmd = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->encheres = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->watchlist = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Add cmd
@@ -196,17 +204,6 @@ class Acheteur extends User
     {
         return $this->watchlist;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->abonnements = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->cmd = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->encheres = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->watchlist = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
 
     /**
      * Set nom

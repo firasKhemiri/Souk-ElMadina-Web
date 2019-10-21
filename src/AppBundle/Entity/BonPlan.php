@@ -7,6 +7,7 @@
  */
 
 namespace AppBundle\Entity;
+
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\JoinTable;
@@ -43,7 +44,6 @@ class BonPlan
     private $articles;
 
 
-
     /**
      * @ORM\Column(type="string")
      * @Type("string")
@@ -69,7 +69,13 @@ class BonPlan
      */
     private $date_fin;
 
-
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->articles = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -80,12 +86,15 @@ class BonPlan
     {
         return $this->id;
     }
+
     /**
-     * Constructor
+     * Get type
+     *
+     * @return string
      */
-    public function __construct()
+    public function getType()
     {
-        $this->articles = new \Doctrine\Common\Collections\ArrayCollection();
+        return $this->type;
     }
 
     /**
@@ -103,13 +112,13 @@ class BonPlan
     }
 
     /**
-     * Get type
+     * Get offre
      *
      * @return string
      */
-    public function getType()
+    public function getOffre()
     {
-        return $this->type;
+        return $this->offre;
     }
 
     /**
@@ -127,13 +136,13 @@ class BonPlan
     }
 
     /**
-     * Get offre
+     * Get dateDeb
      *
-     * @return string
+     * @return \DateTime
      */
-    public function getOffre()
+    public function getDateDeb()
     {
-        return $this->offre;
+        return $this->date_deb;
     }
 
     /**
@@ -151,13 +160,13 @@ class BonPlan
     }
 
     /**
-     * Get dateDeb
+     * Get dateFin
      *
      * @return \DateTime
      */
-    public function getDateDeb()
+    public function getDateFin()
     {
-        return $this->date_deb;
+        return $this->date_fin;
     }
 
     /**
@@ -172,16 +181,6 @@ class BonPlan
         $this->date_fin = $dateFin;
 
         return $this;
-    }
-
-    /**
-     * Get dateFin
-     *
-     * @return \DateTime
-     */
-    public function getDateFin()
-    {
-        return $this->date_fin;
     }
 
     /**

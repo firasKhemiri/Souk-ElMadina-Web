@@ -7,12 +7,10 @@
  */
 
 namespace AppBundle\Entity;
-use Doctrine\ORM\Mapping\JoinTable;
-use Doctrine\ORM\Mapping\ManyToMany;
-use Doctrine\ORM\Mapping\OneToOne;
-use Doctrine\ORM\Mapping\OneToMany;
+
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\OneToOne;
 use Symfony\Component\Validator\Constraints\Type;
 
 /**
@@ -77,9 +75,6 @@ class Commande
     private $etat;
 
 
-
-
-
     /**
      * One Product has One Shipment.
      * @OneToOne(targetEntity="AppBundle\Entity\User")
@@ -87,8 +82,13 @@ class Commande
      */
     private $acheteur;
 
-
-
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->article = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -125,34 +125,27 @@ class Commande
     }
 
     /**
+     * Get acheteur
+     *
+     * @return \AppBundle\Entity\User
+     */
+    public function getAcheteur()
+    {
+        return $this->acheteur;
+    }
+
+    /**
      * Set acheteur
      *
      * @param \AppBundle\Entity\Acheteur $acheteur
      *
      * @return Commande
      */
-    public function setAcheteur(\AppBundle\Entity\Acheteur $acheteur = null)
+    public function setAcheteur(\AppBundle\Entity\User $acheteur = null)
     {
         $this->acheteur = $acheteur;
 
         return $this;
-    }
-
-    /**
-     * Get acheteur
-     *
-     * @return \AppBundle\Entity\Acheteur
-     */
-    public function getAcheteur()
-    {
-        return $this->acheteur;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->article = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -180,6 +173,16 @@ class Commande
     }
 
     /**
+     * Get adressLiv
+     *
+     * @return string
+     */
+    public function getadress_liv()
+    {
+        return $this->adress_liv;
+    }
+
+    /**
      * Set adressLiv
      *
      * @param string $adressLiv
@@ -194,13 +197,23 @@ class Commande
     }
 
     /**
-     * Get adressLiv
+     * Get methPaiment
      *
      * @return string
      */
-    public function getAdressLiv()
+    public function getmeth_paiment()
     {
-        return $this->adress_liv;
+        return $this->meth_paiment;
+    }
+
+    /**
+     * Get methPaiment
+     *
+     * @return string
+     */
+    public function getmethPaiment()
+    {
+        return $this->meth_paiment;
     }
 
     /**
@@ -218,13 +231,13 @@ class Commande
     }
 
     /**
-     * Get methPaiment
+     * Get methLivraison
      *
      * @return string
      */
-    public function getMethPaiment()
+    public function getMethLivraison()
     {
-        return $this->meth_paiment;
+        return $this->meth_livraison;
     }
 
     /**
@@ -242,13 +255,13 @@ class Commande
     }
 
     /**
-     * Get methLivraison
+     * Get date
      *
-     * @return string
+     * @return \DateTime
      */
-    public function getMethLivraison()
+    public function getDate()
     {
-        return $this->meth_livraison;
+        return $this->date;
     }
 
     /**
@@ -266,13 +279,13 @@ class Commande
     }
 
     /**
-     * Get date
+     * Get etat
      *
-     * @return \DateTime
+     * @return boolean
      */
-    public function getDate()
+    public function getEtat()
     {
-        return $this->date;
+        return $this->etat;
     }
 
     /**
@@ -290,13 +303,13 @@ class Commande
     }
 
     /**
-     * Get etat
+     * Get panier
      *
-     * @return boolean
+     * @return \AppBundle\Entity\Panier
      */
-    public function getEtat()
+    public function getPanier()
     {
-        return $this->etat;
+        return $this->panier;
     }
 
     /**
@@ -313,13 +326,15 @@ class Commande
         return $this;
     }
 
+
     /**
-     * Get panier
+     * Get adressLiv
      *
-     * @return \AppBundle\Entity\Panier
+     * @return string
      */
-    public function getPanier()
+    public function getadressLiv()
     {
-        return $this->panier;
+        return $this->adress_liv;
     }
+
 }

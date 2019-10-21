@@ -3,12 +3,10 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
-
-use Symfony\Component\Validator\Constraints as Assert;
 use FOS\UserBundle\Model\User as BaseUser;
 use FOS\MessageBundle\Model\ParticipantInterface;
 use Symfony\Component\Validator\Constraints\Type;
+
 
 /**
  * @ORM\Entity
@@ -61,8 +59,6 @@ class User extends BaseUser implements ParticipantInterface
     protected $adresse;
 
 
-
-
     /**
      * @var string $photoProf
      * @ORM\Column(type="string", nullable=true)
@@ -76,7 +72,6 @@ class User extends BaseUser implements ParticipantInterface
      * @Type("string")
      */
     protected $gender;
-
 
 
     /**
@@ -95,6 +90,12 @@ class User extends BaseUser implements ParticipantInterface
     protected $birthday;
 
 
+    /**
+     * @var string $panier
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Panier")
+     */
+    protected $panier;
+
 
     /**
      * Get id
@@ -104,6 +105,16 @@ class User extends BaseUser implements ParticipantInterface
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Get adresse
+     *
+     * @return string
+     */
+    public function getAdresse()
+    {
+        return $this->adresse;
     }
 
     /**
@@ -121,13 +132,13 @@ class User extends BaseUser implements ParticipantInterface
     }
 
     /**
-     * Get adresse
+     * Get photoProf
      *
      * @return string
      */
-    public function getAdresse()
+    public function getPhotoProf()
     {
-        return $this->adresse;
+        return $this->photoProf;
     }
 
     /**
@@ -145,18 +156,14 @@ class User extends BaseUser implements ParticipantInterface
     }
 
     /**
-     * Get photoProf
+     * Get state
      *
      * @return string
      */
-    public function getPhotoProf()
+    public function getState()
     {
-        return $this->photoProf;
+        return $this->state;
     }
-
-
-
-
 
     /**
      * Set state
@@ -173,13 +180,13 @@ class User extends BaseUser implements ParticipantInterface
     }
 
     /**
-     * Get state
+     * Get ville
      *
      * @return string
      */
-    public function getState()
+    public function getVille()
     {
-        return $this->state;
+        return $this->ville;
     }
 
     /**
@@ -197,13 +204,13 @@ class User extends BaseUser implements ParticipantInterface
     }
 
     /**
-     * Get ville
+     * Get nom
      *
      * @return string
      */
-    public function getVille()
+    public function getNom()
     {
-        return $this->ville;
+        return $this->nom;
     }
 
     /**
@@ -221,13 +228,13 @@ class User extends BaseUser implements ParticipantInterface
     }
 
     /**
-     * Get nom
+     * Get prenom
      *
      * @return string
      */
-    public function getNom()
+    public function getPrenom()
     {
-        return $this->nom;
+        return $this->prenom;
     }
 
     /**
@@ -245,13 +252,13 @@ class User extends BaseUser implements ParticipantInterface
     }
 
     /**
-     * Get prenom
+     * Get gender
      *
      * @return string
      */
-    public function getPrenom()
+    public function getGender()
     {
-        return $this->prenom;
+        return $this->gender;
     }
 
     /**
@@ -269,13 +276,13 @@ class User extends BaseUser implements ParticipantInterface
     }
 
     /**
-     * Get gender
+     * Get birthday
      *
-     * @return string
+     * @return \DateTime
      */
-    public function getGender()
+    public function getBirthday()
     {
-        return $this->gender;
+        return $this->birthday;
     }
 
     /**
@@ -293,13 +300,13 @@ class User extends BaseUser implements ParticipantInterface
     }
 
     /**
-     * Get birthday
+     * Get phone
      *
-     * @return \DateTime
+     * @return string
      */
-    public function getBirthday()
+    public function getPhone()
     {
-        return $this->birthday;
+        return $this->phone;
     }
 
     /**
@@ -317,13 +324,13 @@ class User extends BaseUser implements ParticipantInterface
     }
 
     /**
-     * Get phone
+     * Get facebookId
      *
      * @return string
      */
-    public function getPhone()
+    public function getFacebookId()
     {
-        return $this->phone;
+        return $this->facebook_id;
     }
 
     /**
@@ -341,13 +348,13 @@ class User extends BaseUser implements ParticipantInterface
     }
 
     /**
-     * Get facebookId
+     * Get facebookAccessToken
      *
      * @return string
      */
-    public function getFacebookId()
+    public function getFacebookAccessToken()
     {
-        return $this->facebook_id;
+        return $this->facebook_access_token;
     }
 
     /**
@@ -365,12 +372,20 @@ class User extends BaseUser implements ParticipantInterface
     }
 
     /**
-     * Get facebookAccessToken
-     *
      * @return string
      */
-    public function getFacebookAccessToken()
+    public function getPanier()
     {
-        return $this->facebook_access_token;
+        return $this->panier;
     }
+
+    /**
+     * @param string $panier
+     */
+    public function setPanier($panier)
+    {
+        $this->panier = $panier;
+    }
+
+
 }

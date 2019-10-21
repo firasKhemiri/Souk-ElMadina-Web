@@ -9,14 +9,10 @@
 namespace AppBundle\backup;
 
 
-use Doctrine\ORM\Mapping\JoinTable;
-use Doctrine\ORM\Mapping\ManyToMany;
-use Doctrine\ORM\Mapping\OneToMany;
-
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
-use Doctrine\ORM\Mapping\OneToOne;
-
+use Doctrine\ORM\Mapping\JoinTable;
+use Doctrine\ORM\Mapping\ManyToMany;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Constraints\Type;
 
@@ -73,13 +69,20 @@ class Vendeur
     private $articles;
 
 
-
-
     /**
      * @ORM\Column(type="string", nullable=true)
      * @Type("int")
      */
     private $note;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->abonnes = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->articles = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Add article
@@ -148,14 +151,6 @@ class Vendeur
     {
         return $this->abonnes;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->abonnes = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->articles = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
      * Set nom
@@ -182,6 +177,16 @@ class Vendeur
     }
 
     /**
+     * Get note
+     *
+     * @return string
+     */
+    public function getNote()
+    {
+        return $this->note;
+    }
+
+    /**
      * Set note
      *
      * @param string $note
@@ -196,13 +201,13 @@ class Vendeur
     }
 
     /**
-     * Get note
+     * Get description
      *
      * @return string
      */
-    public function getNote()
+    public function getDescription()
     {
-        return $this->note;
+        return $this->description;
     }
 
     /**
@@ -217,16 +222,6 @@ class Vendeur
         $this->description = $description;
 
         return $this;
-    }
-
-    /**
-     * Get description
-     *
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
     }
 
     /**
@@ -302,6 +297,16 @@ class Vendeur
     }
 
     /**
+     * Get nomBoutique
+     *
+     * @return string
+     */
+    public function getNomBoutique()
+    {
+        return $this->nom_boutique;
+    }
+
+    /**
      * Set nomBoutique
      *
      * @param string $nomBoutique
@@ -313,16 +318,6 @@ class Vendeur
         $this->nom_boutique = $nomBoutique;
 
         return $this;
-    }
-
-    /**
-     * Get nomBoutique
-     *
-     * @return string
-     */
-    public function getNomBoutique()
-    {
-        return $this->nom_boutique;
     }
 
     /**
@@ -398,6 +393,16 @@ class Vendeur
     }
 
     /**
+     * Get usertype
+     *
+     * @return string
+     */
+    public function getUsertype()
+    {
+        return $this->usertype;
+    }
+
+    /**
      * Set usertype
      *
      * @param string $usertype
@@ -409,16 +414,6 @@ class Vendeur
         $this->usertype = $usertype;
 
         return $this;
-    }
-
-    /**
-     * Get usertype
-     *
-     * @return string
-     */
-    public function getUsertype()
-    {
-        return $this->usertype;
     }
 
     /**

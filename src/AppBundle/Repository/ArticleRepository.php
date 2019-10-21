@@ -1,8 +1,7 @@
 <?php
 
 namespace AppBundle\Repository;
-use Doctrine\DBAL\DBALException;
-use Doctrine\ORM\Query\ResultSetMappingBuilder;
+
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
@@ -28,7 +27,6 @@ class ArticleRepository extends \Doctrine\ORM\EntityRepository
     }
 
 
-
     public function paginate($dql, $page)
     {
         $limit = 12;
@@ -36,33 +34,26 @@ class ArticleRepository extends \Doctrine\ORM\EntityRepository
         $paginator = new Paginator($dql);
 
         $paginator->getQuery()
-            ->setFirstResult(($page - 1) * $limit ) // Offset
+            ->setFirstResult(($page - 1) * $limit)// Offset
             ->setMaxResults($limit); // Limit
 
         return $paginator;
     }
 
 
-
-
-
-    public function filterArts($currentPage,$nom_art='',$cats='',$type_tri='',$gov='',$pmin=0, $pmax=1050,$abon='',$nom_bout='')
+    public function filterArts($currentPage, $nom_art = '', $cats = '', $type_tri = '', $gov = '', $pmin = 0, $pmax = 1050, $abon = '', $nom_bout = '')
     {
-
 
 
         // Create our query
         $query = $this->createQueryBuilder('a')
-
             ->join('a.vendeur', 'v')
-            ->join('v.user','uv')
+            ->join('v.user', 'uv')
             //  ->join('v.abonnes','ab')
-            ->join('a.categorie','c')
-
+            ->join('a.categorie', 'c')
             ->where('a.nom LIKE :nom_art')
             ->andWhere('a.prix >= :pmin')
             ->andWhere('a.prix <= :pmax')
-
             ->andWhere('v.nom_boutique LIKE :nom_bout')
             ->andWhere('uv.state LIKE :gov');
 
@@ -73,23 +64,20 @@ class ArticleRepository extends \Doctrine\ORM\EntityRepository
             // $catss = explode(",", $cats);
 
             $first = true;
-            $i=0;
+            $i = 0;
 
             foreach ($cats as $c) {
-                if ($first)
-                {
+                if ($first) {
                     $query
-                        ->andWhere('c.nom LIKE :cat'.$i)
-                        ->setParameter('cat'.$i, '%'.$c.'%');
-                    $first=false;
+                        ->andWhere('c.nom LIKE :cat' . $i)
+                        ->setParameter('cat' . $i, '%' . $c . '%');
+                    $first = false;
                     $i++;
-                }
-                else
-                {
+                } else {
 
                     $query
-                        ->orWhere('c.nom LIKE :cat'.$i)
-                        ->setParameter('cat'.$i, '%'.$c.'%');
+                        ->orWhere('c.nom LIKE :cat' . $i)
+                        ->setParameter('cat' . $i, '%' . $c . '%');
                     $i++;
                 }
             }
@@ -124,12 +112,11 @@ class ArticleRepository extends \Doctrine\ORM\EntityRepository
         }
 
         $query
-
-            ->setParameter('nom_art', '%'.$nom_art.'%')
+            ->setParameter('nom_art', '%' . $nom_art . '%')
             ->setParameter('pmin', $pmin)
             ->setParameter('pmax', $pmax)
-            ->setParameter('nom_bout', '%'.$nom_bout.'%')
-            ->setParameter('gov', '%'.$gov.'%')
+            ->setParameter('nom_bout', '%' . $nom_bout . '%')
+            ->setParameter('gov', '%' . $gov . '%')
             ->getQuery();
 
         // No need to manually get get the result ($query->getResult())
@@ -140,106 +127,112 @@ class ArticleRepository extends \Doctrine\ORM\EntityRepository
     }
 
 
+    /*
+        public function filterArts($currentPage,$nom_art='',$cat='',$type_tri='',$gov='',$pmin=0, $pmax=150,$abon='',$nom_bout='')
+        {
+    
+            $requete = " select * from article a " .
+            "JOIN articles_vendeurs av ON a.id = av.article_id " .
+            "JOIN vendeur v ON av.vendeur_id = v.id " .
+            "JOIN user u ON u.id = v.id ".
+            "JOIN categories_articles ac ON a.id = ac.article_id " .
+            "JOIN categorie c ON ac.categorie_id = c.id " ;
+    
+                  /*  if ($abon == "Mes abonnements")
+                    {
+                        $requete = requete + " " + "JOIN abonnements ab ON v.id = ab.vendeur_id " .
+                            "WHERE ab.acheteur_id = "+$statCuser.getId()+" AND ";
+                    }
+                    else*
+                        $requete = $requete . " " . "WHERE ";
+    
+                    $requete2 =  "u.state LIKE '%".$gov."%' " .
+            "AND v.nom_boutique LIKE '%".$nom_bout."%' " .
+            "AND a.nom LIKE '%".$nom_art."%' ".
+            "AND c.nom LIKE '%".$cat."%' ".
+            "AND a.prix BETWEEN '".$pmin."' AND '".$pmax."' ";
+    
+    
+    
+                  /*  switch ($type_tri) {
+                        case "Prix croissant":
+                            $requete2 = $requete2 . " ORDER BY a.prix ASC";
+                            break;
+                        case "Prix decroissant":
+                            $requete2 = $requete2 . " ORDER BY a.prix Desc";
+                            break;
+                        case "Date pub croissant":
+                            $requete2 = $requete2 . " ORDER BY a.date_pub ASC";
+                            break;
+                        case "date pub decroissant":
+                            $requete2 = $requete2 . " ORDER BY a.date_pub DESC";
+                            break;
+                        case "Alphabetique":
+                            $requete2 = $requete2 . " ORDER BY a.nom ASC";
+                            break;
+                        /* case "":
+                             requete = requete + "ORDER BY a.nom DESC";
+                             break;
+                        }*
+    
+    
+            $requete = $requete ." ".$requete2;
+    
+            $rsm = new ResultSetMappingBuilder($this->getEntityManager());
+            $rsm->addRootEntityFromClassMetadata('AppBundle:Article', 'a');
+    
+    
+            $query = $this->getEntityManager()->createNativeQuery($requete,$rsm);
+    
+    
+    
+            /
+            try {
+                $query = $this->getEntityManager()->getConnection()->query($requete);
+            } catch (DBALException $e) {
+            }*
+    
+            $paginator = $this->paginatee($query, $currentPage);
+    
+            return $paginator;
+        }
+    
+    
+    
+    
+        public function paginatee($query, $page)
+        {
+            $limit = 12;
+            // do a count for all query, create a separate NativeQuery only for that
+            $sqlInitial = $query->getSQL();
+    
+            $rsm = new ResultSetMappingBuilder($query->getEntityManager());
+            $rsm->addScalarResult('count', 'count');
+    
+            $sqlCount = 'select count(*) as count from (' . $sqlInitial . ') as item';
+            $qCount = $query->getEntityManager()->createNativeQuery($sqlCount, $rsm);
+            $qCount->setParameters($query->getParameters());
+    
+            $resultCount = (int)$qCount->getSingleScalarResult();
+            $this->count = $resultCount;
+    
+            // then, add the limit - paginate for current page
+            $query->setSQL($query->getSQL() . ' limit ' . (($page - 1) * $limit) . ', ' . $limit);
+        }
+    */
 
 
-
-
-
-
-
-/*
-    public function filterArts($currentPage,$nom_art='',$cat='',$type_tri='',$gov='',$pmin=0, $pmax=150,$abon='',$nom_bout='')
+    public function getArticleFromPanier($panier)
     {
+        $query = $this->createQueryBuilder('c')->select(['c.id', 'c.nom', 'c.prix', 'c.ref', 'a.quantite'])
+            ->join('c.lignes', 'a')
+            ->where('a.panier = :panier')
+            ->setParameter('panier', $panier);
 
-        $requete = " select * from article a " .
-        "JOIN articles_vendeurs av ON a.id = av.article_id " .
-        "JOIN vendeur v ON av.vendeur_id = v.id " .
-        "JOIN user u ON u.id = v.id ".
-        "JOIN categories_articles ac ON a.id = ac.article_id " .
-        "JOIN categorie c ON ac.categorie_id = c.id " ;
+        $results = $query->getQuery()->getResult();
 
-              /*  if ($abon == "Mes abonnements")
-                {
-                    $requete = requete + " " + "JOIN abonnements ab ON v.id = ab.vendeur_id " .
-                        "WHERE ab.acheteur_id = "+$statCuser.getId()+" AND ";
-                }
-                else*
-                    $requete = $requete . " " . "WHERE ";
-
-                $requete2 =  "u.state LIKE '%".$gov."%' " .
-        "AND v.nom_boutique LIKE '%".$nom_bout."%' " .
-        "AND a.nom LIKE '%".$nom_art."%' ".
-        "AND c.nom LIKE '%".$cat."%' ".
-        "AND a.prix BETWEEN '".$pmin."' AND '".$pmax."' ";
-
-
-
-              /*  switch ($type_tri) {
-                    case "Prix croissant":
-                        $requete2 = $requete2 . " ORDER BY a.prix ASC";
-                        break;
-                    case "Prix decroissant":
-                        $requete2 = $requete2 . " ORDER BY a.prix Desc";
-                        break;
-                    case "Date pub croissant":
-                        $requete2 = $requete2 . " ORDER BY a.date_pub ASC";
-                        break;
-                    case "date pub decroissant":
-                        $requete2 = $requete2 . " ORDER BY a.date_pub DESC";
-                        break;
-                    case "Alphabetique":
-                        $requete2 = $requete2 . " ORDER BY a.nom ASC";
-                        break;
-                    /* case "":
-                         requete = requete + "ORDER BY a.nom DESC";
-                         break;
-                    }*
-
-
-        $requete = $requete ." ".$requete2;
-
-        $rsm = new ResultSetMappingBuilder($this->getEntityManager());
-        $rsm->addRootEntityFromClassMetadata('AppBundle:Article', 'a');
-
-
-        $query = $this->getEntityManager()->createNativeQuery($requete,$rsm);
-
-
-
-        /
-        try {
-            $query = $this->getEntityManager()->getConnection()->query($requete);
-        } catch (DBALException $e) {
-        }*
-
-        $paginator = $this->paginatee($query, $currentPage);
-
-        return $paginator;
+        return $results;
     }
-
-
-
-
-    public function paginatee($query, $page)
-    {
-        $limit = 12;
-        // do a count for all query, create a separate NativeQuery only for that
-        $sqlInitial = $query->getSQL();
-
-        $rsm = new ResultSetMappingBuilder($query->getEntityManager());
-        $rsm->addScalarResult('count', 'count');
-
-        $sqlCount = 'select count(*) as count from (' . $sqlInitial . ') as item';
-        $qCount = $query->getEntityManager()->createNativeQuery($sqlCount, $rsm);
-        $qCount->setParameters($query->getParameters());
-
-        $resultCount = (int)$qCount->getSingleScalarResult();
-        $this->count = $resultCount;
-
-        // then, add the limit - paginate for current page
-        $query->setSQL($query->getSQL() . ' limit ' . (($page - 1) * $limit) . ', ' . $limit);
-    }
-*/
 
 
 }

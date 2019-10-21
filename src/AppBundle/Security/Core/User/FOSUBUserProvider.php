@@ -1,10 +1,11 @@
 <?php
+
 namespace AppBundle\Security\Core\User;
 
-use AppBundle\Entity\User;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider as BaseClass;
 use Symfony\Component\Security\Core\User\UserInterface;
+
 class FOSUBUserProvider extends BaseClass
 {
     /**
@@ -16,9 +17,9 @@ class FOSUBUserProvider extends BaseClass
         $username = $response->getUsername();
         //on connect - get the access token and the user ID
         $service = $response->getResourceOwner()->getName();
-        $setter = 'set'.ucfirst($service);
-        $setter_id = $setter.'Id';
-        $setter_token = $setter.'AccessToken';
+        $setter = 'set' . ucfirst($service);
+        $setter_id = $setter . 'Id';
+        $setter_token = $setter . 'AccessToken';
         //we "disconnect" previously connected users
         if (null !== $previousUser = $this->userManager->findUserBy(array($property => $username))) {
             $previousUser->$setter_id(null);
@@ -30,6 +31,7 @@ class FOSUBUserProvider extends BaseClass
         $user->$setter_token($response->getAccessToken());
         $this->userManager->updateUser($user);
     }
+
     /**
      * {@inheritdoc}
      */
@@ -42,16 +44,16 @@ class FOSUBUserProvider extends BaseClass
         $email = $response->getEmail();
         $photoprof = $response->getProfilePicture();
 
-       /* $user = new User();
-        $user->setNom();
-*/
+        /* $user = new User();
+         $user->setNom();
+ */
         $user = $this->userManager->findUserBy(array($this->getProperty($response) => $username));
         //when the user is registrating
         if (null === $user) {
             $service = $response->getResourceOwner()->getName();
-            $setter = 'set'.ucfirst($service);
-            $setter_id = $setter.'Id';
-            $setter_token = $setter.'AccessToken';
+            $setter = 'set' . ucfirst($service);
+            $setter_id = $setter . 'Id';
+            $setter_token = $setter . 'AccessToken';
             // create new user here
             $user = $this->userManager->createUser();
             $user->$setter_id($username);
@@ -60,13 +62,13 @@ class FOSUBUserProvider extends BaseClass
             //modify here with relevant data
             $user->setUsername($username);
             $user->setEmail($email);
-            $user->setNom( $response->getRealName());
+            $user->setNom($response->getRealName());
             $user->setPrenom($last_name);
 
             $user->setPhotoProf($response->getProfilePicture());
-          //  $user->setPhotoProf($photoprof."asid=".$username."&height=50&width=50");
+            //  $user->setPhotoProf($photoprof."asid=".$username."&height=50&width=50");
 
-            if(!$user->getPassword()) {
+            if (!$user->getPassword()) {
                 // generate unique token
                 $secret = md5(uniqid(rand(), true));
                 $user->setPassword($secret);
