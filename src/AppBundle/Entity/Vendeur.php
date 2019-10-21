@@ -6,7 +6,7 @@
  * Time: 12:33
  */
 
-namespace AppBundle\backup;
+namespace AppBundle\Entity;
 
 
 use Doctrine\ORM\Mapping\JoinTable;
@@ -28,6 +28,22 @@ use Symfony\Component\Validator\Constraints\Type;
  */
 class Vendeur
 {
+
+    /**
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * One Product has One Shipment.
+     * @OneToOne(targetEntity="AppBundle\Entity\User")
+     * @JoinColumn(name="user_id", referencedColumnName="id",onDelete="CASCADE")
+     *
+     */
+    private $user;
 
 
     /**
@@ -54,21 +70,17 @@ class Vendeur
     /**
      * @ORM\Column(type="string", length=255,nullable=true)
      */
-    protected $usertype;
+    protected $type;
 
     /**
      * Many Groups have Many Users.
-     * @ManyToMany(targetEntity="AppBundle\Entity\Acheteur", mappedBy="vendeurs")
+     * @ManyToMany(targetEntity="AppBundle\Entity\Acheteur", mappedBy="vendeur")
      */
     private $abonnes;
 
     /**
-     * Many User have Many Phonenumbers.
-     * @ManyToMany(targetEntity="AppBundle\Entity\Article")
-     * @JoinTable(name="articles_vendeurs",
-     *      joinColumns={@JoinColumn(name="vendeur_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@JoinColumn(name="article_id", referencedColumnName="id", unique=true)}
-     *      )
+     * One Product has Many Features.
+     * @OneToMany(targetEntity="AppBundle\Entity\Article", mappedBy="vendeur")
      */
     private $articles;
 
@@ -467,5 +479,77 @@ class Vendeur
     public function getFacebookAccessToken()
     {
         return $this->facebook_access_token;
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set id
+     *
+     * @param \AppBundle\Entity\User $id
+     *
+     * @return Vendeur
+     */
+    public function setId(\AppBundle\Entity\User $id = null)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \AppBundle\Entity\User $user
+     *
+     * @return Vendeur
+     */
+    public function setUser(\AppBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \AppBundle\Entity\User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * Set type
+     *
+     * @param string $type
+     *
+     * @return Vendeur
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 }

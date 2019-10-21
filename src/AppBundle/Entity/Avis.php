@@ -9,9 +9,10 @@
 namespace AppBundle\Entity;
 
 
+use Doctrine\ORM\Mapping\OneToOne;
+use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
-use Doctrine\ORM\Mapping\ManyToOne;
 use Symfony\Component\Validator\Constraints\Type;
 
 
@@ -59,12 +60,15 @@ class Avis
     private $user;
 
 
+
     /**
      * Many Features have One Product.
      * @ManyToOne(targetEntity="AppBundle\Entity\Article", inversedBy="avis")
      * @JoinColumn(name="article_id", referencedColumnName="id",onDelete="CASCADE")
      */
     private $article;
+
+
 
 
     /**
@@ -75,16 +79,6 @@ class Avis
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Get note
-     *
-     * @return string
-     */
-    public function getNote()
-    {
-        return $this->note;
     }
 
     /**
@@ -99,6 +93,16 @@ class Avis
         $this->note = $note;
 
         return $this;
+    }
+
+    /**
+     * Get note
+     *
+     * @return string
+     */
+    public function getNote()
+    {
+        return $this->note;
     }
 
     /**
@@ -126,16 +130,6 @@ class Avis
     }
 
     /**
-     * Get article
-     *
-     * @return \AppBundle\Entity\Article
-     */
-    public function getArticle()
-    {
-        return $this->article;
-    }
-
-    /**
      * Set article
      *
      * @param \AppBundle\Entity\Article $article
@@ -147,6 +141,16 @@ class Avis
         $this->article = $article;
 
         return $this;
+    }
+
+    /**
+     * Get article
+     *
+     * @return \AppBundle\Entity\Article
+     */
+    public function getArticle()
+    {
+        return $this->article;
     }
 
     /**
@@ -168,15 +172,15 @@ class Avis
     }
 
     /**
-     * Set datePub
+     * Set avis
      *
-     * @param \DateTime $datePub
+     * @param string $avis
      *
      * @return Avis
      */
-    public function setDatePub($datePub)
+    public function setAvis($avis)
     {
-        $this->date_pub = $datePub;
+        $this->avis = $avis;
 
         return $this;
     }
@@ -192,15 +196,15 @@ class Avis
     }
 
     /**
-     * Set avis
+     * Set user
      *
-     * @param string $avis
+     * @param \AppBundle\Entity\User $user
      *
      * @return Avis
      */
-    public function setAvis($avis)
+    public function setUser(\AppBundle\Entity\User $user = null)
     {
-        $this->avis = $avis;
+        $this->user = $user;
 
         return $this;
     }
@@ -216,15 +220,15 @@ class Avis
     }
 
     /**
-     * Set user
+     * Set datePub
      *
-     * @param \AppBundle\Entity\User $user
+     * @param \DateTime $datePub
      *
      * @return Avis
      */
-    public function setUser(\AppBundle\Entity\User $user = null)
+    public function setDatePub($datePub)
     {
-        $this->user = $user;
+        $this->date_pub = $datePub;
 
         return $this;
     }

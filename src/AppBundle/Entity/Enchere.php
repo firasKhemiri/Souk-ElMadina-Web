@@ -9,11 +9,12 @@
 namespace AppBundle\Entity;
 
 
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToMany;
 use Doctrine\ORM\Mapping\OneToOne;
 use Symfony\Component\Validator\Constraints\Type;
+
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Enchere
@@ -92,16 +93,6 @@ class Enchere
     }
 
     /**
-     * Get dateDeb
-     *
-     * @return \Date
-     */
-    public function getDateDeb()
-    {
-        return $this->date_deb;
-    }
-
-    /**
      * Set dateDeb
      *
      * @param \Date $dateDeb
@@ -116,13 +107,13 @@ class Enchere
     }
 
     /**
-     * Get dateFin
+     * Get dateDeb
      *
      * @return \Date
      */
-    public function getDateFin()
+    public function getDateDeb()
     {
-        return $this->date_fin;
+        return $this->date_deb;
     }
 
     /**
@@ -140,13 +131,13 @@ class Enchere
     }
 
     /**
-     * Get prixActuel
+     * Get dateFin
      *
-     * @return float
+     * @return \Date
      */
-    public function getPrixActuel()
+    public function getDateFin()
     {
-        return $this->prix_actuel;
+        return $this->date_fin;
     }
 
     /**
@@ -161,6 +152,16 @@ class Enchere
         $this->prix_actuel = $prixActuel;
 
         return $this;
+    }
+
+    /**
+     * Get prixActuel
+     *
+     * @return float
+     */
+    public function getPrixActuel()
+    {
+        return $this->prix_actuel;
     }
 
     /**
@@ -198,16 +199,6 @@ class Enchere
     }
 
     /**
-     * Get article
-     *
-     * @return \AppBundle\Entity\Article
-     */
-    public function getArticle()
-    {
-        return $this->article;
-    }
-
-    /**
      * Set article
      *
      * @param \AppBundle\Entity\Article $article
@@ -222,13 +213,13 @@ class Enchere
     }
 
     /**
-     * Get winner
+     * Get article
      *
-     * @return \AppBundle\Entity\Acheteur
+     * @return \AppBundle\Entity\Article
      */
-    public function getWinner()
+    public function getArticle()
     {
-        return $this->winner;
+        return $this->article;
     }
 
     /**
@@ -243,5 +234,15 @@ class Enchere
         $this->winner = $winner;
 
         return $this;
+    }
+
+    /**
+     * Get winner
+     *
+     * @return \AppBundle\Entity\Acheteur
+     */
+    public function getWinner()
+    {
+        return $this->winner;
     }
 }

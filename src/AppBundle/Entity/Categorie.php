@@ -9,10 +9,10 @@
 namespace AppBundle\Entity;
 
 
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\JoinTable;
 use Doctrine\ORM\Mapping\ManyToMany;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints\Type;
 
 /**
@@ -82,16 +82,6 @@ class Categorie
     }
 
     /**
-     * Get nom
-     *
-     * @return string
-     */
-    public function getNom()
-    {
-        return $this->nom;
-    }
-
-    /**
      * Set nom
      *
      * @param string $nom
@@ -106,13 +96,13 @@ class Categorie
     }
 
     /**
-     * Get description
+     * Get nom
      *
      * @return string
      */
-    public function getDescription()
+    public function getNom()
     {
-        return $this->description;
+        return $this->nom;
     }
 
     /**
@@ -127,6 +117,16 @@ class Categorie
         $this->description = $description;
 
         return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
     }
 
     /**
@@ -164,16 +164,6 @@ class Categorie
     }
 
     /**
-     * Get image
-     *
-     * @return string
-     */
-    public function getImage()
-    {
-        return $this->image;
-    }
-
-    /**
      * Set image
      *
      * @param string $image
@@ -185,5 +175,15 @@ class Categorie
         $this->image = $image;
 
         return $this;
+    }
+
+    /**
+     * Get image
+     *
+     * @return string
+     */
+    public function getImage()
+    {
+        return $this->image;
     }
 }

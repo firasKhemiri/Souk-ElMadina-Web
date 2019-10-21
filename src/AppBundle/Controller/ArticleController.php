@@ -2,20 +2,12 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Article;
 use AppBundle\Entity\Avis;
 use AppBundle\Entity\User;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-
-/**
- * Commande controller.
- *
- * @Route("article")
- */
 
 class ArticleController extends Controller
 {
@@ -30,7 +22,7 @@ class ArticleController extends Controller
 
         }
 
-        return $this->render('@App/articles/index.html.twig', array('user' => $user));
+        return $this->render('@App/articles/index.html.twig', array('user'=>$user ));
     }
 
     public function AllArticlesAction()
@@ -41,8 +33,9 @@ class ArticleController extends Controller
             $user = $this->get('security.token_storage')->getToken()->getUser();
 
         }
-        return $this->render('@App/articles/allarticles.html.twig', array('user' => $user));
+        return $this->render('@App/articles/allarticles.html.twig', array('user'=>$user ));
     }
+
 
 
     public function userProfileAction()
@@ -51,8 +44,10 @@ class ArticleController extends Controller
         if ($this->container->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             $user = $this->get('security.token_storage')->getToken()->getUser();
 
-            return $this->render('@App/articles/profileUser.html.twig', array('user' => $user));
-        } else
+            return $this->render('@App/articles/profileUser.html.twig', array('user'=>$user ));
+        }
+
+        else
             return $this->render('@App/Security/newlogin.html.twig');
     }
 
@@ -73,8 +68,11 @@ class ArticleController extends Controller
 
         }
 
-        return $this->render('@App/articles/detailsarticle.html.twig', array('article' => $article, 'user' => $user));
+        return $this->render('@App/articles/detailsarticle.html.twig', array('article' => $article,'user'=>$user));
     }
+
+
+
 
 
     public function getAllArtsAction()
@@ -198,6 +196,8 @@ class ArticleController extends Controller
         return new Response(json_encode($fresponse));
 
     }
+
+
 
 
     public function articlesPagerAction(Request $request)
@@ -332,6 +332,8 @@ class ArticleController extends Controller
     }
 
 
+
+
     public function articleDetailsAction(Request $request)
     {
         $id = $request->get("id");
@@ -414,23 +416,23 @@ class ArticleController extends Controller
 
             $interval = $datetime1->diff($datetime2);
 
-            $time = "";
-            //    echo $interval->format('%h')." Hours ".$interval->format('%i')." Minutes";
+            $time="";
+        //    echo $interval->format('%h')." Hours ".$interval->format('%i')." Minutes";
 
-            if ($interval->format('%d') >= 1)
+            if ($interval->format('%d')>=1)
 
-                $time = $interval->format('%d') . "j";
-            else if ($interval->format('%h') >= 1)
+                $time = $interval->format('%d')."j";
+            else if ($interval->format('%h')>=1)
 
-                $time = $interval->format('%h') . "h";
-            else if ($interval->format('%i') > 1)
+                $time = $interval->format('%h')."h";
+            else if ($interval->format('%i')>1 )
 
-                $time = $interval->format('%i') . "m";
+                $time = $interval->format('%i')."m";
             else
                 $time = "1m";
 
 
-            // $comment = new Avis();
+           // $comment = new Avis();
 
             $mine = false;
             $img = "";
@@ -446,7 +448,7 @@ class ArticleController extends Controller
 
             $res[] = array("id" => $comment->getId(), "comment" => $comment->getAvis(), "mine" => $mine, "date" => $time,
                 "user_id" => $comment->getUser()->getId(), "user_name" => $comment->getUser()->getNom() . ' ' . $comment->getUser()->getPrenom(),
-                "img_user" => $img, "rate" => $comment->getNote());
+                "img_user" => $img,"rate"=> $comment->getNote());
 
             $responses = $res;
             $i++;
@@ -463,6 +465,12 @@ class ArticleController extends Controller
     }
 
 
+
+
+
+
+
+
     public function delCommentAction(Request $request)
     {
 
@@ -475,30 +483,16 @@ class ArticleController extends Controller
         return new Response(json_encode("done"));
     }
 
-    /**
-     * Creates a new commande entity.
-     *
-     * @Route("/new", name="article_new")
-     * @Method({"GET", "POST"})
-     */
-    public function newAction(Request $request)
-    {
-        $article = new Article();
-        $form = $this->createForm('AppBundle\Form\ArticleType', $article);
-        $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($article);
-            $em->flush();
 
-            return $this->redirectToRoute('article_new', array('id' => $article->getId()));
-        }
 
-        return $this->render('@App/articles/newArticle.html.twig', array(
-            'article' => $article,
-            'form' => $form->createView(),
-        ));
-    }
+
+
+
+
+
+
+
+
 
 }

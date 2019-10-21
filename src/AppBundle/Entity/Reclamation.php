@@ -9,10 +9,11 @@
 namespace AppBundle\Entity;
 
 
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\OneToOne;
 use Symfony\Component\Validator\Constraints\Type;
+
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Reclamation
@@ -62,16 +63,6 @@ class Reclamation
     }
 
     /**
-     * Get reclamation
-     *
-     * @return string
-     */
-    public function getReclamation()
-    {
-        return $this->reclamation;
-    }
-
-    /**
      * Set reclamation
      *
      * @param string $reclamation
@@ -86,13 +77,13 @@ class Reclamation
     }
 
     /**
-     * Get acheteur
+     * Get reclamation
      *
-     * @return \AppBundle\Entity\Acheteur
+     * @return string
      */
-    public function getAcheteur()
+    public function getReclamation()
     {
-        return $this->acheteur;
+        return $this->reclamation;
     }
 
     /**
@@ -110,13 +101,13 @@ class Reclamation
     }
 
     /**
-     * Get article
+     * Get acheteur
      *
-     * @return \AppBundle\Entity\Article
+     * @return \AppBundle\Entity\Acheteur
      */
-    public function getArticle()
+    public function getAcheteur()
     {
-        return $this->article;
+        return $this->acheteur;
     }
 
     /**
@@ -131,5 +122,15 @@ class Reclamation
         $this->article = $article;
 
         return $this;
+    }
+
+    /**
+     * Get article
+     *
+     * @return \AppBundle\Entity\Article
+     */
+    public function getArticle()
+    {
+        return $this->article;
     }
 }

@@ -7,11 +7,10 @@
  */
 
 namespace AppBundle\Entity;
-
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Symfony\Component\Validator\Constraints\Type;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Images
@@ -55,16 +54,6 @@ class Images
     }
 
     /**
-     * Get url
-     *
-     * @return string
-     */
-    public function getUrl()
-    {
-        return $this->url;
-    }
-
-    /**
      * Set url
      *
      * @param string $url
@@ -79,13 +68,13 @@ class Images
     }
 
     /**
-     * Get article
+     * Get url
      *
-     * @return \AppBundle\Entity\Article
+     * @return string
      */
-    public function getArticle()
+    public function getUrl()
     {
-        return $this->article;
+        return $this->url;
     }
 
     /**
@@ -100,5 +89,15 @@ class Images
         $this->article = $article;
 
         return $this;
+    }
+
+    /**
+     * Get article
+     *
+     * @return \AppBundle\Entity\Article
+     */
+    public function getArticle()
+    {
+        return $this->article;
     }
 }

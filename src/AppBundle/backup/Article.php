@@ -9,9 +9,15 @@
 namespace AppBundle\backup;
 
 
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\JoinTable;
+use Doctrine\ORM\Mapping\ManyToMany;
 use Doctrine\ORM\Mapping\OneToMany;
 use Symfony\Component\Validator\Constraints\Type;
+
+use Doctrine\ORM\Mapping\OneToOne;
+use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\JoinColumn;
 
 
 /**
@@ -72,20 +78,16 @@ class Article
     private $oldprix;
 
 
+
+
+
+
     /**
      * One Product has Many Features.
      * @OneToMany(targetEntity="AppBundle\Entity\Images", mappedBy="article")
      */
     private $images;
 
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->avis = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->images = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
      * Get id
@@ -95,16 +97,6 @@ class Article
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Get nom
-     *
-     * @return string
-     */
-    public function getNom()
-    {
-        return $this->nom;
     }
 
     /**
@@ -122,13 +114,13 @@ class Article
     }
 
     /**
-     * Get description
+     * Get nom
      *
      * @return string
      */
-    public function getDescription()
+    public function getNom()
     {
-        return $this->description;
+        return $this->nom;
     }
 
     /**
@@ -144,6 +136,18 @@ class Article
 
         return $this;
     }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+
 
     /**
      * Set commande
@@ -170,16 +174,6 @@ class Article
     }
 
     /**
-     * Get images
-     *
-     * @return string
-     */
-    public function getImages()
-    {
-        return $this->images;
-    }
-
-    /**
      * Set images
      *
      * @param string $images
@@ -194,13 +188,21 @@ class Article
     }
 
     /**
-     * Get categorie
+     * Get images
      *
      * @return string
      */
-    public function getCategorie()
+    public function getImages()
     {
-        return $this->categorie;
+        return $this->images;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->avis = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->images = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -215,6 +217,16 @@ class Article
         $this->categorie = $categorie;
 
         return $this;
+    }
+
+    /**
+     * Get categorie
+     *
+     * @return string
+     */
+    public function getCategorie()
+    {
+        return $this->categorie;
     }
 
     /**
@@ -276,16 +288,6 @@ class Article
     }
 
     /**
-     * Get prix
-     *
-     * @return float
-     */
-    public function getPrix()
-    {
-        return $this->prix;
-    }
-
-    /**
      * Set prix
      *
      * @param float $prix
@@ -300,13 +302,13 @@ class Article
     }
 
     /**
-     * Get datePub
+     * Get prix
      *
-     * @return \DateTime
+     * @return float
      */
-    public function getDatePub()
+    public function getPrix()
     {
-        return $this->date_pub;
+        return $this->prix;
     }
 
     /**
@@ -324,13 +326,13 @@ class Article
     }
 
     /**
-     * Get oldprix
+     * Get datePub
      *
-     * @return float
+     * @return \DateTime
      */
-    public function getOldprix()
+    public function getDatePub()
     {
-        return $this->oldprix;
+        return $this->date_pub;
     }
 
     /**
@@ -345,5 +347,15 @@ class Article
         $this->oldprix = $oldprix;
 
         return $this;
+    }
+
+    /**
+     * Get oldprix
+     *
+     * @return float
+     */
+    public function getOldprix()
+    {
+        return $this->oldprix;
     }
 }

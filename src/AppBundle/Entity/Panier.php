@@ -9,20 +9,24 @@
 namespace AppBundle\Entity;
 
 
-use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\JoinTable;
+use Doctrine\ORM\Mapping\ManyToMany;
+use Doctrine\ORM\Mapping\OneToOne;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints\DateTime;
+
+use Symfony\Component\Validator\Constraints\Type;
 
 
 /**
- * Panier
+ * Acheteur
  *
  * @ORM\Table(name="panier")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\PanierRepository")
- * @ORM\HasLifecycleCallbacks
  */
 class Panier
 {
+
 
     /**
      * @var int
@@ -32,45 +36,45 @@ class Panier
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-    /**
-     * @var DateTime
-     *
-     * @ORM\Column(name="date_creation", type="datetime" , nullable=true)
-     */
-    private $date_creation;
-    /**
-     * @var DateTime
-     *
-     * @ORM\Column(name="date_facturation", type="datetime" , nullable=true)
-     */
-    private $date_facturation;
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="montant", type="float" , nullable=true)
-     */
-    private $montant;
+
 
     /**
-     * @var User
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
-     * @ORM\JoinColumn(name="user", referencedColumnName="id")
+     * One Product has One Shipment.
+     * @OneToOne(targetEntity="AppBundle\Entity\User")
+     * @JoinColumn(name="user_id", referencedColumnName="id",unique=true,onDelete="CASCADE")
      */
     private $user;
-    /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Ligne", mappedBy="panier",cascade={"persist"})
-     */
-    private $lignes;
 
+    /**
+     * Many User have Many Phonenumbers.
+     * @ManyToMany(targetEntity="AppBundle\Entity\Article")
+     * @JoinTable(name="panier_articles",
+     *      joinColumns={@JoinColumn(name="panier_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@JoinColumn(name="article_id", referencedColumnName="id")}
+     *      )
+     */
+    private $article;
+
+
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     * @Type("datetime")
+     */
+    private $date_modif;
+
+    /**
+     * Constructor
+     */
     public function __construct()
     {
-        $this->lignes = new ArrayCollection();
+        $this->article = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
@@ -78,106 +82,108 @@ class Panier
     }
 
     /**
-     * @return DateTime
-     */
-    public function getDateCreation()
-    {
-        return $this->date_creation;
-    }
-
-    /**
-     * @param DateTime $date_creation
-     */
-    public function setDateCreation($date_creation)
-    {
-        $this->date_creation = $date_creation;
-    }
-
-    /**
-     * @return DateTime
-     */
-    public function getDateFacturation()
-    {
-        return $this->date_facturation;
-    }
-
-    /**
-     * @param DateTime $date_facturation
-     */
-    public function setDateFacturation($date_facturation)
-    {
-        $this->date_facturation = $date_facturation;
-    }
-
-    /**
-     * @return float
-     */
-    public function getMontant()
-    {
-        return $this->montant;
-    }
-
-    /**
-     * @param float $montant
-     */
-    public function setMontant($montant)
-    {
-        $this->montant = $montant;
-    }
-
-    /**
-     * @return User
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
-     * @param User $user
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
-    }
-
-    /**
-     * Add user_recipe_associations
+     * Set dateModif
      *
-     * @param Ligne $ligne
+     * @param \DateTime $dateModif
+     *
      * @return Panier
      */
-    public function addUserRecipeAssociation(Ligne $ligne)
+    public function setDateModif($dateModif)
     {
-        $this->lignes[] = $ligne;
+        $this->date_modif = $dateModif;
+
         return $this;
     }
 
     /**
-     * Remove ligne
+     * Get dateModif
      *
-     * @param Ligne $ligne
+     * @return \DateTime
      */
-    public function removeUserRecipeAssociation(Ligne $ligne)
+    public function getDateModif()
     {
-        $this->lignes->removeElement($ligne);
+        return $this->date_modif;
     }
 
     /**
-     * Get lignes
+     * Set acheteur
+     *
+     * @param \AppBundle\Entity\Acheteur $acheteur
+     *
+     * @return Panier
+     */
+    public function setAcheteur(\AppBundle\Entity\Acheteur $acheteur = null)
+    {
+        $this->acheteur = $acheteur;
+
+        return $this;
+    }
+
+    /**
+     * Get acheteur
+     *
+     * @return \AppBundle\Entity\Acheteur
+     */
+    public function getAcheteur()
+    {
+        return $this->acheteur;
+    }
+
+    /**
+     * Add article
+     *
+     * @param \AppBundle\Entity\Article $article
+     *
+     * @return Panier
+     */
+    public function addArticle(\AppBundle\Entity\Article $article)
+    {
+        $this->article[] = $article;
+
+        return $this;
+    }
+
+    /**
+     * Remove article
+     *
+     * @param \AppBundle\Entity\Article $article
+     */
+    public function removeArticle(\AppBundle\Entity\Article $article)
+    {
+        $this->article->removeElement($article);
+    }
+
+    /**
+     * Get article
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getUserRecipeAssociations()
+    public function getArticle()
     {
-        return $this->lignes;
+        return $this->article;
     }
 
     /**
-     * @ORM\PrePersist
+     * Set user
+     *
+     * @param \AppBundle\Entity\User $user
+     *
+     * @return Panier
      */
-    public function onPrePersistSetRegistrationDate()
+    public function setUser(\AppBundle\Entity\User $user = null)
     {
-        $this->date_creation = new \DateTime();
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \AppBundle\Entity\User
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }

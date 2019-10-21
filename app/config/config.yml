@@ -1,0 +1,137 @@
+imports:
+    - { resource: parameters.yml }
+    - { resource: security.yml }
+    - { resource: services.yml }
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+    locale: fr
+
+framework:
+    #esi: ~
+    #translator: { fallbacks: ['%locale%'] }
+    secret: '%secret%'
+    router:
+        resource: '%kernel.project_dir%/app/config/routing.yml'
+        strict_requirements: ~
+    form: ~
+    csrf_protection:
+        enabled: true
+    validation: { enable_annotations: true }
+    #serializer: { enable_annotations: true }
+    default_locale: '%locale%'
+    trusted_hosts: ~
+    session:
+        # https://symfony.com/doc/current/reference/configuration/framework.html#handler-id
+        handler_id: session.handler.native_file
+        save_path: '%kernel.project_dir%/var/sessions/%kernel.environment%'
+    fragments: ~
+    http_method_override: true
+    assets: ~
+    php_errors:
+        log: true
+    translator: ~
+    templating:
+        engines: ['twig']
+
+
+
+# Twig Configuration
+twig:
+    debug: '%kernel.debug%'
+    strict_variables: '%kernel.debug%'
+
+# Doctrine Configuration
+doctrine:
+    dbal:
+        driver: pdo_mysql
+        host: '%database_host%'
+        port: '%database_port%'
+        dbname: '%database_name%'
+        user: '%database_user%'
+        password: '%database_password%'
+        charset: UTF8
+        # if using pdo_sqlite as your database driver:
+        #   1. add the path in parameters.yml
+        #     e.g. database_path: '%kernel.project_dir%/var/data/data.sqlite'
+        #   2. Uncomment database_path in parameters.yml.dist
+        #   3. Uncomment next line:
+        #path: '%database_path%'
+        logging: true
+
+    orm:
+        auto_generate_proxy_classes: '%kernel.debug%'
+        naming_strategy: doctrine.orm.naming_strategy.underscore
+        auto_mapping: true
+
+# Swiftmailer Configuration
+swiftmailer:
+    transport: '%mailer_transport%'
+    host: '%mailer_host%'
+    username: '%mailer_user%'
+    password: '%mailer_password%'
+    spool: { type: memory }
+
+
+
+fos_user:
+    db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
+    firewall_name: main
+    user_class: AppBundle\Entity\User
+
+    service:                               # this lines
+        mailer: fos_user.mailer.twig_swift # this lines
+
+    from_email:
+            address: "noreply@yourcompany.com"
+            sender_name: "No Reply"
+
+hwi_oauth:
+    connect:
+        account_connector: my_user_provider
+    # name of the firewall in which this bundle is active, this setting MUST be set
+    firewall_name: main
+    fosub:
+        username_iterations: 30
+        properties:
+            # these properties will be used/redefined later in the custom FOSUBUserProvider service.
+            facebook: facebook_id
+            google: google_id
+    resource_owners:
+        facebook:
+            type:                facebook
+            client_id:           451355188634464
+            client_secret:       a0a7089604ad4d32d55f5d0dcaf4fe5a
+
+            scope:               "email, basic_info, user_birthday"
+            infos_url:           "https://graph.facebook.com/me?fields=id,name,email,picture.type(square).height(961),friends"
+
+            paths:
+                                  email:          email
+                                  date_of_birth: user_birthday
+                                  firstname: first_name
+                                  middlename: middle_name
+                                  lastname: last_name
+                                  profilepicture: picture.data.url
+
+services:
+    hwi_oauth.user.provider.entity:
+        class: HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUserProvider
+<<<<<<< HEAD
+
+        # app/config/config.yml
+
+        fos_message:
+            db_driver: orm
+            thread_class: AppBundle\Entity\Thread
+            message_class: AppBundle\Entity\Message
+=======
+knp_snappy:
+    temporary_folder: "%kernel.cache_dir%/snappy"
+    process_timeout: 20 # In seconds
+    pdf:
+        enabled:    true
+        binary:     "\"C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe\""
+        options:    []
+>>>>>>> b059c0bf69399d6096e2ed0e8d088a71990669a3
