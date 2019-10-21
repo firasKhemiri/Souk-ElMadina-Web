@@ -66,6 +66,12 @@ class Vendeur
      */
     protected $description;
 
+
+    /**
+     * @ORM\Column(type="string", length=255,nullable=true)
+     */
+    protected $type;
+
     /**
      * Many Groups have Many Users.
      * @ManyToMany(targetEntity="AppBundle\Entity\Acheteur", mappedBy="vendeur")
@@ -521,5 +527,29 @@ class Vendeur
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set type
+     *
+     * @param string $type
+     *
+     * @return Vendeur
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 }

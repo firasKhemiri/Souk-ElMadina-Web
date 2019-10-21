@@ -2,6 +2,8 @@
 
 namespace AppBundle\Repository;
 
+use Doctrine\ORM\Tools\Pagination\Paginator;
+
 /**
  * VendeurRepository
  *
@@ -10,4 +12,79 @@ namespace AppBundle\Repository;
  */
 class VendeurRepository extends \Doctrine\ORM\EntityRepository
 {
+
+
+
+    public function paginate($dql, $page)
+    {
+        $limit = 12;
+
+        $paginator = new Paginator($dql);
+
+        $paginator->getQuery()
+            ->setFirstResult(($page - 1) * $limit ) // Offset
+            ->setMaxResults($limit); // Limit
+
+        return $paginator;
+    }
+
+
+
+
+
+    public function filterBouts($currentPage,$nom_bout='',$gov='',$type_tri,$notemin,$notemax)
+    {
+
+        // Create our query
+        $query = $this->createQueryBuilder('v')
+
+            ->join('v.user','uv')
+            //  ->join('v.abonnes','ab')
+
+            ->Where('v.nom_boutique LIKE :nom_bout')
+            ->andWhere('uv.state LIKE :gov')
+            ->andWhere('v.note >= :notemin')
+            ->andWhere('v.note <= :notemax');
+
+        switch ($type_tri) {
+
+            case "note decroissante":
+                $query
+                    ->orderBy('v.note', 'DESC');
+                break;
+
+            case "note croissante":
+                $query
+                    ->orderBy('v.note', 'ASC');
+                break;
+
+            case "Alphabetique":
+                $query
+                    ->orderBy('v.nom_boutique', 'ASC');
+                break;
+
+            default:
+                $query
+                    ->orderBy('uv.id', 'DESC');
+        }
+
+        $query
+
+            ->setParameter('nom_bout', '%'.$nom_bout.'%')
+            ->setParameter('gov', '%'.$gov.'%')
+            ->setParameter('notemin', $notemin)
+            ->setParameter('notemax', $notemax)
+            ->getQuery();
+
+        // No need to manually get get the result ($query->getResult())
+
+        $paginator = $this->paginate($query, $currentPage);
+
+        return $paginator;
+    }
+
+
+
+
+
 }

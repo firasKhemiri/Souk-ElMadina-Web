@@ -1,16 +1,21 @@
 <?php
-// src/AppBundle/Entity/Message.php
+/**
+ * Created by PhpStorm.
+ * User: Mx14
+ * Date: 11/04/2018
+ * Time: 05:01
+ */
 
 namespace AppBundle\Entity;
 
+
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\Collection;
-use FOS\MessageBundle\Entity\Message as BaseMessage;
+use FOS\MessageBundle\Entity\ThreadMetadata as BaseThreadMetadata;
 
 /**
  * @ORM\Entity
  */
-class Message extends BaseMessage
+class ThreadMetadata extends BaseThreadMetadata
 {
     /**
      * @ORM\Id
@@ -22,7 +27,7 @@ class Message extends BaseMessage
     /**
      * @ORM\ManyToOne(
      *   targetEntity="AppBundle\Entity\Thread",
-     *   inversedBy="messages"
+     *   inversedBy="metadata"
      * )
      * @var \FOS\MessageBundle\Model\ThreadInterface
      */
@@ -32,15 +37,5 @@ class Message extends BaseMessage
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
      * @var \FOS\MessageBundle\Model\ParticipantInterface
      */
-    protected $sender;
-
-    /**
-     * @ORM\OneToMany(
-     *   targetEntity="AppBundle\Entity\MessageMetadata",
-     *   mappedBy="message",
-     *   cascade={"all"}
-     * )
-     * @var MessageMetadata[]|Collection
-     */
-    protected $metadata;
+    protected $participant;
 }

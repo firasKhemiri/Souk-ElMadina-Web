@@ -58,6 +58,11 @@
         <default key="_controller">AppBundle:Article:delComment</default>
     </route>
 
+    <route id="ajoutreclamation" path="/ajout">
+        <default key="_controller">AppBundle:Reclamation:ajout</default>
+    </route>
+
+
 
 
 

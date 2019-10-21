@@ -114,3 +114,10 @@ hwi_oauth:
 services:
     hwi_oauth.user.provider.entity:
         class: HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUserProvider
+
+        # app/config/config.yml
+
+        fos_message:
+            db_driver: orm
+            thread_class: AppBundle\Entity\Thread
+            message_class: AppBundle\Entity\Message

@@ -14,8 +14,7 @@
 
             var first = true;
 
-            var nom_art;
-            var cats;
+
             var nom_bout;
             var pmin;
             var pmax;
@@ -26,20 +25,17 @@
 
             function getAllArticles(page) {
 
-                var jsonString = JSON.stringify(cats);
 
                 //  alert("jso"+jsonString);
 
                 $.ajax({
-                    url: "{{ path('filterArts') }}",
+                    url: "{{ path('filtervendeurs') }}",
                     type: "POST",
                     data: {page:page,
-                        nom_art:nom_art,
-                        cats:jsonString,
                         nom_bout:nom_bout,
                         type_tri:tri_type,
-                        pmin:pmin,
-                        pmax:pmax,
+                        notemin:pmin,
+                        notemax:pmax,
                         gov:gov},
 
                     beforeSend: function () {
@@ -81,30 +77,11 @@
 
                             for (i=0;i<response.nbrc;i++) {
 
-                                if (response[i].oldprix === "" && !response[i].new) {
-                                    $html =
-                                        "<div class=\" col-sm-12 col-md-6 col-lg-4 p-b-50\">\n" +
-                                        "                        <!-- Block2 -->\n" +
-                                        "                        <div class=\"block2\">\n" +
-                                        "                            <div class=\"block2-img wrap-pic-w of-hidden pos-relative block2-labelnew\">";
-                                }
-
-                                else if (response[i].oldprix <= response[i].prix && !response[i].new) {
-                                    $html =
-                                        "<div class=\"col-sm-12 col-md-6 col-lg-4 p-b-50\">\n" +
-                                        "                        <!-- Block2 -->\n" +
-                                        "                        <div class=\"block2\">\n" +
-                                        "                            <div class=\"block2-img wrap-pic-w of-hidden pos-relative block2-labelnew\">";
-                                }
-
-
-                                else if (response[i].oldprix > response[i].prix) {
-                                    $html =
-                                        "<div class=\"col-sm-12 col-md-6 col-lg-4 p-b-50\">\n" +
-                                        "                        <!-- Block2 -->\n" +
-                                        "                        <div class=\"block2\">\n" +
-                                        "                            <div class=\"block2-img wrap-pic-w of-hidden pos-relative block2-labelsale\">";
-                                }
+                                $html =
+                                    "<div class=\" col-sm-12 col-md-6 col-lg-4 p-b-50\">\n" +
+                                    "                        <!-- Block2 -->\n" +
+                                    "                        <div class=\"block2\">\n" +
+                                    "                            <div class=\"block2-img wrap-pic-w of-hidden pos-relative \">";
 
 
                                 $html += "                                " +
@@ -113,21 +90,21 @@
 
                                     "                                <div class=\"block2-overlay trans-0-4\" >\n" +
 
-                                     "<a href=\"article/"+response[i].id+"\" >\n" +
-                                "                                        <i class=\"block2-overlay trans-1-0\"></i>\n" +
-                                "                                    </a>\n" +
+                                    "<a href=\"vendeur/"+response[i].id+"\" >\n" +
+                                    "                                        <i class=\"block2-overlay trans-1-0\"></i>\n" +
+                                    "                                    </a>\n" +
 
                                     "                                    <a href=\"#\" class=\"block2-btn-addwishlist hov-pointer trans-0-4\">\n" +
                                     "                                        <i class=\"icon-wishlist icon_heart_alt\" aria-hidden=\"true\"></i>\n" +
                                     "                                        <i class=\"icon-wishlist icon_heart dis-none\" aria-hidden=\"true\"></i>\n" +
                                     "                                    </a>\n" +
                                     "\n" +
-                     //               " <div class=\"block2-overlay\" onclick=\"location.href='article/"+response[i].id+"';\" > </div> "+
+                                    //               " <div class=\"block2-overlay\" onclick=\"location.href='article/"+response[i].id+"';\" > </div> "+
 
-                                    "                                    <div class=\"block2-btn-addcart w-size2 trans-0-4\">\n" +
+                                    "                                    <div class=\"block2-btn-addcart w-size3 trans-0-4 p-r-20\">\n" +
                                     "                                        <!-- Button -->\n" +
-                                    "                                        <button class=\"flex-c-m size2 bg4 bo-rad-23 hov1 s-text1 trans-0-4\">\n" +
-                                    "                                            Ajouter au panier\n" +
+                                    "                                        <button class=\"flex-c-m size2_mod bg4 bo-rad-23 hov1 s-text1 trans-0-4  \">\n" +
+                                    "                                            Contacter vendeur\n" +
                                     "                                        </button>\n" +
                                     "                                    </div>\n" +
 
@@ -136,39 +113,15 @@
                                     "                            </div>";
 
 
-                                if (response[i].oldprix === "") {
-                                    $html +=
-                                        "         <div class=\"block2-txt p-t-20\">" +
-                                        "              <a href=\"product-detail.html\" class=\"block2-name dis-block s-text3 p-b-5\">" +
-                                        "                    " + response[i].name +
-                                        "              </a>" +
+                                $html +=
+                                    "         <div class=\"block2-txt p-t-20\">" +
+                                    "              <a href=\"product-detail.html\" class=\"block2-name dis-block s-text3 p-b-5\">" +
+                                    "                    " + response[i].name +
+                                    "              </a>" +
 
-                                        "              <span class=\"block2-price m-text6 p-r-5\">" +
-                                        "                    " + response[i].prix +
-                                        "              </span>" +
-                                        "         </div>" +
-                                        "    </div>" +
-                                        "</div>";
-                                }
-
-                                else {
-                                    $html +=
-                                        "         <div class=\"block2-txt p-t-20\">" +
-                                        "              <a href=\"product-detail.html\" class=\"block2-name dis-block s-text3 p-b-5\">" +
-                                        "                    " + response[i].name +
-                                        "              </a>" +
-
-                                        "              <span class=\"block2-oldprice m-text7 p-r-5\">" +
-                                        "                   " + response[i].oldprix +
-                                        "              </span>" +
-
-                                        "              <span class=\"block2-newprice m-text8 p-r-5\">" +
-                                        "                    " + response[i].prix +
-                                        "              </span>" +
-                                        "         </div>" +
-                                        "    </div>" +
-                                        "</div>";
-                                }
+                                    "         </div>" +
+                                    "    </div>" +
+                                    "</div>";
 
 
                                 document.getElementById("prodsec").innerHTML += $html;
@@ -204,68 +157,31 @@
 
 
 
-            function getCat() {
-
-
-                $.ajax({
-                    url: "{{ path('getCats') }}",
-                    type: "GET",
-                    data: {},
-
-                    beforeSend: function () {
-                    },
-                    complete: function () {
-
-                    },
-                    success: function (data) {
-                        var response = jQuery.parseJSON(data);
-                        console.log(response);
-
-                        for (i=0;i<response.nbrc;i++) {
-
-                            document.getElementById("cats").innerHTML +=
-                                "<option value='"+response[i].name+"'>"+response[i].name+"</option>"
-                        }
-                    },
-                    error: function (XMLHttpRequest, textStatus, errorThrown) {
-                        alert(errorThrown)
-                    }
-                });
-
-            }
 
 
 
             $(document).ready(function() {
                 first = true;
 
-                nom_art="";
                 nom_bout="";
-                cat="";
                 gov="";
                 pmin=0;
-                pmax=1500;
+                pmax=5;
                 tri_type='';
                 getAllArticles(1);
 
-                getCat();
+
 
                 $("#rech").click(function () {
 
                     //alert("hheyy");
-                    nom_art = $("#nom_art").val();
                     nom_bout = $("#nom_bout").val();
                     pmax = Math.round(sliderValue[1]);
                     pmin = Math.round(sliderValue[0]);
 
-
-                    cats =  $('.ui.dropdown').dropdown('get value') ;
+                    gov = $("#gov").val();
 
                     first = true;
-
-
-                    if (cats == null)
-                        cats =undefined;
 
 
                     //   alert("hheyy art"+nom_art+" b "+nom_bout+" pmin "+pmin+" pmax "+pmax+"cats "+cats);
@@ -277,7 +193,7 @@
                 $("#tri_type").change(function () {
                     tri_type = $("#tri_type").val();
 
-                 //   alert(tri_type);
+                    //   alert(tri_type);
                     getAllArticles(1);
 
                 })
@@ -406,11 +322,11 @@
                             </li>
 
                             <li>
-                                <a href="cart.html">Nos Boutiques</a>
+                                <a href="{{ path('allvendeurs') }}">Nos Boutiques</a>
                             </li>
 
                             <li>
-                                <a href="{{ path('blog') }}">Blog</a>
+                                <a href="{{ path('blogs') }}">Blog</a>
                             </li>
 
                             <li>
@@ -851,7 +767,7 @@
                     </li>
 
                     <li class="item-menu-mobile">
-                        <a href="cart.html">Features</a>
+                        <a href="{{ path('allvendeurs') }}">Nos Boutiques</a>
                     </li>
 
                     <li class="item-menu-mobile">
@@ -879,31 +795,13 @@
                 <div class="col-sm-6 col-md-4 col-lg-3 p-b-50">
                     <div class="leftbar p-r-20 p-r-0-sm">
                         <!--  -->
-                        <h4 class="m-text14 p-b-7">
-                            Categories
-                        </h4>
 
-
-
-                        <select id="cats" class="ui fluid search dropdown" multiple="">
-                            <option value="">Categories</option>
-                        </select>
-
-                        <!--  -->
                         <h4 class="m-text14 p-b-12">
                             Filtres
                         </h4>
 
 
-                        <div class="search-product pos-relative bo4 of-hidden ">
-                            <input id="nom_art" class="s-text7 size1 p-l-23 p-r-50 " type="text" name="search-product" placeholder="Chercher articles par nom">
 
-                            <!--      <button class="flex-c-m size5 ab-r-m color2 color0-hov trans-0-4">
-                                      <i class="fs-12 fa fa-search" aria-hidden="true"></i>
-                                  </button> -->
-                        </div>
-
-                        <br>
 
                         <div  class="search-product pos-relative bo4 of-hidden">
                             <input id="nom_bout" class="s-text7 size1 p-l-23 p-r-50" type="text" name="search-product" placeholder="Chercher par vendeur">
@@ -913,9 +811,19 @@
                                   </button> -->
                         </div>
 
+                        <br>
+
+                        <div class="search-product pos-relative bo4 of-hidden ">
+                            <input id="gov" class="s-text7 size1 p-l-23 p-r-50 " type="text" name="search-product" placeholder="Chercher vendeur par governorat">
+
+                            <!--      <button class="flex-c-m size5 ab-r-m color2 color0-hov trans-0-4">
+                                      <i class="fs-12 fa fa-search" aria-hidden="true"></i>
+                                  </button> -->
+                        </div>
+
                         <div class="filter-price p-t-22 p-b-50 bo3">
                             <div class="m-text15 p-b-17">
-                                Prix
+                                Note
                             </div>
 
                             <div class="wra-filter-bar">
@@ -931,53 +839,9 @@
                                 </div>
 
                                 <div class="s-text3 p-t-10 p-b-10">
-                                    Range: <span id="value-lower">610</span>DT - <span id="value-upper">980</span>DT
+                                    Valeur: <span id="value-lower">0</span> - <span id="value-upper">5</span>
                                 </div>
                             </div>
-                        </div>
-
-
-                        <div class="filter-color p-t-22 p-b-50 bo3">
-                            <div class="m-text15 p-b-12">
-                                Couleur
-                            </div>
-
-                            <ul class="flex-w">
-                                <li class="m-r-10">
-                                    <input class="checkbox-color-filter" id="color-filter1" type="checkbox" name="color-filter1">
-                                    <label class="color-filter color-filter1" for="color-filter1"></label>
-                                </li>
-
-                                <li class="m-r-10">
-                                    <input class="checkbox-color-filter" id="color-filter2" type="checkbox" name="color-filter2">
-                                    <label class="color-filter color-filter2" for="color-filter2"></label>
-                                </li>
-
-                                <li class="m-r-10">
-                                    <input class="checkbox-color-filter" id="color-filter3" type="checkbox" name="color-filter3">
-                                    <label class="color-filter color-filter3" for="color-filter3"></label>
-                                </li>
-
-                                <li class="m-r-10">
-                                    <input class="checkbox-color-filter" id="color-filter4" type="checkbox" name="color-filter4">
-                                    <label class="color-filter color-filter4" for="color-filter4"></label>
-                                </li>
-
-                                <li class="m-r-10">
-                                    <input class="checkbox-color-filter" id="color-filter5" type="checkbox" name="color-filter5">
-                                    <label class="color-filter color-filter5" for="color-filter5"></label>
-                                </li>
-
-                                <li class="m-r-10">
-                                    <input class="checkbox-color-filter" id="color-filter6" type="checkbox" name="color-filter6">
-                                    <label class="color-filter color-filter6" for="color-filter6"></label>
-                                </li>
-
-                                <li class="m-r-10">
-                                    <input class="checkbox-color-filter" id="color-filter7" type="checkbox" name="color-filter7">
-                                    <label class="color-filter color-filter7" for="color-filter7"></label>
-                                </li>
-                            </ul>
                         </div>
 
                     </div>
@@ -997,17 +861,17 @@
                                 </select>
                             </div>
 
-                       <!--     <div class="rs2-select2 bo4 of-hidden w-size12 m-t-5 m-b-5 m-r-10">
-                                <select class="selection-2" name="sorting">
-                                    <option>prix</option>
-                                    <option>$0.00 - $50.00</option>
-                                    <option>$50.00 - $100.00</option>
-                                    <option>$100.00 - $150.00</option>
-                                    <option>$150.00 - $200.00</option>
-                                    <option>$200.00+</option>
+                            <!--     <div class="rs2-select2 bo4 of-hidden w-size12 m-t-5 m-b-5 m-r-10">
+                                     <select class="selection-2" name="sorting">
+                                         <option>prix</option>
+                                         <option>$0.00 - $50.00</option>
+                                         <option>$50.00 - $100.00</option>
+                                         <option>$100.00 - $150.00</option>
+                                         <option>$150.00 - $200.00</option>
+                                         <option>$200.00+</option>
 
-                                </select>
-                            </div> -->
+                                     </select>
+                                 </div> -->
                         </div>
 
                         <span id="art_num" class="s-text8 p-t-5 p-b-5">
@@ -1217,7 +1081,7 @@
     <!--===============================================================================================-->
     <script type="text/javascript" src="{{ asset('vendor/jquery/jquery-3.2.1.min.js') }}"></script>
 
-<!--===============================================================================================-->-->
+    <!--===============================================================================================-->-->
 
     <!--script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script-->
     <script src="{{ asset('js/semantic.js') }}"></script>
@@ -1281,11 +1145,11 @@
         var filterBar = document.getElementById('filter-bar');
 
         noUiSlider.create(filterBar, {
-            start: [ 0, 1000 ],
+            start: [ 0, 5 ],
             connect: true,
             range: {
                 'min': 0,
-                'max': 1000
+                'max': 5
             }
         });
 

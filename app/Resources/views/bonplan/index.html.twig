@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Bonplans list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Type</th>
+                <th>Offre</th>
+                <th>Date_deb</th>
+                <th>Date_fin</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for bonPlan in bonPlans %}
+            <tr>
+                <td><a href="{{ path('bonplan_show', { 'id': bonPlan.id }) }}">{{ bonPlan.id }}</a></td>
+                <td>{{ bonPlan.type }}</td>
+                <td>{{ bonPlan.offre }}</td>
+                <td>{% if bonPlan.datedeb %}{{ bonPlan.datedeb|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if bonPlan.datefin %}{{ bonPlan.datefin|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('bonplan_show', { 'id': bonPlan.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('bonplan_edit', { 'id': bonPlan.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('bonplan_new') }}">Create a new bonPlan</a>
+        </li>
+    </ul>
+{% endblock %}

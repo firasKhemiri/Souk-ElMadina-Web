@@ -47,7 +47,7 @@ class Reclamation
 
 
     /**
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="text", nullable=true)
      * @Type("string")
      */
     private $reclamation;

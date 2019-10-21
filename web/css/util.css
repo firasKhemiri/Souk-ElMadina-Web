@@ -3513,6 +3513,11 @@ SHAPE SHAPE SHAPE SHAPE SHAPE SHAPE SHAPE SHAPE SHAPE SHAPE
 	height: 46px;
 }
 
+.size2_mod {
+    width: 120%;
+    height: 46px;
+}
+
 .size3 {
 	width: 60px;
 	height: 60px;

@@ -7,13 +7,14 @@ use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use FOS\UserBundle\Model\User as BaseUser;
+use FOS\MessageBundle\Model\ParticipantInterface;
 use Symfony\Component\Validator\Constraints\Type;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="user")
  */
-class User extends BaseUser
+class User extends BaseUser implements ParticipantInterface
 {
     /**
      * @var int

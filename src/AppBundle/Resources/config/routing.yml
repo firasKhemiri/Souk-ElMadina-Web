@@ -1,0 +1,4 @@
+app_bonplan:
+    resource: "@AppBundle/Resources/config/routing/bonplan.xml"
+    prefix:   /bonplan
+

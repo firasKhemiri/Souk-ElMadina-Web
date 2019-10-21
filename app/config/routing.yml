@@ -47,12 +47,27 @@ articles:
     resource: "@AppBundle/Routing/articles.xml"
     prefix: /
 
+bonplan:
+    resource: "@AppBundle/Resources/config/routing/bonplan.xml"
+    prefix: /crud
+
+enchere:
+    resource: "@AppBundle/Resources/config/routing/enchere.xml"
+    prefix: /enchere
+
 profile:
     resource: "@AppBundle/Routing/profile.xml"
     prefix: /profile
 
+user:
+    resource: "@AppBundle/Routing/user.xml"
+    prefix: /
 
 
 secondary:
     resource: "@AppBundle/Routing/secondary.xml"
     prefix: /
+
+fos_message:
+    resource: "@FOSMessageBundle/Resources/config/routing.xml"
+    prefix: /optional_routing_prefix

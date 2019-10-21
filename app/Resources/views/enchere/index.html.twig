@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Encheres list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Date_deb</th>
+                <th>Date_fin</th>
+                <th>Prix_actuel</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for enchere in encheres %}
+            <tr>
+                <td><a href="{{ path('enchere_show', { 'id': enchere.id }) }}">{{ enchere.id }}</a></td>
+                <td>{% if enchere.datedeb %}{{ enchere.datedeb|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if enchere.datefin %}{{ enchere.datefin|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ enchere.prixactuel }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('enchere_show', { 'id': enchere.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('enchere_edit', { 'id': enchere.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('enchere_new') }}">Create a new enchere</a>
+        </li>
+    </ul>
+{% endblock %}
